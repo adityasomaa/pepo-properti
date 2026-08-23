@@ -12,7 +12,7 @@ import { LOCALE_COOKIE, type Locale } from "./i18n";
  * that was already set.
  */
 
-export const CONSENT_COOKIE = "pepo_consent";
+export const CONSENT_COOKIE = "korva_consent";
 export type Consent = "granted" | "denied";
 
 function readCookie(name: string): string | null {

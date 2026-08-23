@@ -1,4 +1,4 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 40" width="320" height="40">
-<g fill="#eff1ea"><path fill-rule="evenodd" d="M4 6h10.5a7.5 7.5 0 0 1 0 15H9.5v9H4V6Zm5.5 3.9v7.2h4.9a3.6 3.6 0 0 0 0-7.2H9.5Z"/></g>
-<text x="30" y="27" font-family="Neue Montreal" font-size="24" fill="#eff1ea">Pepo Properti</text>
+<g transform="translate(4,4)"><path fill="#eff1ea" d="M4 3h6v26H4V3Zm8 13L22.5 3H30L19.4 16 30 29h-7.5L12 16Z"/></g>
+<text x="44" y="28" font-family="Neue Montreal" font-size="24" letter-spacing="1.4" fill="#eff1ea">KORVA</text>
 </svg>

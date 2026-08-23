@@ -7,14 +7,18 @@ import { WhatsAppLink } from "../WhatsAppLink";
 import { SectionHeader } from "../SectionHeader";
 import { Wordmark } from "./Wordmark";
 import { path, type Dictionary, type Locale, type RouteKey } from "@/lib/i18n";
-import { site } from "@/content/site";
+import { site, divisionList } from "@/content/site";
 
 /**
  * Every page ends on a call to action.
  *
- * The secondary target moves out of the way: standing on the submission page,
- * the footer offers the listings instead, and so on. A footer that invites you
- * to the page you are already reading is noise.
+ * The secondary target moves out of the way: standing on the build page, the
+ * footer offers the listings instead, and so on. A footer that invites you to
+ * the page you are already reading is noise.
+ *
+ * Both legal entities are named here. For a business asking people to buy land
+ * and commission construction, who exactly they are contracting with is part of
+ * the contact information, not fine print.
  */
 export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   const pathname = usePathname();
@@ -25,18 +29,22 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
     return key === "home" ? pathname === href : pathname.startsWith(href);
   };
 
-  const secondaryOrder: RouteKey[] = ["submit", "listings", "contact"];
+  const secondaryOrder: RouteKey[] = ["listings", "build", "submit", "portfolio", "contact"];
   const secondaryKey = secondaryOrder.find((key) => !isCurrent(key)) ?? "listings";
   const secondaryLabel: Record<string, string> = {
-    submit: dict.footer.ctaSubmit,
     listings: dict.footer.ctaListings,
+    build: dict.footer.ctaBuild,
+    submit: dict.footer.ctaSubmit,
+    portfolio: dict.footer.ctaPortfolio,
     contact: dict.footer.ctaContact,
   };
 
-  const navKeys: RouteKey[] = ["home", "listings", "submit", "contact"];
+  const navKeys: RouteKey[] = ["home", "listings", "build", "portfolio", "submit", "contact"];
   const navLabel: Record<string, string> = {
     home: dict.nav.home,
     listings: dict.nav.listings,
+    build: dict.nav.build,
+    portfolio: dict.nav.portfolio,
     submit: dict.nav.submit,
     contact: dict.nav.contact,
   };
@@ -76,9 +84,21 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
             <span className="flex items-center text-[1.0625rem] text-on-forest">
               <Wordmark />
             </span>
-            <p className="mt-3 max-w-[26ch] text-[0.875rem] leading-relaxed text-on-forest-muted">
-              {site.legalName}
+            <p className="mt-3 max-w-[30ch] text-[0.875rem] leading-relaxed text-on-forest-muted">
+              {site.tagline[locale]}
             </p>
+
+            <h2 className="mt-6 text-[0.75rem] font-medium uppercase tracking-[0.09em] text-on-forest-muted">
+              {dict.footer.entitiesHeading}
+            </h2>
+            <ul className="mt-3 space-y-2.5 text-[0.8125rem] leading-relaxed text-on-forest-muted">
+              {divisionList.map((division) => (
+                <li key={division.key}>
+                  <span className="block text-on-forest">{division.name}</span>
+                  {division.legalName}
+                </li>
+              ))}
+            </ul>
           </div>
 
           <nav aria-label={dict.footer.navHeading}>
@@ -108,7 +128,8 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
               <li className="flex gap-2.5">
                 <MapPin weight="regular" aria-hidden="true" className="mt-0.5 h-4 w-4 flex-none" />
                 <span>
-                  {site.address.street}, {site.address.locality}, {site.address.region} {site.address.postalCode}
+                  {site.address.street}, {site.address.locality}, {site.address.regency}, {site.address.region}{" "}
+                  {site.address.postalCode}
                 </span>
               </li>
               <li className="flex gap-2.5">
@@ -119,12 +140,20 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
                   {closedLine}
                 </span>
               </li>
-              <li className="flex gap-2.5">
-                <Phone weight="regular" aria-hidden="true" className="mt-0.5 h-4 w-4 flex-none" />
-                <a href={site.phoneHref} className="transition-colors duration-200 hover:text-on-forest">
-                  {site.phoneDisplay}
-                </a>
-              </li>
+              {divisionList.map((division) => (
+                <li key={division.key} className="flex gap-2.5">
+                  <Phone weight="regular" aria-hidden="true" className="mt-0.5 h-4 w-4 flex-none" />
+                  <span>
+                    <a
+                      href={division.phoneHref}
+                      className="numeric transition-colors duration-200 hover:text-on-forest"
+                    >
+                      {division.phoneDisplay}
+                    </a>
+                    <span className="block text-[0.8125rem] opacity-80">{division.name}</span>
+                  </span>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -154,7 +183,7 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
         </div>
 
         <p className="mt-12 border-t border-on-forest/15 pt-6 text-[0.8125rem] text-on-forest-muted">
-          {site.legalName}. {dict.footer.rights}
+          {site.name}. {dict.footer.rights}
         </p>
       </div>
     </footer>

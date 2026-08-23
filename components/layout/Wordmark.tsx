@@ -4,6 +4,9 @@ import { LetterCascade } from "../ui/letter-cascade";
  * The brand mark. Authored rather than taken from an icon library, because it
  * is a logo and not an icon: the same geometry ships as the site icon and the
  * Open Graph card, so the three never drift apart.
+ *
+ * A stem and two straight arms. No curves, which suits a business whose other
+ * half draws buildings, and which holds up at 16px in a browser tab.
  */
 export function Mark({ className = "", title }: { className?: string; title?: string }) {
   return (
@@ -17,8 +20,7 @@ export function Mark({ className = "", title }: { className?: string; title?: st
     >
       <path
         fill="currentColor"
-        fillRule="evenodd"
-        d="M5 3h11a8.5 8.5 0 0 1 0 17h-6v9H5V3Zm5 4.4v8.2h5.6a4.1 4.1 0 0 0 0-8.2H10Z"
+        d="M4 3h6v26H4V3Zm8 13L22.5 3H30L19.4 16 30 29h-7.5L12 16Z"
       />
     </svg>
   );
@@ -37,16 +39,40 @@ export function Wordmark({
 }) {
   return (
     <span className={`inline-flex items-center gap-2.5 ${className}`}>
-      <Mark className="h-[1.35em] w-[1.35em] flex-none" />
+      <Mark className="h-[1.15em] w-[1.15em] flex-none" />
       {cascade ? (
         <LetterCascade
-          text="Pepo Properti"
-          className="font-medium tracking-[-0.025em]"
-          staggerDuration={0.028}
+          text="KORVA"
+          className="font-medium tracking-[0.04em]"
+          staggerDuration={0.035}
         />
       ) : (
-        <span className="font-medium tracking-[-0.025em]">Pepo Properti</span>
+        <span className="font-medium tracking-[0.04em]">KORVA</span>
       )}
+    </span>
+  );
+}
+
+/**
+ * The mark plus the division it belongs to. Used where a block of content is
+ * owned by one side of the business rather than by KORVA as a whole.
+ */
+export function DivisionMark({
+  name,
+  role,
+  className = "",
+}: {
+  name: string;
+  role: string;
+  className?: string;
+}) {
+  return (
+    <span className={`inline-flex items-center gap-3 ${className}`}>
+      <Mark className="h-5 w-5 flex-none" />
+      <span className="min-w-0">
+        <span className="block text-[1.0625rem] font-medium leading-tight tracking-[-0.01em]">{name}</span>
+        <span className="block text-[0.8125rem] leading-tight opacity-70">{role}</span>
+      </span>
     </span>
   );
 }

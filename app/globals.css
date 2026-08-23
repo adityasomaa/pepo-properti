@@ -483,6 +483,16 @@
     text-decoration: underline;
   }
 
+  /* Buttons never wrap by default. The hero pair is the exception: at 375 the
+     two division labels cannot both sit on one line inside a two-column row,
+     and wrapping there is cheaper than stacking them, which would push the
+     search below the fold. At every width with room, they stay on one line. */
+  .btn--wrap {
+    white-space: normal;
+    text-align: center;
+    line-height: 1.25;
+  }
+
   .btn[disabled],
   .btn[aria-disabled="true"] {
     opacity: 0.55;
@@ -655,5 +665,31 @@
       opacity: 1;
       transform: none;
     }
+  }
+}
+
+@layer components {
+  /* The comparison slider's input is invisible but must stay operable and must
+     still show a focus ring, so it is transparent rather than hidden. */
+  .compare-range::-webkit-slider-thumb {
+    appearance: none;
+    width: 2.75rem;
+    height: 2.75rem;
+    cursor: ew-resize;
+    background: transparent;
+  }
+
+  .compare-range::-moz-range-thumb {
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 0;
+    cursor: ew-resize;
+    background: transparent;
+  }
+
+  .compare-range:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: -2px;
+    border-radius: var(--radius-card);
   }
 }

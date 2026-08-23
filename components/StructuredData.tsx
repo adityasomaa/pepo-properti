@@ -1,17 +1,19 @@
-import { site } from "@/content/site";
-import { formatPrice } from "@/lib/format";
+import { site, divisionList } from "@/content/site";
 import { path, type Dictionary, type Locale } from "@/lib/i18n";
 import type { Listing } from "@/content/listings";
+import type { Project } from "@/content/projects";
 
 /**
- * While jualvillamurah.co.id has been down, every structured signal Google held
- * about this business has been resolving to an error page. These blocks put the
- * agency and its listings back into a machine readable form: address, opening
- * hours, and one RealEstateListing per property.
+ * Machine readable identity for a business that is actually two businesses.
  *
- * Nothing here is invented. The address, hours, phone number, and map link come
- * from the agency's own business profile; no rating, review count, or
- * transaction history is asserted, because none has been supplied.
+ * Korva Pro is declared as a RealEstateAgent and Korva Studio as a
+ * GeneralContractor, both at the same address, tied together by an Organization
+ * that names them as departments. Search engines then have the same picture a
+ * reader gets from the page rather than a single blurred entity.
+ *
+ * Nothing here is invented. Address, phone numbers, and legal entity names come
+ * from the client's brief; no rating, review count, or transaction history is
+ * asserted, because none has been supplied.
  */
 
 function Json({ data }: { data: unknown }) {
@@ -24,38 +26,70 @@ function Json({ data }: { data: unknown }) {
   );
 }
 
+function postalAddress() {
+  return {
+    "@type": "PostalAddress",
+    streetAddress: site.address.street,
+    addressLocality: site.address.locality,
+    addressRegion: `${site.address.regency}, ${site.address.region}`,
+    postalCode: site.address.postalCode,
+    addressCountry: site.address.country,
+  };
+}
+
+function openingHours() {
+  return site.hours.map((slot) => ({
+    "@type": "OpeningHoursSpecification",
+    dayOfWeek: slot.days.map((d) => `https://schema.org/${d}`),
+    opens: slot.opens,
+    closes: slot.closes,
+  }));
+}
+
 export function OrganizationSchema({ locale }: { locale: Locale }) {
+  const home = site.url + path(locale, "home");
+
+  const departments = [
+    {
+      "@type": "RealEstateAgent",
+      "@id": `${site.url}/#korva-pro`,
+      name: site.divisions.pro.name,
+      legalName: site.divisions.pro.legalName,
+      description: site.divisions.pro.role[locale],
+      telephone: site.divisions.pro.phoneDisplay,
+      url: site.url + path(locale, "listings"),
+      address: postalAddress(),
+      openingHoursSpecification: openingHours(),
+      areaServed: site.serviceAreas.map((name) => ({ "@type": "AdministrativeArea", name })),
+    },
+    {
+      "@type": "GeneralContractor",
+      "@id": `${site.url}/#korva-studio`,
+      name: site.divisions.studio.name,
+      legalName: site.divisions.studio.legalName,
+      description: site.divisions.studio.role[locale],
+      telephone: site.divisions.studio.phoneDisplay,
+      url: site.url + path(locale, "build"),
+      address: postalAddress(),
+      openingHoursSpecification: openingHours(),
+      areaServed: site.serviceAreas.map((name) => ({ "@type": "AdministrativeArea", name })),
+    },
+  ];
+
   const data = {
     "@context": "https://schema.org",
-    "@type": "RealEstateAgent",
+    "@type": "Organization",
     "@id": `${site.url}/#organization`,
-    name: site.legalName,
-    alternateName: site.name,
-    url: site.url + path(locale, "home"),
-    telephone: site.phoneDisplay,
+    name: site.name,
+    url: home,
     image: `${site.url}/og/default.png`,
     logo: `${site.url}/icon.svg`,
-    areaServed: { "@type": "AdministrativeArea", name: "Bali, Indonesia" },
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: site.address.street,
-      addressLocality: site.address.locality,
-      addressRegion: site.address.region,
-      postalCode: site.address.postalCode,
-      addressCountry: site.address.country,
-    },
-    geo: {
-      "@type": "GeoCoordinates",
-      latitude: site.geo.lat,
-      longitude: site.geo.lng,
-    },
-    hasMap: site.mapsUrl,
-    openingHoursSpecification: site.hours.map((slot) => ({
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: slot.days.map((d) => `https://schema.org/${d}`),
-      opens: slot.opens,
-      closes: slot.closes,
-    })),
+    telephone: divisionList.map((d) => d.phoneDisplay),
+    address: postalAddress(),
+    geo: { "@type": "GeoCoordinates", latitude: site.geo.lat, longitude: site.geo.lng },
+    openingHoursSpecification: openingHours(),
+    areaServed: site.serviceAreas.map((name) => ({ "@type": "AdministrativeArea", name })),
+    department: departments,
   };
 
   return <Json data={data} />;
@@ -83,23 +117,25 @@ export function ListingSchema({
     datePosted: listing.publishedAt,
     inLanguage: dict.meta.htmlLang,
     image: [site.url + listing.images[0], `${site.url}/og/${listing.slug}.png`],
-    provider: { "@id": `${site.url}/#organization` },
+    provider: { "@id": `${site.url}/#korva-pro` },
     offers: {
       "@type": "Offer",
       price: listing.price,
       priceCurrency: "IDR",
       availability: "https://schema.org/InStock",
       businessFunction:
-        listing.status === "dijual"
-          ? "https://schema.org/Sell"
-          : "https://schema.org/LeaseOut",
+        listing.status === "dijual" ? "https://schema.org/Sell" : "https://schema.org/LeaseOut",
     },
     about: {
       "@type": listing.type === "tanah" ? "LandForm" : "Accommodation",
       name: dict.type[listing.type],
       ...(listing.bedrooms !== null ? { numberOfBedrooms: listing.bedrooms } : {}),
       ...(listing.bathrooms !== null ? { numberOfBathroomsTotal: listing.bathrooms } : {}),
-      floorSize: { "@type": "QuantitativeValue", value: listing.buildingSize ?? listing.landSize, unitCode: "MTK" },
+      floorSize: {
+        "@type": "QuantitativeValue",
+        value: listing.buildingSize ?? listing.landSize,
+        unitCode: "MTK",
+      },
       address: {
         "@type": "PostalAddress",
         addressLocality: listing.area,
@@ -112,11 +148,58 @@ export function ListingSchema({
   return <Json data={data} />;
 }
 
-export function BreadcrumbSchema({
-  items,
+export function ProjectSchema({
+  project,
+  locale,
+  dict,
 }: {
-  items: { name: string; url: string }[];
+  project: Project;
+  locale: Locale;
+  dict: Dictionary;
 }) {
+  const data = {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    name: project.title[locale],
+    description: project.description[locale],
+    inLanguage: dict.meta.htmlLang,
+    creator: { "@id": `${site.url}/#korva-studio` },
+    image: [site.url + project.after, site.url + project.before],
+    locationCreated: {
+      "@type": "Place",
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: project.area,
+        addressRegion: `${project.regency}, ${site.address.region}`,
+        addressCountry: site.address.country,
+      },
+    },
+  };
+  return <Json data={data} />;
+}
+
+/** The services Korva Studio offers, so a build enquiry can surface on its own. */
+export function ServiceSchema({ locale, names }: { locale: Locale; names: string[] }) {
+  const data = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: site.divisions.studio.name,
+    itemListElement: names.map((name, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      item: {
+        "@type": "Service",
+        name,
+        provider: { "@id": `${site.url}/#korva-studio` },
+        areaServed: site.serviceAreas.map((area) => ({ "@type": "AdministrativeArea", name: area })),
+        url: site.url + path(locale, "build"),
+      },
+    })),
+  };
+  return <Json data={data} />;
+}
+
+export function BreadcrumbSchema({ items }: { items: { name: string; url: string }[] }) {
   const data = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -130,13 +213,7 @@ export function BreadcrumbSchema({
   return <Json data={data} />;
 }
 
-export function ItemListSchema({
-  listings,
-  locale,
-}: {
-  listings: Listing[];
-  locale: Locale;
-}) {
+export function ItemListSchema({ listings, locale }: { listings: Listing[]; locale: Locale }) {
   const data = {
     "@context": "https://schema.org",
     "@type": "ItemList",
@@ -149,9 +226,4 @@ export function ItemListSchema({
     })),
   };
   return <Json data={data} />;
-}
-
-/** Kept alongside the schema helpers so price formatting stays in one place. */
-export function priceText(listing: Listing, locale: Locale): string {
-  return formatPrice(listing.price, locale);
 }

@@ -47,7 +47,13 @@ export function HeroSearch({ locale, dict }: { locale: Locale; dict: Dictionary 
       aria-label={dict.home.searchLabel}
       className="rounded-[var(--radius-card)] border border-line bg-white p-3.5 sm:p-5"
     >
-      <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
+      {/*
+        Status and type are hidden on the narrowest screens. The hero has to
+        stay one screen tall with the cookie banner up, and on a phone the
+        search box is the thing that has to survive that squeeze. Both filters
+        are the first controls on the listing page the search lands on.
+      */}
+      <div className="hidden grid-cols-2 gap-2.5 sm:grid sm:gap-3">
         <Listbox
           label={dict.listings.status}
           value={status}
@@ -64,7 +70,7 @@ export function HeroSearch({ locale, dict }: { locale: Locale; dict: Dictionary 
         />
       </div>
 
-      <div className="mt-2.5 sm:mt-3">
+      <div className="sm:mt-3">
         <label htmlFor={inputId} className="field-label">
           {dict.listings.search}
         </label>

@@ -14,6 +14,8 @@ import { site } from "@/content/site";
 const NAV: { key: RouteKey; label: (d: Dictionary) => string }[] = [
   { key: "home", label: (d) => d.nav.home },
   { key: "listings", label: (d) => d.nav.listings },
+  { key: "build", label: (d) => d.nav.build },
+  { key: "portfolio", label: (d) => d.nav.portfolio },
   { key: "submit", label: (d) => d.nav.submit },
   { key: "contact", label: (d) => d.nav.contact },
 ];
@@ -86,7 +88,7 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
           <AppLink
             href={path(locale, "home")}
             className="flex items-center text-[1.0625rem] text-ink"
-            aria-label={site.legalName}
+            aria-label={site.name}
           >
             <Wordmark cascade />
           </AppLink>
@@ -98,7 +100,7 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
                   <AppLink
                     href={path(locale, item.key)}
                     aria-current={isCurrent(item.key) ? "page" : undefined}
-                    className="inline-flex min-h-9 items-center rounded-full px-3 py-1.5 text-[0.9375rem] text-ink-muted transition-colors duration-200 hover:text-ink aria-[current=page]:font-medium aria-[current=page]:text-ink"
+                    className="inline-flex min-h-9 items-center rounded-full px-2.5 py-1.5 text-[0.9375rem] text-ink-muted transition-colors duration-200 hover:text-ink aria-[current=page]:font-medium aria-[current=page]:text-ink"
                   >
                     {item.label(dict)}
                   </AppLink>
@@ -110,7 +112,7 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
           <div className="flex items-center gap-2">
             <LanguageSwitcher locale={locale} compact />
 
-            <div className="hidden lg:block">
+            <div className="hidden xl:block">
               <WhatsAppLink
                 locale={locale}
                 pageUrl={pageUrl}
@@ -196,7 +198,7 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
                 className="w-full"
               />
               <p className="mt-3 text-[0.875rem] text-ink-muted">
-                {site.address.street}, {site.address.locality}
+                {site.address.street}, {site.address.locality}, {site.address.regency}
               </p>
             </div>
           </div>

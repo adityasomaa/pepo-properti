@@ -41,6 +41,10 @@ const ROUTES = [
   "/id/listings",
   "/id/listings?type=villa&status=dijual",
   "/en/listings",
+  "/id/build",
+  "/en/build",
+  "/id/portfolio",
+  "/en/portfolio",
   // The longest title in the data set, in both languages.
   "/id/listings/villa-lima-kamar-kolam-renang-taman-uluwatu",
   "/en/listings/villa-lima-kamar-kolam-renang-taman-uluwatu",

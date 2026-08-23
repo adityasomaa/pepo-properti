@@ -63,6 +63,14 @@ export const SAMPLE_DATA = true;
    buildingSize Luas bangunan dalam meter persegi. Tulis null untuk tanah.
    certificate  Jenis sertifikat. Contoh: "SHM", "HGB".
 
+   tenure       Status hak. Hanya boleh salah satu dari:
+                "freehold"  hak milik, dijual putus
+                "leasehold" hak sewa untuk jangka waktu tertentu
+
+   zoning       Peruntukan lahan menurut ITR. Hanya boleh salah satu dari:
+                "perumahan" | "komersial" | "pariwisata"
+                Tulis null kalau peruntukannya belum dipastikan.
+
    featured     true kalau mau ditandai di halaman depan, selain itu false.
    publishedAt  Tanggal masuk, format "TAHUN-BULAN-TANGGAL". Dipakai untuk
                 mengurutkan mana yang terbaru.
@@ -82,6 +90,8 @@ export const SAMPLE_DATA = true;
 export type PropertyType = "villa" | "rumah" | "tanah" | "ruko";
 export type ListingStatus = "dijual" | "disewa";
 export type PriceUnit = "total" | "per_tahun" | "per_bulan";
+export type Tenure = "freehold" | "leasehold";
+export type Zoning = "perumahan" | "komersial" | "pariwisata";
 
 export type Listing = {
   code: string;
@@ -97,6 +107,8 @@ export type Listing = {
   landSize: number;
   buildingSize: number | null;
   certificate: string;
+  tenure: Tenure;
+  zoning: Zoning | null;
   featured: boolean;
   publishedAt: string;
   title: { id: string; en: string };
@@ -119,6 +131,8 @@ export const listings: Listing[] = [
     landSize: 320,
     buildingSize: 210,
     certificate: "SHM",
+    tenure: "freehold",
+    zoning: "pariwisata",
     featured: true,
     publishedAt: "2026-08-14",
     title: {
@@ -150,6 +164,8 @@ export const listings: Listing[] = [
     landSize: 190,
     buildingSize: 140,
     certificate: "HGB",
+    tenure: "leasehold",
+    zoning: "pariwisata",
     featured: true,
     publishedAt: "2026-08-11",
     title: {
@@ -181,6 +197,8 @@ export const listings: Listing[] = [
     landSize: 640,
     buildingSize: 380,
     certificate: "SHM",
+    tenure: "freehold",
+    zoning: "pariwisata",
     featured: true,
     publishedAt: "2026-08-09",
     title: {
@@ -212,6 +230,8 @@ export const listings: Listing[] = [
     landSize: 250,
     buildingSize: 165,
     certificate: "HGB",
+    tenure: "leasehold",
+    zoning: "pariwisata",
     featured: false,
     publishedAt: "2026-08-06",
     title: {
@@ -243,6 +263,8 @@ export const listings: Listing[] = [
     landSize: 210,
     buildingSize: 135,
     certificate: "SHM",
+    tenure: "freehold",
+    zoning: "pariwisata",
     featured: true,
     publishedAt: "2026-08-04",
     title: {
@@ -274,6 +296,8 @@ export const listings: Listing[] = [
     landSize: 980,
     buildingSize: 520,
     certificate: "SHM",
+    tenure: "freehold",
+    zoning: "pariwisata",
     featured: false,
     publishedAt: "2026-08-02",
     title: {
@@ -305,6 +329,8 @@ export const listings: Listing[] = [
     landSize: 145,
     buildingSize: 78,
     certificate: "HGB",
+    tenure: "leasehold",
+    zoning: "pariwisata",
     featured: false,
     publishedAt: "2026-07-29",
     title: {
@@ -336,6 +362,8 @@ export const listings: Listing[] = [
     landSize: 400,
     buildingSize: 245,
     certificate: "SHM",
+    tenure: "freehold",
+    zoning: "pariwisata",
     featured: false,
     publishedAt: "2026-07-25",
     title: {
@@ -367,6 +395,8 @@ export const listings: Listing[] = [
     landSize: 180,
     buildingSize: 195,
     certificate: "SHM",
+    tenure: "freehold",
+    zoning: "perumahan",
     featured: false,
     publishedAt: "2026-08-12",
     title: {
@@ -398,6 +428,8 @@ export const listings: Listing[] = [
     landSize: 150,
     buildingSize: 120,
     certificate: "SHM",
+    tenure: "leasehold",
+    zoning: "perumahan",
     featured: false,
     publishedAt: "2026-08-08",
     title: {
@@ -429,6 +461,8 @@ export const listings: Listing[] = [
     landSize: 300,
     buildingSize: 280,
     certificate: "SHM",
+    tenure: "freehold",
+    zoning: "perumahan",
     featured: false,
     publishedAt: "2026-07-31",
     title: {
@@ -460,6 +494,8 @@ export const listings: Listing[] = [
     landSize: 125,
     buildingSize: 90,
     certificate: "SHM",
+    tenure: "freehold",
+    zoning: "perumahan",
     featured: false,
     publishedAt: "2026-07-22",
     title: {
@@ -491,6 +527,8 @@ export const listings: Listing[] = [
     landSize: 500,
     buildingSize: null,
     certificate: "SHM",
+    tenure: "freehold",
+    zoning: "pariwisata",
     featured: false,
     publishedAt: "2026-08-10",
     title: {
@@ -521,6 +559,8 @@ export const listings: Listing[] = [
     landSize: 800,
     buildingSize: null,
     certificate: "SHM",
+    tenure: "freehold",
+    zoning: "pariwisata",
     featured: false,
     publishedAt: "2026-07-27",
     title: {
@@ -551,6 +591,8 @@ export const listings: Listing[] = [
     landSize: 90,
     buildingSize: 160,
     certificate: "HGB",
+    tenure: "leasehold",
+    zoning: "komersial",
     featured: false,
     publishedAt: "2026-08-13",
     title: {
@@ -581,6 +623,8 @@ export const listings: Listing[] = [
     landSize: 120,
     buildingSize: 310,
     certificate: "HGB",
+    tenure: "freehold",
+    zoning: "komersial",
     featured: false,
     publishedAt: "2026-07-20",
     title: {

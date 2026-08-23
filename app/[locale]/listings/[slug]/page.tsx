@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ArrowLeft, MapPin } from "@phosphor-icons/react/dist/ssr";
+import { ArrowLeft, ArrowRight, MapPin } from "@phosphor-icons/react/dist/ssr";
 
 import { AppLink } from "@/components/AppLink";
 import { SectionHeader } from "@/components/SectionHeader";
@@ -97,6 +97,8 @@ export default async function ListingDetailPage({
       ? [{ label: dict.listing.buildingSize, value: formatArea(listing.buildingSize, locale) }]
       : []),
     { label: dict.listing.certificate, value: listing.certificate },
+    { label: dict.listing.tenure, value: dict.tenure[listing.tenure] },
+    ...(listing.zoning ? [{ label: dict.listing.zoning, value: dict.zoning[listing.zoning] }] : []),
     { label: dict.listing.code, value: listing.code },
   ];
 
@@ -157,6 +159,7 @@ export default async function ListingDetailPage({
                 pageUrl={pageUrl}
                 buttonLabel={dict.common.askAboutThis}
                 placement="listing-detail"
+                division="pro"
                 listing={{ code: listing.code, title: listing.title[locale] }}
                 variant="primary"
                 className="w-full"
@@ -210,6 +213,41 @@ export default async function ListingDetailPage({
           </div>
         </div>
       </div>
+
+      {/*
+        The cross-sell the brief asks for: someone reading about a plot is one
+        press away from the team that would build on it. It sits on land
+        listings, where the question actually arises, rather than on every page.
+      */}
+      {listing.type === "tanah" ? (
+        <Reveal className="mt-16">
+          <div className="on-dark rounded-[var(--radius-card)] bg-forest p-6 sm:p-10">
+            <SectionHeader
+              tone="dark"
+              label={dict.listing.crossSell.label}
+              headline={dict.listing.crossSell.headline}
+              description={dict.listing.crossSell.description}
+              cta={
+                <>
+                  <AppLink href={path(locale, "build")} className="btn" data-variant="primary">
+                    <span>{dict.listing.crossSell.cta}</span>
+                    <ArrowRight weight="regular" aria-hidden="true" className="btn__icon" />
+                  </AppLink>
+                  <WhatsAppLink
+                    locale={locale}
+                    pageUrl={pageUrl}
+                    buttonLabel={dict.common.askBuild}
+                    placement="listing-cross-sell"
+                    division="studio"
+                    listing={{ code: listing.code, title: listing.title[locale] }}
+                    variant="secondary"
+                  />
+                </>
+              }
+            />
+          </div>
+        </Reveal>
+      ) : null}
 
       {related.length ? (
         <section aria-labelledby="related-heading" className="mt-24 md:mt-32">

@@ -11,7 +11,16 @@ import { site } from "@/content/site";
  * they carry the later change frequency and are never omitted.
  */
 export default function sitemap(): MetadataRoute.Sitemap {
-  const staticKeys: RouteKey[] = ["home", "listings", "submit", "contact", "privacy", "terms"];
+  const staticKeys: RouteKey[] = [
+    "home",
+    "listings",
+    "build",
+    "portfolio",
+    "submit",
+    "contact",
+    "privacy",
+    "terms",
+  ];
   const listings = allListings();
   const now = new Date();
 
@@ -20,7 +29,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: site.url + path(locale, key),
       lastModified: now,
       changeFrequency: key === "listings" ? ("daily" as const) : ("monthly" as const),
-      priority: key === "home" ? 1 : key === "listings" ? 0.9 : 0.5,
+      priority: key === "home" ? 1 : key === "listings" || key === "build" ? 0.9 : 0.6,
       alternates: {
         languages: Object.fromEntries(
           locales.map((other) => [other, site.url + path(other, key)])

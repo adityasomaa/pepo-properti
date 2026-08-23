@@ -16,6 +16,8 @@ import {
   activeFilterCount,
   LISTING_STATUSES,
   PROPERTY_TYPES,
+  TENURES,
+  ZONINGS,
   type Filters,
   type SortKey,
 } from "@/lib/listings";
@@ -123,6 +125,16 @@ export function ListingBrowser({
     { value: "", label: dict.listings.anyLocation },
     ...areas.map((a) => ({ value: a, label: a })),
   ];
+  // Tenure and zoning come from the brief: a buyer screens the legal status of a
+  // plot before anyone starts drawing on it.
+  const tenureOptions = [
+    { value: "", label: dict.listings.anyTenure },
+    ...TENURES.map((t) => ({ value: t, label: dict.tenure[t] })),
+  ];
+  const zoningOptions = [
+    { value: "", label: dict.listings.anyZoning },
+    ...ZONINGS.map((z) => ({ value: z, label: dict.zoning[z] })),
+  ];
   const sortOptions: { value: SortKey; label: string }[] = [
     { value: "newest", label: dict.listings.sortNewest },
     { value: "price-asc", label: dict.listings.sortPriceAsc },
@@ -170,6 +182,22 @@ export function ListingBrowser({
         options={areaOptions}
         onChange={(value) => set("area", value)}
         placeholder={dict.listings.anyLocation}
+      />
+
+      <Listbox
+        label={dict.listings.tenure}
+        value={filters.tenure}
+        options={tenureOptions}
+        onChange={(value) => set("tenure", value as Filters["tenure"])}
+        placeholder={dict.listings.anyTenure}
+      />
+
+      <Listbox
+        label={dict.listings.zoning}
+        value={filters.zoning}
+        options={zoningOptions}
+        onChange={(value) => set("zoning", value as Filters["zoning"])}
+        placeholder={dict.listings.anyZoning}
       />
 
       <fieldset>
@@ -270,6 +298,7 @@ export function ListingBrowser({
                 pageUrl={pageUrl}
                 buttonLabel={dict.common.askWhatsApp}
                 placement="listings-no-results"
+                division="pro"
                 variant="primary"
               />
             </div>

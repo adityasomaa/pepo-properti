@@ -1,5 +1,5 @@
 /**
- * Deterministic placeholder graphics for Pepo Properti.
+ * Deterministic placeholder graphics for KORVA.
  *
  *   node scripts/generate-graphics.mjs
  *
@@ -343,15 +343,15 @@ ${body}
 /** The site icon. Transparent background, one filled path, legible at 16px. */
 function mark(color = "#12261d") {
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
-<path fill="${color}" fill-rule="evenodd" d="M5 3h11a8.5 8.5 0 0 1 0 17h-6v9H5V3Zm5 4.4v8.2h5.6a4.1 4.1 0 0 0 0-8.2H10Z"/>
+<path fill="${color}" d="M4 3h6v26H4V3Zm8 13L22.5 3H30L19.4 16 30 29h-7.5L12 16Z"/>
 </svg>
 `;
 }
 
 function wordmarkSvg(color = "#eff1ea") {
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 40" width="320" height="40">
-<g fill="${color}"><path fill-rule="evenodd" d="M4 6h10.5a7.5 7.5 0 0 1 0 15H9.5v9H4V6Zm5.5 3.9v7.2h4.9a3.6 3.6 0 0 0 0-7.2H9.5Z"/></g>
-<text x="30" y="27" font-family="Neue Montreal" font-size="24" fill="${color}">Pepo Properti</text>
+<g transform="translate(4,4)"><path fill="${color}" d="M4 3h6v26H4V3Zm8 13L22.5 3H30L19.4 16 30 29h-7.5L12 16Z"/></g>
+<text x="44" y="28" font-family="Neue Montreal" font-size="24" letter-spacing="1.4" fill="${color}">KORVA</text>
 </svg>
 `;
 }
@@ -387,9 +387,9 @@ function ogSvg({ seed, type, lines }) {
 <rect width="${W}" height="${H}" fill="url(#${gid})"/>
 ${body}
 <rect x="0" y="${panelY - 90}" width="${W}" height="${H - panelY + 90}" fill="url(#${gid}s)"/>
-<g transform="translate(72, ${panelY - 6}) scale(1.05)">
-  <path fill="#eff1ea" fill-rule="evenodd" d="M0 0h10.5a7.5 7.5 0 0 1 0 15H5.5v9H0V0Zm5.5 3.9v7.2h4.9a3.6 3.6 0 0 0 0-7.2H5.5Z"/>
-  <text x="27" y="20" font-family="Neue Montreal" font-size="23" fill="#eff1ea" letter-spacing="0.2">Pepo Properti</text>
+<g transform="translate(72, ${panelY - 18}) scale(0.95)">
+  <path fill="#eff1ea" d="M4 3h6v26H4V3Zm8 13L22.5 3H30L19.4 16 30 29h-7.5L12 16Z"/>
+  <text x="44" y="26" font-family="Neue Montreal" font-size="25" fill="#eff1ea" letter-spacing="1.8">KORVA</text>
 </g>
 ${text}
 </svg>
@@ -446,13 +446,28 @@ for (const type of ["villa", "rumah", "tanah", "ruko"]) {
 }
 
 // The hero plane. Wide, quiet, and deliberately the calmest tile in the set.
-// The hero panel is portrait on desktop, so the source is authored portrait:
-// a landscape composition put through object-cover loses its horizon entirely.
+// Authored at the aspect the hero slot actually uses. A source in the wrong
+// orientation loses its horizon to object-cover, which is the whole picture.
 writeFileSync(
   join(GRAPHICS, "hero.svg"),
-  tile({ seed: "hero:pepo-properti:v4", type: "villa", width: 1100, height: 1500 })
+  tile({ seed: "korva:hero:v2", type: "villa", width: 1400, height: 1000 })
 );
 tiles++;
+
+const { projects } = await import("../content/projects.ts");
+const PROJECT_FAMILY = { villa: "villa", rumah: "rumah", komersial: "ruko" };
+
+for (const project of projects) {
+  writeFileSync(
+    join(GRAPHICS, `project-${project.slug}-before.svg`),
+    tile({ seed: `plan:${project.slug}`, type: "tanah" })
+  );
+  writeFileSync(
+    join(GRAPHICS, `project-${project.slug}-after.svg`),
+    tile({ seed: `built:${project.slug}`, type: PROJECT_FAMILY[project.type] })
+  );
+  tiles += 2;
+}
 
 // Brand marks.
 writeFileSync(join(ROOT, "public", "icon.svg"), mark("#12261d"));
@@ -464,7 +479,11 @@ renderPng(
   ogSvg({
     seed: "og:default",
     type: "villa",
-    lines: ["Villa, rumah, tanah, dan ruko di Bali", "Panjer, Denpasar Selatan"],
+    lines: [
+      "Properti, arsitektur, dan konstruksi di Bali",
+      "Korva Pro dan Korva Studio",
+      "Jimbaran, Kuta Selatan",
+    ],
   }),
   join(OG, "default.png")
 );
@@ -482,7 +501,7 @@ for (const l of listings) {
 
 // Apple touch icon needs a filled background; the site icon stays transparent.
 renderPng(
-  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" width="180" height="180"><rect width="180" height="180" rx="38" fill="#12261d"/><g transform="translate(48,40) scale(3.1)"><path fill="#eff1ea" fill-rule="evenodd" d="M0 0h10.5a7.5 7.5 0 0 1 0 15H5.5v9H0V0Zm5.5 3.9v7.2h4.9a3.6 3.6 0 0 0 0-7.2H5.5Z"/></g></svg>`,
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" width="180" height="180"><rect width="180" height="180" rx="38" fill="#12261d"/><g transform="translate(23,26) scale(4.2)"><path fill="#eff1ea" d="M4 3h6v26H4V3Zm8 13L22.5 3H30L19.4 16 30 29h-7.5L12 16Z"/></g></svg>`,
   join(ROOT, "public", "apple-icon.png")
 );
 

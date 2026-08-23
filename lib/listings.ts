@@ -1,4 +1,11 @@
-import { listings, type Listing, type PropertyType, type ListingStatus } from "@/content/listings";
+import {
+  listings,
+  type Listing,
+  type PropertyType,
+  type ListingStatus,
+  type Tenure,
+  type Zoning,
+} from "@/content/listings";
 import type { Locale } from "./i18n";
 
 export type SortKey = "newest" | "price-asc" | "price-desc";
@@ -8,6 +15,10 @@ export type Filters = {
   type: PropertyType | "";
   status: ListingStatus | "";
   area: string;
+  /** Freehold or leasehold, from the client's brief on land tenure. */
+  tenure: Tenure | "";
+  /** ITR land designation, so a buyer can screen a plot before planning a build. */
+  zoning: Zoning | "";
   priceMin: number | null;
   priceMax: number | null;
   sort: SortKey;
@@ -18,6 +29,8 @@ export const emptyFilters: Filters = {
   type: "",
   status: "",
   area: "",
+  tenure: "",
+  zoning: "",
   priceMin: null,
   priceMax: null,
   sort: "newest",
@@ -25,6 +38,8 @@ export const emptyFilters: Filters = {
 
 export const PROPERTY_TYPES: PropertyType[] = ["villa", "rumah", "tanah", "ruko"];
 export const LISTING_STATUSES: ListingStatus[] = ["dijual", "disewa"];
+export const TENURES: Tenure[] = ["freehold", "leasehold"];
+export const ZONINGS: Zoning[] = ["perumahan", "komersial", "pariwisata"];
 
 /** Areas actually present in the data, so the filter can never offer a dead end. */
 export function allAreas(): string[] {
@@ -49,6 +64,8 @@ function haystack(l: Listing, locale: Locale): string {
     l.type,
     l.status,
     l.certificate,
+    l.tenure,
+    l.zoning ?? "",
   ]
     .join(" ")
     .toLowerCase();
@@ -62,6 +79,8 @@ export function filterListings(source: Listing[], f: Filters, locale: Locale): L
     if (f.type && l.type !== f.type) return false;
     if (f.status && l.status !== f.status) return false;
     if (f.area && l.area !== f.area) return false;
+    if (f.tenure && l.tenure !== f.tenure) return false;
+    if (f.zoning && l.zoning !== f.zoning) return false;
     if (f.priceMin !== null && l.price < f.priceMin) return false;
     if (f.priceMax !== null && l.price > f.priceMax) return false;
     if (terms.length) {
@@ -91,6 +110,10 @@ export function latestVillas(count: number): Listing[] {
     listings.filter((l) => l.type === "villa"),
     "newest"
   ).slice(0, count);
+}
+
+export function latestListings(count: number): Listing[] {
+  return sortListings(listings, "newest").slice(0, count);
 }
 
 export function relatedListings(current: Listing, count: number): Listing[] {
@@ -124,6 +147,8 @@ export function filtersFromParams(params: Record<string, string | string[] | und
   const type = one(params.type);
   const status = one(params.status);
   const area = one(params.area);
+  const tenure = one(params.tenure);
+  const zoning = one(params.zoning);
   const sort = one(params.sort);
   const min = Number(one(params.min).replace(/\D/g, ""));
   const max = Number(one(params.max).replace(/\D/g, ""));
@@ -133,6 +158,8 @@ export function filtersFromParams(params: Record<string, string | string[] | und
     type: (PROPERTY_TYPES as string[]).includes(type) ? (type as PropertyType) : "",
     status: (LISTING_STATUSES as string[]).includes(status) ? (status as ListingStatus) : "",
     area: allAreas().includes(area) ? area : "",
+    tenure: (TENURES as string[]).includes(tenure) ? (tenure as Tenure) : "",
+    zoning: (ZONINGS as string[]).includes(zoning) ? (zoning as Zoning) : "",
     priceMin: Number.isFinite(min) && min > 0 ? min : null,
     priceMax: Number.isFinite(max) && max > 0 ? max : null,
     sort: SORTS.includes(sort as SortKey) ? (sort as SortKey) : "newest",
@@ -145,6 +172,8 @@ export function filtersToQuery(f: Filters): string {
   if (f.type) p.set("type", f.type);
   if (f.status) p.set("status", f.status);
   if (f.area) p.set("area", f.area);
+  if (f.tenure) p.set("tenure", f.tenure);
+  if (f.zoning) p.set("zoning", f.zoning);
   if (f.priceMin !== null) p.set("min", String(f.priceMin));
   if (f.priceMax !== null) p.set("max", String(f.priceMax));
   if (f.sort !== "newest") p.set("sort", f.sort);
@@ -158,6 +187,8 @@ export function activeFilterCount(f: Filters): number {
   if (f.type) n++;
   if (f.status) n++;
   if (f.area) n++;
+  if (f.tenure) n++;
+  if (f.zoning) n++;
   if (f.priceMin !== null || f.priceMax !== null) n++;
   return n;
 }

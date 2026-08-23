@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
+import { ArrowRight, Buildings, Compass } from "@phosphor-icons/react/dist/ssr";
 
 import { AppLink } from "@/components/AppLink";
 import { SectionHeader } from "@/components/SectionHeader";
@@ -8,9 +8,12 @@ import { Reveal } from "@/components/ui/Reveal";
 import { HeroSearch } from "@/components/home/HeroSearch";
 import { ListingCard } from "@/components/listing/ListingCard";
 import { SampleNotice } from "@/components/listing/SampleNotice";
+import { BeforeAfter } from "@/components/portfolio/BeforeAfter";
 import { ItemListSchema } from "@/components/StructuredData";
 import { getDict, isLocale, path, type Locale } from "@/lib/i18n";
-import { latestVillas } from "@/lib/listings";
+import { latestListings } from "@/lib/listings";
+import { studioServices } from "@/content/build";
+import { projects, SAMPLE_PROJECTS } from "@/content/projects";
 import { site } from "@/content/site";
 
 export async function generateMetadata({
@@ -46,7 +49,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   const locale = raw as Locale;
   const dict = getDict(locale);
 
-  const villas = latestVillas(3);
+  const latest = latestListings(3);
+  const lead = projects[0];
 
   return (
     <>
@@ -56,7 +60,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         The height subtracts the sticky header, so the first screen is the
         header plus the hero and nothing of the section below it. It also
         subtracts whatever height the cookie banner currently reports, so on a
-        first visit the banner cannot sit on top of the search button.
+        first visit the banner cannot sit on top of the search.
 
         100svh, not 100vh: the small viewport unit is fixed at the size the
         viewport has while the browser chrome is showing, so the hero does not
@@ -67,49 +71,135 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       */}
       <section
         className="relative overflow-hidden"
-        style={{ height: "calc(100svh - var(--header-h))", minHeight: "30rem" }}
+        style={{ height: "calc(100svh - var(--header-h))", minHeight: "34rem" }}
       >
         <div
-          className="container grid h-full items-stretch gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.82fr)] lg:gap-14"
-          style={{ paddingTop: "1.5rem", paddingBottom: "calc(1.5rem + var(--cookie-h, 0px))" }}
+          className="container flex h-full flex-col justify-center gap-5 sm:gap-6"
+          style={{ paddingTop: "1.25rem", paddingBottom: "calc(1.25rem + var(--cookie-h, 0px))" }}
         >
-          <div className="flex min-w-0 flex-col justify-center">
-            <h1 className="max-w-[16ch] text-[clamp(1.875rem,1.1rem+3.2vw,3.75rem)] font-medium leading-[1.05] tracking-[-0.035em] text-ink">
-              {dict.home.heroHeadline}
-            </h1>
-            <p className="mt-4 max-w-[44ch] text-[clamp(0.9375rem,0.9rem+0.2vw,1.0625rem)] leading-[1.55] text-ink-muted">
-              {dict.home.heroDescription}
-            </p>
-            <div className="mt-6 max-w-[34rem]">
-              <HeroSearch locale={locale} dict={dict} />
+          <div className="grid items-stretch gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.75fr)] lg:gap-12">
+            <div className="min-w-0">
+              <h1 className="max-w-[19ch] text-[clamp(1.5rem,0.95rem+2.6vw,3.25rem)] font-medium leading-[1.08] tracking-[-0.035em] text-ink">
+                {dict.home.heroHeadline}
+              </h1>
+              <p className="mt-3.5 max-w-[54ch] text-[clamp(0.9375rem,0.9rem+0.2vw,1.0625rem)] leading-[1.5] text-ink-muted sm:mt-4">
+                {dict.home.heroDescription}
+              </p>
+
+              {/* The two routes into the business, exactly as the brief frames them. */}
+              <div className="mt-5 grid grid-cols-2 gap-2.5 sm:mt-6 sm:flex sm:flex-wrap sm:gap-3">
+                <AppLink href={path(locale, "listings")} className="btn btn--wrap sm:whitespace-nowrap" data-variant="primary">
+                  <Buildings weight="regular" aria-hidden="true" className="btn__icon" />
+                  <span>{dict.division.proCta}</span>
+                </AppLink>
+                <AppLink href={path(locale, "build")} className="btn btn--wrap sm:whitespace-nowrap" data-variant="secondary">
+                  <Compass weight="regular" aria-hidden="true" className="btn__icon" />
+                  <span>{dict.division.studioCta}</span>
+                </AppLink>
+              </div>
+            </div>
+
+            <div className="relative hidden min-w-0 lg:block">
+              <div className="absolute inset-0 overflow-hidden rounded-[var(--radius-card)] border border-line">
+                <img
+                  src="/graphics/hero.svg"
+                  alt=""
+                  width={1400}
+                  height={1000}
+                  fetchPriority="high"
+                  decoding="async"
+                  className="h-full w-full object-cover"
+                />
+              </div>
             </div>
           </div>
 
-          <div className="relative hidden min-w-0 lg:block">
-            <div className="absolute inset-0 overflow-hidden rounded-[var(--radius-card)] border border-line">
-              <img
-                src="/graphics/hero.svg"
-                alt=""
-                width={2000}
-                height={1250}
-                fetchPriority="high"
-                decoding="async"
-                className="h-full w-full object-cover"
-              />
-            </div>
+          <div className="min-w-0">
+            <HeroSearch locale={locale} dict={dict} />
           </div>
         </div>
       </section>
 
-      {/* Villas lead, because that is what this agency is known for. */}
-      <section aria-labelledby="villas-heading" className="container pt-4 md:pt-8">
+      {/* Two divisions, side by side, so the ecosystem is legible immediately. */}
+      <section aria-labelledby="synergy-heading" className="container pt-4 md:pt-8">
         <Reveal>
           <SectionHeader
-            id="villas-heading"
+            id="synergy-heading"
+            label={dict.home.synergy.label}
+            headline={dict.home.synergy.headline}
+            description={dict.home.synergy.description}
+            cta={{ href: path(locale, "build"), label: dict.home.synergy.cta }}
+          />
+        </Reveal>
+
+        <div className="mt-10 grid gap-4 md:grid-cols-2">
+          {[
+            { division: site.divisions.pro, label: dict.division.proLabel, href: path(locale, "listings"), cta: dict.division.proCta },
+            { division: site.divisions.studio, label: dict.division.studioLabel, href: path(locale, "build"), cta: dict.division.studioCta },
+          ].map((entry, index) => (
+            <Reveal key={entry.division.key} delay={index * 90} className="h-full">
+              <AppLink
+                href={entry.href}
+                className="group flex h-full flex-col rounded-[var(--radius-card)] border border-line bg-white p-6 transition-colors duration-300 hover:border-ink/35 sm:p-8"
+              >
+                <p className="text-[0.75rem] font-medium uppercase tracking-[0.09em] text-ink-muted">
+                  {entry.label}
+                </p>
+                <h3 className="mt-3 text-[clamp(1.375rem,1.1rem+1vw,1.875rem)] font-medium tracking-[-0.025em] text-ink">
+                  {entry.division.name}
+                </h3>
+                <p className="mt-1.5 text-[0.8125rem] text-ink-muted">{entry.division.legalName}</p>
+                <p className="mt-4 max-w-[46ch] flex-1 text-[0.9375rem] leading-relaxed text-ink-muted">
+                  {entry.division.role[locale]}
+                </p>
+                <span className="mt-6 inline-flex items-center gap-1.5 text-[0.9375rem] text-accent-ink">
+                  {entry.cta}
+                  <ArrowRight weight="regular" aria-hidden="true" className="h-4 w-4" />
+                </span>
+              </AppLink>
+            </Reveal>
+          ))}
+        </div>
+
+        <Reveal>
+          <p className="mt-8 max-w-[68ch] text-[1.0625rem] leading-[1.7] text-ink-muted">
+            {dict.home.synergy.closing}
+          </p>
+        </Reveal>
+      </section>
+
+      {/* A ruled grid rather than cards: four claims, no containers around them. */}
+      <section aria-labelledby="advantages-heading" className="container mt-24 md:mt-32">
+        <Reveal>
+          <SectionHeader
+            id="advantages-heading"
+            label={dict.home.advantages.label}
+            headline={dict.home.advantages.headline}
+            description={dict.home.advantages.description}
+          />
+        </Reveal>
+
+        <ul className="mt-10 grid gap-x-10 gap-y-8 border-t border-line pt-8 sm:grid-cols-2">
+          {dict.home.advantages.items.map((item, index) => (
+            <li key={item.title}>
+              <Reveal delay={index * 70}>
+                <h3 className="text-[1.0625rem] font-medium tracking-[-0.015em] text-ink">{item.title}</h3>
+                <p className="mt-2 max-w-[48ch] text-[0.9375rem] leading-relaxed text-ink-muted">{item.body}</p>
+              </Reveal>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* Korva Pro. */}
+      <section aria-labelledby="latest-heading" className="container mt-24 md:mt-32">
+        <Reveal>
+          <SectionHeader
+            id="latest-heading"
             label={dict.home.latest.label}
             headline={dict.home.latest.headline}
             description={dict.home.latest.description}
-            cta={{ href: path(locale, "listings") + "?type=villa", label: dict.home.latest.cta }}
+            cta={{ href: path(locale, "listings"), label: dict.home.latest.cta }}
           />
         </Reveal>
 
@@ -118,7 +208,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         </div>
 
         <ul className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {villas.map((listing, index) => (
+          {latest.map((listing, index) => (
             <li key={listing.slug}>
               <Reveal delay={index * 90}>
                 <ListingCard listing={listing} locale={locale} dict={dict} priority={index === 0} />
@@ -128,10 +218,73 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         </ul>
       </section>
 
-      {/*
-        A different layout family from the grid above: one lead tile with a wide
-        plane, two supporting tiles. Exactly three cells for three categories.
-      */}
+      {/* Korva Studio. A list against a single plane, not another card grid. */}
+      <section aria-labelledby="build-heading" className="container mt-24 md:mt-32">
+        <Reveal>
+          <SectionHeader
+            id="build-heading"
+            label={dict.home.build.label}
+            headline={dict.home.build.headline}
+            description={dict.home.build.description}
+            cta={{ href: path(locale, "build"), label: dict.home.build.cta }}
+          />
+        </Reveal>
+
+        <ul className="mt-10 divide-y divide-line border-y border-line">
+          {studioServices.map((service, index) => (
+            <li key={service.key}>
+              <Reveal delay={index * 60}>
+                <div className="grid gap-2 py-6 md:grid-cols-[minmax(0,0.4fr)_minmax(0,1fr)] md:gap-10">
+                  <h3 className="text-[1.0625rem] font-medium tracking-[-0.015em] text-ink">
+                    {service.name[locale]}
+                  </h3>
+                  <p className="max-w-[62ch] text-[0.9375rem] leading-relaxed text-ink-muted">
+                    {service.description[locale]}
+                  </p>
+                </div>
+              </Reveal>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* One full-width comparison, the clearest evidence of what Studio does. */}
+      {lead ? (
+        <section aria-labelledby="portfolio-heading" className="container mt-24 md:mt-32">
+          <Reveal>
+            <SectionHeader
+              id="portfolio-heading"
+              label={dict.home.portfolio.label}
+              headline={dict.home.portfolio.headline}
+              description={dict.home.portfolio.description}
+              cta={{ href: path(locale, "portfolio"), label: dict.home.portfolio.cta }}
+            />
+          </Reveal>
+
+          {SAMPLE_PROJECTS ? (
+            <div className="mt-8">
+              <SampleNotice text={dict.common.sampleNoteProjects} badge={dict.common.sampleBadge} />
+            </div>
+          ) : null}
+
+          <Reveal className="mt-8">
+            <BeforeAfter
+              before={lead.before}
+              after={lead.after}
+              beforeAlt={`${dict.portfolio.beforeLabel}. ${lead.title[locale]}.`}
+              afterAlt={`${dict.portfolio.afterLabel}. ${lead.title[locale]}.`}
+              beforeLabel={dict.portfolio.beforeLabel}
+              afterLabel={dict.portfolio.afterLabel}
+              sliderLabel={dict.portfolio.sliderLabel}
+            />
+            <p className="mt-3 text-[0.875rem] text-ink-muted">
+              {lead.title[locale]}. {dict.portfolio.sliderInstruction}
+            </p>
+          </Reveal>
+        </section>
+      ) : null}
+
+      {/* A bento: one lead tile, two supporting. Exactly three cells for three. */}
       <section aria-labelledby="categories-heading" className="container mt-24 md:mt-32">
         <Reveal>
           <SectionHeader
@@ -145,15 +298,17 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
         <ul className="mt-10 grid gap-4 md:grid-cols-2 md:grid-rows-2">
           {CATEGORIES.map((type, index) => {
-            const lead = index === 0;
+            const isLead = index === 0;
             return (
-              <li key={type} className={lead ? "md:row-span-2" : ""}>
+              <li key={type} className={isLead ? "md:row-span-2" : ""}>
                 <Reveal delay={index * 90} className="h-full">
                   <AppLink
                     href={path(locale, "listings") + `?type=${type}`}
                     className="group flex h-full flex-col overflow-hidden rounded-[var(--radius-card)] border border-line bg-white transition-colors duration-300 hover:border-ink/35"
                   >
-                    <span className={`block w-full overflow-hidden bg-surface ${lead ? "aspect-[4/3] md:aspect-auto md:flex-1" : "aspect-[16/7]"}`}>
+                    <span
+                      className={`block w-full overflow-hidden bg-surface ${isLead ? "aspect-[4/3] md:aspect-auto md:flex-1" : "aspect-[16/7]"}`}
+                    >
                       <img
                         src={`/graphics/category-${type}.svg`}
                         alt=""
@@ -181,7 +336,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         </ul>
       </section>
 
-      <ItemListSchema listings={villas} locale={locale} />
+      <ItemListSchema listings={latest} locale={locale} />
     </>
   );
 }

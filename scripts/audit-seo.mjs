@@ -11,6 +11,7 @@
  */
 
 import { listings } from "../content/listings.ts";
+import { projects } from "../content/projects.ts";
 import { locales, path, routes } from "../lib/i18n.ts";
 
 const BASE = process.argv[2] || "http://localhost:4311";
@@ -46,6 +47,10 @@ async function text(url) {
   for (const listing of listings) listing.images.forEach((i) => assets.add(i));
   for (const type of ["villa", "rumah", "tanah", "ruko"]) assets.add(`/graphics/category-${type}.svg`);
   assets.add("/graphics/hero.svg");
+  for (const project of projects) {
+    assets.add(project.before);
+    assets.add(project.after);
+  }
   assets.add("/icon.svg");
   assets.add("/apple-icon.png");
   assets.add("/og/default.png");
@@ -120,7 +125,8 @@ async function text(url) {
     for (const key of Object.keys(routes)) {
       const url = path(locale, key);
       const { body } = await text(BASE + url);
-      if (!body.includes('"@type":"RealEstateAgent"')) problems.push(`${url}: no agent schema`);
+      if (!body.includes('"@type":"RealEstateAgent"')) problems.push(`${url}: no Korva Pro schema`);
+      if (!body.includes('"@type":"GeneralContractor"')) problems.push(`${url}: no Korva Studio schema`);
       if (!body.includes('"openingHoursSpecification"')) problems.push(`${url}: no opening hours`);
       if (!body.includes('"streetAddress"')) problems.push(`${url}: no address`);
       const lang = body.match(/<html lang="([^"]*)"/)?.[1] ?? "";

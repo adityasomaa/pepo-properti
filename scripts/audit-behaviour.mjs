@@ -70,7 +70,7 @@ async function freshPage(width = 1440, height = 900) {
   });
   check("mobile menu opens", open.present && open.modal);
   check("mobile menu locks page scroll", open.locked && open.bodyFixed);
-  check("mobile menu lists all four pages", open.links === 4, `${open.links} links`);
+  check("mobile menu lists every page", open.links === 6, `${open.links} links`);
   check("cookie banner steps aside for the menu", open.cookieBannerVisible === false);
 
   await page.keyboard.press("Escape");
@@ -226,7 +226,7 @@ async function freshPage(width = 1440, height = 900) {
   check("language switch keeps the same property", switched.url === "/en/listings/villa-empat-kamar-ubud", switched.url);
   check("document language follows the choice", switched.lang === "en", switched.lang);
   check("content is translated", /Four-Bedroom Villa/i.test(switched.heading || ""), switched.heading);
-  check("navigation is translated", switched.nav.includes("Listings"), switched.nav.join(", "));
+  check("navigation is translated", switched.nav.includes("Properties"), switched.nav.join(", "));
 
   // Move to another page: the choice has to survive.
   await page.evaluate(() => {
@@ -237,7 +237,7 @@ async function freshPage(width = 1440, height = 900) {
   check("language survives a page change", kept.path.startsWith("/en") && kept.lang === "en", kept.path);
 
   const cookie = await page.evaluate(() => document.cookie);
-  check("accepted consent stores the language", /pepo_lang=en/.test(cookie), cookie);
+  check("accepted consent stores the language", /korva_lang=en/.test(cookie), cookie);
 
   // A fresh visit to the root should now land in English.
   await page.goto(`${BASE}/`, { waitUntil: "networkidle2" });
@@ -264,7 +264,11 @@ async function freshPage(width = 1440, height = 900) {
   );
 
   check("every page offers a WhatsApp route", links.length >= 2, `${links.length} links`);
-  check("all links point at the agency number", links.every((l) => l.number === "6281236447099"));
+  // Two divisions, two numbers. Every link must reach one of them, and the
+  // listing enquiry specifically must reach Korva Pro.
+  const NUMBERS = ["6281236447099", "62881037652019"];
+  check("all links reach one of the two divisions", links.every((l) => NUMBERS.includes(l.number)),
+    [...new Set(links.map((l) => l.number))].join(", "));
 
   const listingLink = links.find((l) => l.message.includes("PP-V-006"));
   check("the listing button carries the listing code", !!listingLink);
@@ -407,11 +411,11 @@ async function freshPage(width = 1440, height = 900) {
   await settle(600);
 
   const declined = await page.evaluate(() => {
-    document.cookie = "pepo_lang=en; Path=/";
+    document.cookie = "korva_lang=en; Path=/";
     return { cookie: document.cookie, bannerGone: !document.querySelector('[role="region"]') };
   });
   check("declining dismisses the banner", declined.bannerGone);
-  check("declining is recorded", /pepo_consent=denied/.test(declined.cookie));
+  check("declining is recorded", /korva_consent=denied/.test(declined.cookie));
 
   await context.close();
 }
