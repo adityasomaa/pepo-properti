@@ -147,7 +147,9 @@ export function Gallery({
           role="dialog"
           aria-modal="true"
           aria-label={dict.listing.gallery}
-          className="fixed inset-0 z-[var(--z-overlay)] bg-forest/97"
+          // Fully opaque. At 97% the page ghosted through behind the image, which
+          // reads as a rendering fault rather than as depth.
+          className="fixed inset-0 z-[var(--z-overlay)] bg-forest"
         >
           <div ref={dialogRef} className="on-dark flex h-[100svh] flex-col">
             <div className="container flex h-[var(--header-h)] flex-none items-center justify-between">
