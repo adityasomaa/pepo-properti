@@ -88,7 +88,7 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
             className="flex items-center text-[1.0625rem] text-ink"
             aria-label={site.legalName}
           >
-            <Wordmark />
+            <Wordmark cascade />
           </AppLink>
 
           <nav aria-label={dict.nav.menuLabel} className="hidden lg:block">

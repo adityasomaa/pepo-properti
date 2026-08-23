@@ -1,3 +1,5 @@
+import { LetterCascade } from "../ui/letter-cascade";
+
 /**
  * The brand mark. Authored rather than taken from an icon library, because it
  * is a logo and not an icon: the same geometry ships as the site icon and the
@@ -22,11 +24,29 @@ export function Mark({ className = "", title }: { className?: string; title?: st
   );
 }
 
-export function Wordmark({ className = "" }: { className?: string }) {
+export function Wordmark({
+  className = "",
+  cascade = false,
+}: {
+  className?: string;
+  /**
+   * Runs the letter cascade on hover. Used on the header mark and nowhere else:
+   * one authored moment, on the one element that is on every page.
+   */
+  cascade?: boolean;
+}) {
   return (
     <span className={`inline-flex items-center gap-2.5 ${className}`}>
       <Mark className="h-[1.35em] w-[1.35em] flex-none" />
-      <span className="font-medium tracking-[-0.025em]">Pepo Properti</span>
+      {cascade ? (
+        <LetterCascade
+          text="Pepo Properti"
+          className="font-medium tracking-[-0.025em]"
+          staggerDuration={0.028}
+        />
+      ) : (
+        <span className="font-medium tracking-[-0.025em]">Pepo Properti</span>
+      )}
     </span>
   );
 }
