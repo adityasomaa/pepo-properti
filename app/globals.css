@@ -351,7 +351,10 @@
     display: block;
     width: min(16rem, 60vw);
     height: 1px;
-    background-color: var(--color-accent);
+    /* Muted light, not the clay accent: a 1px clay hairline on the deep forest
+       panel is too close in value to read as a deliberate mark. The clay stays
+       where it does read, on the leading edge of the page curtain. */
+    background-color: var(--color-on-forest-muted);
     transform: scaleX(0);
     transform-origin: left center;
     animation: rule-draw 760ms var(--ease-out-expo) both;
