@@ -1,0 +1,656 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   @font-face is deliberately declared OUTSIDE a cascade layer.
+   It is an at-rule that registers a font resource; it carries no specificity
+   and cannot override a Tailwind utility, so layering it buys nothing while
+   historically risking font loading bugs. Every rule that CAN win against a
+   utility lives inside @layer base / @layer components below.
+   --------------------------------------------------------------------------- */
+@font-face {
+  font-family: "Neue Montreal";
+  src: url("/fonts/NeueMontreal-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Neue Montreal";
+  src: url("/fonts/NeueMontreal-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Neue Montreal";
+  src: url("/fonts/NeueMontreal-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  /* Palette. Locked: forest + paper + brick. Every pair is audited by
+     `npm run contrast` (scripts/check-contrast.mjs). Do not add a colour here
+     without adding its pairing to that script. */
+  --color-paper: #f2f3ef;
+  --color-surface: #e7e9e1;
+  --color-forest: #12261d;
+  --color-forest-soft: #1d3a2c;
+  --color-ink: #12261d;
+  --color-ink-muted: #4c5b53;
+  --color-line: #d2d6cb;
+  --color-accent: #9c3517;
+  --color-accent-ink: #8a2f14;
+  --color-on-forest: #eff1ea;
+  --color-on-forest-muted: #afbcb2;
+
+  --font-sans: "Neue Montreal", ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  /* One radius system for the whole site: 14px surfaces, full-pill controls. */
+  --radius-card: 14px;
+  --radius-field: 10px;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+  /* ---------------------------------------------------------------------
+     THE Z-INDEX SCALE. This is the only place a stacking value is defined.
+     There are no raw z-index numbers anywhere else in the codebase; every
+     layer references one of these tokens via z-[var(--z-*)].
+     Order, lowest to highest:
+       content < sticky header < filter panel < mobile menu
+             < lightbox / popup < cookie banner < skip link
+     --------------------------------------------------------------------- */
+  :root {
+    --z-content: 1;
+    --z-raised: 10;
+    --z-header: 100;
+    --z-filter: 200;
+    --z-menu: 300;
+    --z-overlay: 400;
+    --z-cookie: 500;
+    /* The transition curtain covers the whole viewport during a navigation,
+       so it sits above the cookie banner. Only the skip link outranks it. */
+    --z-transition: 550;
+    --z-skip: 600;
+
+    --header-h: 4rem;
+  }
+
+  @media (min-width: 1024px) {
+    :root {
+      --header-h: 4.5rem;
+    }
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: auto;
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    /* Belt and braces against horizontal overflow on small screens. */
+    overflow-x: clip;
+  }
+
+  /* Browser surfaces we did not draw, themed from the palette. */
+  ::selection {
+    background-color: var(--color-forest);
+    color: var(--color-on-forest);
+  }
+
+  :root {
+    caret-color: var(--color-accent-ink);
+    scrollbar-color: var(--color-ink-muted) var(--color-surface);
+    scrollbar-width: thin;
+    accent-color: var(--color-accent-ink);
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-surface);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-ink-muted);
+    border-radius: 999px;
+    border: 2px solid var(--color-surface);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent-ink);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  a {
+    text-underline-offset: 0.18em;
+    text-decoration-thickness: from-font;
+  }
+
+  /* Long bilingual listing titles must never widen a grid column. */
+  h1, h2, h3, h4, p, li, a, span, button {
+    overflow-wrap: anywhere;
+  }
+
+  h1, h2, h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  img, svg, video {
+    max-width: 100%;
+    height: auto;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* Prices and measurements line up column to column. */
+  .numeric {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+  }
+
+  /* Honeypot. Uses clip, not a negative absolute offset: an off-canvas
+     absolute element without a positioned ancestor escapes to the document
+     and creates horizontal overflow. */
+  .honeypot {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .sr-only-focusable:not(:focus):not(:focus-within) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  /* Applied to <html> while any overlay owns the screen. */
+  .scroll-locked {
+    overflow: hidden !important;
+  }
+  .scroll-locked body {
+    overflow: hidden !important;
+  }
+}
+
+@layer components {
+  /* -------------------------------------------------------------------------
+     Page transition curtains.
+
+     Two curtains share this element and diverge on data-kind:
+       intro  wordmark reveal, used on first load and on any trip to home
+       page   a fast two-plane architectural wipe, used everywhere else
+
+     Phases are driven from JavaScript via data-phase. CSS animations rather
+     than transitions, so each phase starts from its own known keyframe instead
+     of interpolating from wherever the last one was parked.
+     ------------------------------------------------------------------------- */
+  .curtain {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-transition);
+    display: block;
+  }
+
+  .curtain[data-phase="idle"] {
+    display: none;
+  }
+
+  .curtain__panel {
+    position: absolute;
+    inset: 0;
+    will-change: transform;
+  }
+
+  .curtain__panel--back {
+    background-color: var(--color-forest-soft);
+  }
+
+  .curtain__panel--front {
+    background-color: var(--color-forest);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* The clay edge rides the leading boundary of the front plane. */
+  .curtain[data-kind="page"] .curtain__panel--front::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 2px;
+    background-color: var(--color-accent);
+  }
+
+  @keyframes curtain-close {
+    from {
+      transform: translate3d(0, 100%, 0);
+    }
+    to {
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  @keyframes curtain-open {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(0, -100%, 0);
+    }
+  }
+
+  .curtain[data-phase="intro"] .curtain__panel,
+  .curtain[data-phase="held"] .curtain__panel {
+    transform: translate3d(0, 0, 0);
+  }
+
+  .curtain[data-phase="closing"] .curtain__panel {
+    animation: curtain-close 620ms var(--ease-out-expo) both;
+  }
+
+  .curtain[data-phase="opening"] .curtain__panel {
+    animation: curtain-open 720ms var(--ease-out-expo) both;
+  }
+
+  /* The back plane leads on the way in and trails on the way out, which is what
+     gives the wipe a sense of thickness rather than a single flat sheet. */
+  .curtain[data-kind="page"][data-phase="closing"] .curtain__panel--front {
+    animation-delay: 90ms;
+  }
+
+  .curtain[data-kind="page"][data-phase="opening"] .curtain__panel--back {
+    animation-delay: 110ms;
+  }
+
+  /* --- The wordmark, intro curtain only ---------------------------------- */
+  .curtain__mark {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.9rem;
+    padding-inline: 1.5rem;
+  }
+
+  .curtain[data-kind="page"] .curtain__mark {
+    display: none;
+  }
+
+  .curtain__word {
+    display: flex;
+    color: var(--color-on-forest);
+    font-size: clamp(1.75rem, 6vw, 3rem);
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    white-space: pre;
+  }
+
+  .curtain__letter {
+    display: inline-block;
+    transform: translate3d(0, 0.7em, 0);
+    opacity: 0;
+    animation: letter-rise 620ms var(--ease-out-expo) both;
+    animation-delay: calc(var(--i) * 28ms);
+  }
+
+  @keyframes letter-rise {
+    from {
+      transform: translate3d(0, 0.7em, 0);
+      opacity: 0;
+    }
+    to {
+      transform: translate3d(0, 0, 0);
+      opacity: 1;
+    }
+  }
+
+  .curtain__rule {
+    display: block;
+    width: min(16rem, 60vw);
+    height: 1px;
+    background-color: var(--color-accent);
+    transform: scaleX(0);
+    transform-origin: left center;
+    animation: rule-draw 760ms var(--ease-out-expo) both;
+    animation-delay: 320ms;
+  }
+
+  @keyframes rule-draw {
+    to {
+      transform: scaleX(1);
+    }
+  }
+
+  /* On the way out the mark leaves before the plane does. */
+  .curtain[data-phase="opening"] .curtain__mark {
+    animation: mark-leave 320ms var(--ease-out-expo) both;
+  }
+
+  @keyframes mark-leave {
+    to {
+      opacity: 0;
+      transform: translate3d(0, -0.6rem, 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .curtain {
+      display: none !important;
+    }
+  }
+}
+
+@layer components {
+  /* -------------------------------------------------------------------------
+     Controls.
+
+     One radius rule for the whole site, stated once here and never varied:
+       pill      buttons and other small controls
+       10px      form fields
+       14px      cards and panels
+     Elevation is declared once per element: a hairline OR a shadow, never both.
+     ------------------------------------------------------------------------- */
+  .container {
+    width: 100%;
+    max-width: 78rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+
+  @media (min-width: 768px) {
+    .container {
+      padding-inline: 2rem;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .container {
+      padding-inline: 2.5rem;
+    }
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 2.875rem;
+    padding: 0.6875rem 1.25rem;
+    border-radius: 999px;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    line-height: 1.2;
+    text-align: center;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+      transform 160ms var(--ease-out-expo),
+      background-color 200ms ease,
+      color 200ms ease,
+      border-color 200ms ease;
+  }
+
+  .btn__icon {
+    width: 1.125rem;
+    height: 1.125rem;
+    flex: none;
+  }
+
+  .btn:hover {
+    transform: translateY(-1px);
+  }
+
+  .btn:active {
+    transform: scale(0.98);
+  }
+
+  .btn[data-variant="primary"] {
+    background-color: var(--color-accent);
+    color: #ffffff;
+    border: 1px solid var(--color-accent);
+  }
+
+  .btn[data-variant="primary"]:hover {
+    background-color: var(--color-accent-ink);
+    border-color: var(--color-accent-ink);
+  }
+
+  .btn[data-variant="secondary"] {
+    background-color: transparent;
+    color: var(--color-ink);
+    border: 1px solid var(--color-line);
+  }
+
+  .btn[data-variant="secondary"]:hover {
+    border-color: var(--color-ink);
+  }
+
+  .btn[data-variant="ghost"] {
+    background-color: transparent;
+    color: var(--color-accent-ink);
+    border: 1px solid transparent;
+    padding-inline: 0.25rem;
+  }
+
+  .btn[data-variant="ghost"]:hover {
+    text-decoration: underline;
+  }
+
+  .btn[disabled],
+  .btn[aria-disabled="true"] {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  /* Controls sitting on the dark brand surface. */
+  .on-dark .btn[data-variant="secondary"] {
+    color: var(--color-on-forest);
+    border-color: color-mix(in srgb, var(--color-on-forest) 34%, transparent);
+  }
+
+  .on-dark .btn[data-variant="secondary"]:hover {
+    border-color: var(--color-on-forest);
+  }
+
+  .on-dark .btn[data-variant="ghost"] {
+    color: var(--color-on-forest);
+  }
+
+  .on-dark :focus-visible {
+    outline-color: var(--color-on-forest);
+  }
+
+  /* --- Form fields ------------------------------------------------------- */
+  .field-label {
+    display: block;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    color: var(--color-ink);
+    margin-bottom: 0.375rem;
+  }
+
+  .field {
+    width: 100%;
+    min-height: 2.875rem;
+    padding: 0.6875rem 0.875rem;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-field);
+    background-color: #ffffff;
+    color: var(--color-ink);
+    font-family: inherit;
+    font-size: 0.9375rem;
+    line-height: 1.4;
+  }
+
+  .field::placeholder {
+    color: var(--color-ink-muted);
+    opacity: 1;
+  }
+
+  .field:hover {
+    border-color: color-mix(in srgb, var(--color-ink) 32%, var(--color-line));
+  }
+
+  .field:focus-visible {
+    outline: 2px solid var(--color-accent-ink);
+    outline-offset: 1px;
+    border-color: var(--color-accent-ink);
+  }
+
+  .field[aria-invalid="true"] {
+    border-color: var(--color-accent-ink);
+  }
+
+  textarea.field {
+    min-height: 7.5rem;
+    resize: vertical;
+  }
+
+  .field-hint {
+    font-size: 0.8125rem;
+    color: var(--color-ink-muted);
+    margin-top: 0.375rem;
+  }
+
+  .field-error {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.375rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--color-accent-ink);
+    margin-top: 0.375rem;
+  }
+
+  /* --- Surfaces ---------------------------------------------------------- */
+  .panel {
+    background-color: #ffffff;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-card);
+  }
+
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.25rem 0.625rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    line-height: 1.4;
+  }
+
+  .tag[data-tone="sale"] {
+    background-color: var(--color-forest);
+    color: var(--color-on-forest);
+  }
+
+  .tag[data-tone="rent"] {
+    background-color: var(--color-surface);
+    color: var(--color-ink);
+    box-shadow: inset 0 0 0 1px var(--color-line);
+  }
+
+  .tag[data-tone="sample"] {
+    background-color: color-mix(in srgb, var(--color-accent) 12%, var(--color-paper));
+    color: var(--color-accent-ink);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-accent) 30%, transparent);
+  }
+}
+
+@layer components {
+  .skip-link {
+    position: fixed;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: var(--z-skip);
+    display: inline-flex;
+    align-items: center;
+    padding: 0.75rem 1.125rem;
+    border-radius: 999px;
+    background-color: var(--color-forest);
+    color: var(--color-on-forest);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    text-decoration: none;
+    transform: translateY(calc(-100% - 1.5rem));
+    transition: transform 220ms var(--ease-out-expo);
+  }
+
+  .skip-link:focus-visible {
+    transform: translateY(0);
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  /* Reveal on scroll. The observed element is never inside an overflow-hidden
+     parent: a clipped ancestor makes every intersection ratio 0, and the reveal
+     would simply never fire. */
+  .reveal {
+    opacity: 0;
+    transform: translate3d(0, 1.25rem, 0);
+    transition:
+      opacity 700ms var(--ease-out-expo),
+      transform 700ms var(--ease-out-expo);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  .reveal[data-visible="true"] {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
