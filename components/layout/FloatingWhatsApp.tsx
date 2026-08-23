@@ -27,6 +27,7 @@ export function FloatingWhatsApp({ locale, dict }: { locale: Locale; dict: Dicti
         locale={locale}
         pageUrl={site.url + pathname}
         buttonLabel={dict.common.askWhatsApp}
+        placement="floating"
         variant="primary"
         className="shadow-[0_14px_30px_-14px_rgba(18,38,29,0.7)]"
       />

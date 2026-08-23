@@ -9,3 +9,6 @@ next-env.d.ts
 
 # scratch
 scripts/tmp/
+
+# scratch files from local investigation
+scripts/tmp/

@@ -45,9 +45,9 @@ export function HeroSearch({ locale, dict }: { locale: Locale; dict: Dictionary 
       onSubmit={submit}
       role="search"
       aria-label={dict.home.searchLabel}
-      className="rounded-[var(--radius-card)] border border-line bg-white p-4 sm:p-5"
+      className="rounded-[var(--radius-card)] border border-line bg-white p-3.5 sm:p-5"
     >
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
         <Listbox
           label={dict.listings.status}
           value={status}
@@ -64,7 +64,7 @@ export function HeroSearch({ locale, dict }: { locale: Locale; dict: Dictionary 
         />
       </div>
 
-      <div className="mt-3">
+      <div className="mt-2.5 sm:mt-3">
         <label htmlFor={inputId} className="field-label">
           {dict.listings.search}
         </label>
@@ -79,7 +79,7 @@ export function HeroSearch({ locale, dict }: { locale: Locale; dict: Dictionary 
         />
       </div>
 
-      <button type="submit" className="btn mt-4 w-full" data-variant="primary">
+      <button type="submit" className="btn mt-3 w-full sm:mt-4" data-variant="primary">
         <MagnifyingGlass weight="regular" aria-hidden="true" className="btn__icon" />
         <span>{dict.home.searchSubmit}</span>
       </button>

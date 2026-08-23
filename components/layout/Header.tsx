@@ -108,15 +108,14 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
           </nav>
 
           <div className="flex items-center gap-2">
-            <div className="hidden sm:block">
-              <LanguageSwitcher locale={locale} compact />
-            </div>
+            <LanguageSwitcher locale={locale} compact />
 
             <div className="hidden lg:block">
               <WhatsAppLink
                 locale={locale}
                 pageUrl={pageUrl}
                 buttonLabel={dict.common.askWhatsApp}
+                placement="header"
                 variant="primary"
                 className="text-[0.875rem]"
               />
@@ -128,11 +127,12 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
               onClick={() => setMenuOpen(true)}
               aria-expanded={menuOpen}
               aria-controls="mobile-menu"
-              className="btn lg:hidden"
+              className="btn px-3 lg:hidden"
               data-variant="secondary"
+              aria-label={dict.nav.openMenu}
             >
               <List weight="regular" aria-hidden="true" className="btn__icon" />
-              <span>{dict.nav.openMenu}</span>
+              <span className="hidden sm:inline">{dict.nav.openMenu}</span>
             </button>
           </div>
         </div>
@@ -157,11 +157,12 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
                   setMenuOpen(false);
                   triggerRef.current?.focus();
                 }}
-                className="btn"
+                className="btn px-3 sm:px-5"
                 data-variant="secondary"
+                aria-label={dict.nav.closeMenu}
               >
                 <X weight="regular" aria-hidden="true" className="btn__icon" />
-                <span>{dict.nav.closeMenu}</span>
+                <span className="hidden sm:inline">{dict.nav.closeMenu}</span>
               </button>
             </div>
 
@@ -190,6 +191,7 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
                 locale={locale}
                 pageUrl={pageUrl}
                 buttonLabel={dict.common.askWhatsApp}
+                placement="mobile-menu"
                 variant="primary"
                 className="w-full"
               />

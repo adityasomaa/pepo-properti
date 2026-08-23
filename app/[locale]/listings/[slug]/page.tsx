@@ -156,6 +156,7 @@ export default async function ListingDetailPage({
                 locale={locale}
                 pageUrl={pageUrl}
                 buttonLabel={dict.common.askAboutThis}
+                placement="listing-detail"
                 listing={{ code: listing.code, title: listing.title[locale] }}
                 variant="primary"
                 className="w-full"

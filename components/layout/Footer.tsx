@@ -60,6 +60,7 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
                 locale={locale}
                 pageUrl={pageUrl}
                 buttonLabel={dict.footer.ctaWhatsApp}
+                placement="footer"
                 variant="primary"
               />
               <AppLink href={path(locale, secondaryKey)} className="btn" data-variant="secondary">

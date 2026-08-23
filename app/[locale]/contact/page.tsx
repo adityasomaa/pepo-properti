@@ -60,6 +60,7 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
               locale={locale}
               pageUrl={pageUrl}
               buttonLabel={dict.contact.cta}
+              placement="contact-header"
               variant="primary"
             />
           }
@@ -125,6 +126,7 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
               locale={locale}
               pageUrl={pageUrl}
               buttonLabel={dict.contact.whatsapp}
+              placement="contact-card"
               variant="secondary"
             >
               {dict.contact.whatsapp}

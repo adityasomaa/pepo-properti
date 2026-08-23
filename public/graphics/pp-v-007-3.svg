@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1200" width="1600" height="1200" role="presentation">
-<defs><linearGradient id="gzpo" x1="0" y1="0" x2="0" y2="1">
+<defs><linearGradient id="gzpo" x1="0.25" y1="0" x2="0.75" y2="1">
 <stop offset="0" stop-color="#f2f3ef"/><stop offset="1" stop-color="#6e8c7a"/>
 </linearGradient></defs>
 <rect width="1600" height="1200" fill="url(#gzpo)"/>
-<circle cx="384.49" cy="552.2" r="119.52" fill="#f2f3ef" opacity="0.5"/><rect x="0" y="633.32" width="1600" height="108.04" fill="#f2f3ef" opacity="0.22"/><rect x="0" y="741.36" width="1600" height="458.64" fill="#12261d"/><rect x="20.75" y="741.36" width="1579.25" height="133.62" fill="#4d7360" opacity="0.59"/><rect x="183.37" y="836.48" width="1416.63" height="145.94" fill="#2e5442" opacity="0.67"/><rect x="160.07" y="973.34" width="1439.93" height="164.41" fill="#1d3a2c" opacity="0.74"/><rect x="130.34" y="1094.59" width="1469.66" height="75.68" fill="#12261d" opacity="0.73"/><rect x="96" y="1034.54" width="1408" height="72.03" fill="#f2f3ef" opacity="0.32"/><rect x="590.22" y="715.82" width="14.12" height="212.83" fill="#9c3517" opacity="0.9"/>
+<rect x="0" y="364.02" width="1600" height="108.78" fill="#f2f3ef" opacity="0.22"/><rect x="0" y="472.8" width="1600" height="727.2" fill="#12261d"/><rect x="470.78" y="472.8" width="1129.22" height="69.36" fill="#4d7360" opacity="0.84"/><rect x="118.43" y="543.14" width="1481.57" height="58.76" fill="#2e5442" opacity="0.78"/><rect x="0" y="613.25" width="1371.75" height="85.97" fill="#1d3a2c" opacity="0.8"/><rect x="0" y="702.62" width="1587.95" height="56.36" fill="#12261d" opacity="0.73"/><rect x="0" y="737.62" width="1257.74" height="123.34" fill="#c2cdc2" opacity="0.76"/><rect x="119.77" y="835.74" width="1360.46" height="109.67" fill="#f2f3ef" opacity="0.37"/><rect x="416.81" y="456.72" width="11.56" height="160.82" fill="#9c3517" opacity="0.9"/>
 </svg>

@@ -4,8 +4,15 @@ import type { Locale } from "./i18n";
 export type InquirySource = {
   /** Absolute URL of the page the visitor pressed the button on. */
   pageUrl: string;
-  /** The button's own label, so two buttons on one page stay distinguishable. */
+  /** The button's own label, as the visitor read it. */
   buttonLabel: string;
+  /**
+   * Where on the page that button sits: header, footer, floating, listing, and
+   * so on. Several buttons deliberately share one label, because one intent
+   * should have one wording, so the label alone cannot identify which one was
+   * pressed. This can.
+   */
+  placement: string;
 };
 
 export type InquiryListing = {
@@ -50,7 +57,11 @@ export function inquiryMessage(
     lines.push(t.aboutGeneral);
   }
 
-  lines.push("", `${t.page}: ${source.pageUrl}`, `${t.from}: ${source.buttonLabel}`);
+  lines.push(
+    "",
+    `${t.page}: ${source.pageUrl}`,
+    `${t.from}: ${source.buttonLabel} (${source.placement})`
+  );
 
   return lines.join("\n");
 }
@@ -107,6 +118,10 @@ export function submissionMessage(
   if (data.price) lines.push(`${t.price}: ${data.price}`);
   if (data.notes) lines.push("", `${t.notes}:`, data.notes);
 
-  lines.push("", `${t.page}: ${source.pageUrl}`, `${t.from}: ${source.buttonLabel}`);
+  lines.push(
+    "",
+    `${t.page}: ${source.pageUrl}`,
+    `${t.from}: ${source.buttonLabel} (${source.placement})`
+  );
   return lines.join("\n");
 }

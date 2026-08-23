@@ -96,62 +96,81 @@ const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replac
    Compositions
    ------------------------------------------------------------------------- */
 
-function villa(rand, W, H, ramp) {
+/* Each type has three structural variants, picked from the seed. Without them
+   a grid of villas reads as one image repeated, which is exactly what a real
+   listing grid must not look like. */
+
+function villa(rand, W, H, ramp, variant) {
   const out = [];
-  const horizon = H * (0.58 + rand() * 0.07);
+  const tones = [ramp.soft, C.sage, C.fern, C.moss, C.forest];
 
-  // Sun. Small, placed on a third, and always partly taken by the horizon.
-  const sunR = W * (0.055 + rand() * 0.035);
-  const sunX = W * (rand() < 0.5 ? 0.22 + rand() * 0.08 : 0.68 + rand() * 0.1);
-  const sunY = horizon - sunR * (0.7 + rand() * 0.9);
-  out.push(`<circle cx="${r2(sunX)}" cy="${r2(sunY)}" r="${r2(sunR)}" fill="${ramp.top}" opacity="0.5"/>`);
+  // 0 low horizon with a sun, 1 terraced with no sun, 2 high horizon over water
+  const horizon =
+    variant === 1
+      ? H * (0.34 + rand() * 0.1)
+      : variant === 2
+        ? H * (0.3 + rand() * 0.08)
+        : H * (0.55 + rand() * 0.14);
 
-  // Atmospheric band gathering just above the horizon.
-  const hazeH = H * (0.06 + rand() * 0.05);
+  if (variant !== 1) {
+    const sunR = W * (0.045 + rand() * 0.075);
+    const sunX = W * (rand() < 0.5 ? 0.16 + rand() * 0.16 : 0.62 + rand() * 0.2);
+    const sunY =
+      variant === 2 ? horizon - sunR * (1.4 + rand() * 1.6) : horizon - sunR * (0.5 + rand() * 1.1);
+    out.push(
+      `<circle cx="${r2(sunX)}" cy="${r2(sunY)}" r="${r2(sunR)}" fill="${ramp.top}" opacity="${r2(0.4 + rand() * 0.25)}"/>`
+    );
+  }
+
+  const hazeH = H * (0.04 + rand() * 0.09);
   out.push(
     `<rect x="0" y="${r2(horizon - hazeH)}" width="${W}" height="${r2(hazeH)}" fill="${ramp.top}" opacity="0.22"/>`
   );
 
-  // Ground plane.
   out.push(`<rect x="0" y="${r2(horizon)}" width="${W}" height="${r2(H - horizon)}" fill="${ramp.ink}"/>`);
 
-  // Stacked planes below the horizon, each a little darker than the last.
-  const bands = 3 + Math.floor(rand() * 2);
+  const bands = variant === 1 ? 5 + Math.floor(rand() * 4) : 3 + Math.floor(rand() * 3);
   let y = horizon;
-  const tones = [ramp.soft, C.sage, C.fern, C.moss, C.forest];
   for (let i = 0; i < bands; i++) {
-    const h = (H - horizon) * (0.16 + rand() * 0.2);
-    const inset = W * rand() * 0.12;
+    const h = (H - horizon) * (variant === 1 ? 0.07 + rand() * 0.1 : 0.12 + rand() * 0.22);
+    const inset = W * rand() * (variant === 1 ? 0.3 : 0.14);
+    const fromLeft = rand() < 0.62;
     out.push(
-      `<rect x="${r2(inset)}" y="${r2(y)}" width="${r2(W - inset)}" height="${r2(h)}" fill="${tones[(i + 1) % tones.length]}" opacity="${r2(0.5 + rand() * 0.35)}"/>`
+      `<rect x="${r2(fromLeft ? inset : 0)}" y="${r2(y)}" width="${r2(W - inset)}" height="${r2(h)}" fill="${tones[(i + variant) % tones.length]}" opacity="${r2(0.45 + rand() * 0.42)}"/>`
     );
-    y += h * (0.7 + rand() * 0.5);
+    y += h * (0.62 + rand() * 0.6);
   }
 
-  // One still water band, the flattest element in the frame.
-  const waterY = horizon + (H - horizon) * (0.44 + rand() * 0.2);
-  const waterH = (H - horizon) * (0.1 + rand() * 0.08);
+  // A still plane. On variant 2 it dominates the foreground.
+  const waterH = (H - horizon) * (variant === 2 ? 0.3 + rand() * 0.16 : 0.08 + rand() * 0.1);
+  const waterY =
+    variant === 2 ? H - waterH * (1.05 + rand() * 0.25) : horizon + (H - horizon) * (0.42 + rand() * 0.24);
+  const waterInset = variant === 2 ? W * 0.03 : W * (0.05 + rand() * 0.08);
   out.push(
-    `<rect x="${r2(W * 0.06)}" y="${r2(waterY)}" width="${r2(W * 0.88)}" height="${r2(waterH)}" fill="${ramp.top}" opacity="0.32"/>`
+    `<rect x="${r2(waterInset)}" y="${r2(waterY)}" width="${r2(W - waterInset * 2)}" height="${r2(waterH)}" fill="${ramp.top}" opacity="${r2(0.26 + rand() * 0.16)}"/>`
   );
 
-  // A single accent mark, seated on the ground plane rather than floating in
-  // the sky, where it read as a stray artefact.
-  const accW = W * (0.006 + rand() * 0.003);
-  const accH = (H - horizon) * (0.3 + rand() * 0.22);
+  // One accent mark, seated on the ground plane.
+  const accW = W * (0.005 + rand() * 0.004);
+  const accH = (H - horizon) * (0.16 + rand() * 0.26);
   out.push(
-    `<rect x="${r2(W * (0.1 + rand() * 0.62))}" y="${r2(horizon - accH * 0.12)}" width="${r2(accW)}" height="${r2(accH)}" fill="${C.clay}" opacity="0.9"/>`
+    `<rect x="${r2(W * (0.08 + rand() * 0.68))}" y="${r2(horizon - accH * 0.1)}" width="${r2(accW)}" height="${r2(accH)}" fill="${C.clay}" opacity="0.9"/>`
   );
 
   return out.join("");
 }
 
-function rumah(rand, W, H, ramp) {
+function rumah(rand, W, H, ramp, variant) {
   const out = [];
-  const cols = 4;
-  const rows = 3;
-  const pad = W * 0.09;
-  const gap = W * 0.028;
+  const grids = [
+    { cols: 4, rows: 3 },
+    { cols: 3, rows: 3 },
+    { cols: 5, rows: 4 },
+  ];
+  const { cols, rows } = grids[variant];
+
+  const pad = W * (0.06 + rand() * 0.05);
+  const gap = W * (0.018 + rand() * 0.016);
   const cw = (W - pad * 2 - gap * (cols - 1)) / cols;
   const ch = (H - pad * 2 - gap * (rows - 1)) / rows;
   const accentIndex = Math.floor(rand() * cols * rows);
@@ -164,18 +183,23 @@ function rumah(rand, W, H, ramp) {
       const roll = rand();
       if (i === accentIndex) {
         out.push(`<rect x="${r2(x)}" y="${r2(y)}" width="${r2(cw)}" height="${r2(ch)}" fill="${C.clay}" opacity="0.9"/>`);
-      } else if (roll < 0.42) {
-        out.push(`<rect x="${r2(x)}" y="${r2(y)}" width="${r2(cw)}" height="${r2(ch)}" fill="${ramp.ink}" opacity="${r2(0.55 + rand() * 0.4)}"/>`);
-      } else if (roll < 0.72) {
+      } else if (roll < 0.4) {
         out.push(
-          `<rect x="${r2(x + 3)}" y="${r2(y + 3)}" width="${r2(cw - 6)}" height="${r2(ch - 6)}" fill="none" stroke="${ramp.ink}" stroke-width="${r2(W * 0.0035)}" opacity="0.75"/>`
+          `<rect x="${r2(x)}" y="${r2(y)}" width="${r2(cw)}" height="${r2(ch)}" fill="${ramp.ink}" opacity="${r2(0.5 + rand() * 0.45)}"/>`
+        );
+      } else if (roll < 0.7) {
+        const sw = Math.max(1.5, W * 0.0035);
+        out.push(
+          `<rect x="${r2(x + sw)}" y="${r2(y + sw)}" width="${r2(cw - sw * 2)}" height="${r2(ch - sw * 2)}" fill="none" stroke="${ramp.ink}" stroke-width="${r2(sw)}" opacity="0.75"/>`
         );
       } else {
-        // Half module: the block is split, one half solid.
         const half = rand() < 0.5;
+        const vertical = rand() < 0.4;
         out.push(`<rect x="${r2(x)}" y="${r2(y)}" width="${r2(cw)}" height="${r2(ch)}" fill="${ramp.soft}" opacity="0.5"/>`);
         out.push(
-          `<rect x="${r2(x)}" y="${r2(half ? y : y + ch / 2)}" width="${r2(cw)}" height="${r2(ch / 2)}" fill="${ramp.ink}" opacity="0.7"/>`
+          vertical
+            ? `<rect x="${r2(half ? x : x + cw / 2)}" y="${r2(y)}" width="${r2(cw / 2)}" height="${r2(ch)}" fill="${ramp.ink}" opacity="0.7"/>`
+            : `<rect x="${r2(x)}" y="${r2(half ? y : y + ch / 2)}" width="${r2(cw)}" height="${r2(ch / 2)}" fill="${ramp.ink}" opacity="0.7"/>`
         );
       }
     }
@@ -183,78 +207,105 @@ function rumah(rand, W, H, ramp) {
   return out.join("");
 }
 
-function tanah(rand, W, H, ramp) {
+function tanah(rand, W, H, ramp, variant) {
   const out = [];
 
-  // Ruled contour hairlines running the full width at a shallow angle.
-  const lines = 9 + Math.floor(rand() * 5);
-  const skew = (rand() - 0.5) * H * 0.16;
+  const lines = 8 + Math.floor(rand() * 8);
+  const skew = (rand() - 0.5) * H * (0.1 + rand() * 0.25);
   for (let i = 0; i < lines; i++) {
     const y = (H / (lines + 1)) * (i + 1);
     out.push(
-      `<line x1="0" y1="${r2(y)}" x2="${W}" y2="${r2(y + skew)}" stroke="${ramp.ink}" stroke-width="${r2(W * 0.0022)}" opacity="0.42"/>`
+      `<line x1="0" y1="${r2(y)}" x2="${W}" y2="${r2(y + skew)}" stroke="${ramp.ink}" stroke-width="${r2(Math.max(1, W * 0.0022))}" opacity="0.42"/>`
     );
   }
 
-  // The parcel: an irregular quadrilateral, outlined, barely filled.
-  const m = W * 0.14;
-  const jitter = () => (rand() - 0.5) * W * 0.09;
-  const pts = [
-    [m + jitter(), m + jitter()],
-    [W - m + jitter(), m * 1.2 + jitter()],
-    [W - m * 1.1 + jitter(), H - m + jitter()],
-    [m * 1.2 + jitter(), H - m * 0.9 + jitter()],
-  ];
-  const d = pts.map(([x, y]) => `${r2(x)},${r2(y)}`).join(" ");
-  // Darken everything outside the parcel so the plot reads as the subject.
-  out.push(
-    `<path d="M0,0 H${W} V${H} H0 Z M ${d.replace(/ /g, " L ").replace(/,/g, " ")} Z" fill="${C.deep}" fill-rule="evenodd" opacity="0.16"/>`
-  );
-  out.push(`<polygon points="${d}" fill="${ramp.top}" opacity="0.3"/>`);
-  out.push(
-    `<polygon points="${d}" fill="none" stroke="${ramp.ink}" stroke-width="${r2(W * 0.005)}" stroke-linejoin="round" opacity="0.9"/>`
-  );
+  const parcels = variant === 1 ? 2 : 1;
+  for (let k = 0; k < parcels; k++) {
+    const m = W * (0.1 + rand() * 0.08);
+    const top = parcels === 2 ? (k === 0 ? m : H * 0.54) : m;
+    const bottom = parcels === 2 ? (k === 0 ? H * 0.46 : H - m) : H - m;
+    const jitter = () => (rand() - 0.5) * W * 0.08;
 
-  // Corner markers on two vertices, plus one accent marker.
-  const accCorner = Math.floor(rand() * 4);
-  pts.forEach(([x, y], i) => {
-    const s = W * 0.018;
-    const fill = i === accCorner ? C.clay : ramp.ink;
-    out.push(`<rect x="${r2(x - s / 2)}" y="${r2(y - s / 2)}" width="${r2(s)}" height="${r2(s)}" fill="${fill}"/>`);
-  });
+    const pts = [
+      [m + jitter(), top + jitter()],
+      [W - m + jitter(), top + jitter()],
+      [W - m * 1.1 + jitter(), bottom + jitter()],
+      [m * 1.15 + jitter(), bottom + jitter()],
+    ];
+    const d = pts.map(([x, y]) => `${r2(x)},${r2(y)}`).join(" ");
+
+    if (k === 0) {
+      out.push(
+        `<path d="M0,0 H${W} V${H} H0 Z M ${d.replace(/ /g, " L ").replace(/,/g, " ")} Z" fill="${C.deep}" fill-rule="evenodd" opacity="0.16"/>`
+      );
+    }
+    out.push(`<polygon points="${d}" fill="${ramp.top}" opacity="${r2(0.22 + rand() * 0.16)}"/>`);
+    out.push(
+      `<polygon points="${d}" fill="none" stroke="${ramp.ink}" stroke-width="${r2(Math.max(1.5, W * 0.005))}" stroke-linejoin="round" opacity="0.9"/>`
+    );
+
+    const accCorner = Math.floor(rand() * 4);
+    pts.forEach(([x, y], i) => {
+      const sz = W * 0.016;
+      out.push(
+        `<rect x="${r2(x - sz / 2)}" y="${r2(y - sz / 2)}" width="${r2(sz)}" height="${r2(sz)}" fill="${i === accCorner && k === 0 ? C.clay : ramp.ink}"/>`
+      );
+    });
+  }
+
+  // Variant 2 adds an access line running in to the boundary.
+  if (variant === 2) {
+    const yAcc = H * (0.3 + rand() * 0.4);
+    out.push(
+      `<line x1="0" y1="${r2(yAcc)}" x2="${r2(W * (0.42 + rand() * 0.3))}" y2="${r2(yAcc + (rand() - 0.5) * H * 0.1)}" stroke="${C.clay}" stroke-width="${r2(Math.max(2, W * 0.006))}" opacity="0.85"/>`
+    );
+  }
 
   return out.join("");
 }
 
-function ruko(rand, W, H, ramp) {
+function ruko(rand, W, H, ramp, variant) {
   const out = [];
 
-  // Full-height columns of unequal width.
-  const count = 5 + Math.floor(rand() * 3);
-  const weights = Array.from({ length: count }, () => 0.6 + rand() * 1.4);
+  const count =
+    variant === 1 ? 3 + Math.floor(rand() * 2) : variant === 2 ? 7 + Math.floor(rand() * 3) : 5 + Math.floor(rand() * 2);
+  const weights = Array.from({ length: count }, () => 0.6 + rand() * 1.5);
   const accentCol = Math.floor(rand() * count);
-  weights[accentCol] = 0.45;
+  weights[accentCol] = variant === 1 ? 0.7 : 0.45;
   const total = weights.reduce((a, b) => a + b, 0);
-  let x = 0;
+
   const tones = [ramp.ink, ramp.soft, C.fern, C.sage, C.moss];
+  let x = 0;
   for (let i = 0; i < count; i++) {
     const w = (weights[i] / total) * W;
-    const fill = i === accentCol ? C.clay : tones[i % tones.length];
-    const op = i === accentCol ? 0.9 : r2(0.45 + rand() * 0.45);
-    out.push(`<rect x="${r2(x)}" y="0" width="${r2(w) + 0.5}" height="${H}" fill="${fill}" opacity="${op}"/>`);
+    const fill = i === accentCol ? C.clay : tones[(i + variant) % tones.length];
+    const op = i === accentCol ? 0.9 : r2(0.42 + rand() * 0.48);
+    out.push(`<rect x="${r2(x)}" y="0" width="${r2(w) + 0.6}" height="${H}" fill="${fill}" opacity="${op}"/>`);
     x += w;
   }
 
-  // Floor lines cutting straight across the stack.
-  const floors = 2 + Math.floor(rand() * 2);
+  const floors = variant === 2 ? 3 + Math.floor(rand() * 2) : 1 + Math.floor(rand() * 2);
   for (let i = 1; i <= floors; i++) {
     const y = (H / (floors + 1)) * i;
-    out.push(`<rect x="0" y="${r2(y)}" width="${W}" height="${r2(H * 0.008)}" fill="${ramp.top}" opacity="0.26"/>`);
-    out.push(`<rect x="0" y="${r2(y + H * 0.008)}" width="${W}" height="${r2(H * 0.004)}" fill="${C.deep}" opacity="0.22"/>`);
+    out.push(
+      `<rect x="0" y="${r2(y)}" width="${W}" height="${r2(Math.max(1.5, H * 0.007))}" fill="${ramp.top}" opacity="0.26"/>`
+    );
+    out.push(
+      `<rect x="0" y="${r2(y + H * 0.007)}" width="${W}" height="${r2(Math.max(1, H * 0.004))}" fill="${C.deep}" opacity="0.22"/>`
+    );
   }
 
-  // A recessed ground band, the shopfront line.
-  out.push(`<rect x="0" y="${r2(H * 0.86)}" width="${W}" height="${r2(H * 0.14)}" fill="${C.deep}" opacity="0.5"/>`);
+  // Variant 1 sets a recessed block into the upper storeys.
+  if (variant === 1) {
+    const bw = W * (0.24 + rand() * 0.2);
+    const bx = W * (0.12 + rand() * 0.5);
+    out.push(
+      `<rect x="${r2(bx)}" y="${r2(H * 0.12)}" width="${r2(bw)}" height="${r2(H * (0.2 + rand() * 0.16))}" fill="${C.deep}" opacity="0.42"/>`
+    );
+  }
+
+  const groundH = H * (0.1 + rand() * 0.1);
+  out.push(`<rect x="0" y="${r2(H - groundH)}" width="${W}" height="${r2(groundH)}" fill="${C.deep}" opacity="0.5"/>`);
 
   return out.join("");
 }
@@ -269,11 +320,14 @@ function tile({ seed, type, width = 1600, height = 1200 }) {
   const h = hash(seed);
   const rand = rng(h);
   const ramp = RAMPS[h % RAMPS.length];
-  const body = COMPOSERS[type](rand, width, height, ramp);
+  const variant = h % 3;
+  const body = COMPOSERS[type](rand, width, height, ramp, variant);
   const gid = `g${(h % 99991).toString(36)}`;
+  // A slight tilt on the ramp, so two tiles sharing a palette still differ.
+  const gx = r2((h % 7) / 24);
 
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" role="presentation">
-<defs><linearGradient id="${gid}" x1="0" y1="0" x2="0" y2="1">
+<defs><linearGradient id="${gid}" x1="${gx}" y1="0" x2="${r2(1 - gx)}" y2="1">
 <stop offset="0" stop-color="${ramp.top}"/><stop offset="1" stop-color="${ramp.bottom}"/>
 </linearGradient></defs>
 <rect width="${width}" height="${height}" fill="url(#${gid})"/>
@@ -312,7 +366,7 @@ function ogSvg({ seed, type, lines }) {
   const h = hash(seed);
   const rand = rng(h);
   const ramp = RAMPS[h % RAMPS.length];
-  const body = COMPOSERS[type](rand, W, H, ramp);
+  const body = COMPOSERS[type](rand, W, H, ramp, h % 3);
   const gid = `og${(h % 99991).toString(36)}`;
   const panelY = H - 210;
 
@@ -392,7 +446,12 @@ for (const type of ["villa", "rumah", "tanah", "ruko"]) {
 }
 
 // The hero plane. Wide, quiet, and deliberately the calmest tile in the set.
-writeFileSync(join(GRAPHICS, "hero.svg"), tile({ seed: "hero:pepo-properti:v1", type: "villa", width: 2000, height: 1250 }));
+// The hero panel is portrait on desktop, so the source is authored portrait:
+// a landscape composition put through object-cover loses its horizon entirely.
+writeFileSync(
+  join(GRAPHICS, "hero.svg"),
+  tile({ seed: "hero:pepo-properti:v4", type: "villa", width: 1100, height: 1500 })
+);
 tiles++;
 
 // Brand marks.

@@ -97,6 +97,7 @@ export function SubmitForm({
       <input type="hidden" name="locale" value={locale} />
       <input type="hidden" name="pageUrl" value={pageUrl} />
       <input type="hidden" name="buttonLabel" value={buttonLabel} />
+      <input type="hidden" name="placement" value="submit-form" />
 
       {/*
         Honeypot. Hidden with the clip technique, not a negative absolute

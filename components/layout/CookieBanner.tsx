@@ -60,9 +60,9 @@ export function CookieBanner({ locale, dict }: { locale: Locale; dict: Dictionar
       ref={ref}
       role="region"
       aria-label={dict.cookies.label}
-      className="fixed inset-x-0 bottom-0 z-[var(--z-cookie)] border-t border-line bg-paper"
+      className="fixed inset-x-0 bottom-0 z-[var(--z-cookie)] max-h-[45svh] overflow-y-auto border-t border-line bg-paper"
     >
-      <div className="container flex flex-col gap-4 py-4 lg:flex-row lg:items-center lg:justify-between lg:gap-8">
+      <div className="container flex flex-col gap-3 py-3.5 lg:flex-row lg:items-center lg:justify-between lg:gap-8 lg:py-4">
         <div className="min-w-0">
           <h2 className="text-[0.9375rem] font-medium text-ink">{dict.cookies.title}</h2>
           <p className="mt-1 max-w-[68ch] text-[0.875rem] leading-relaxed text-ink-muted">

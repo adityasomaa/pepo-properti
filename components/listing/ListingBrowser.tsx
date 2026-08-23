@@ -269,6 +269,7 @@ export function ListingBrowser({
                 locale={locale}
                 pageUrl={pageUrl}
                 buttonLabel={dict.common.askWhatsApp}
+                placement="listings-no-results"
                 variant="primary"
               />
             </div>

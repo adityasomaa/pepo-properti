@@ -24,6 +24,7 @@ export function WhatsAppLink({
   locale,
   pageUrl,
   buttonLabel,
+  placement,
   listing,
   variant = "primary",
   className = "",
@@ -33,6 +34,8 @@ export function WhatsAppLink({
   locale: Locale;
   pageUrl: string;
   buttonLabel: string;
+  /** Where this button sits on the page, for enquiry tracing. */
+  placement: string;
   listing?: InquiryListing;
   variant?: Variant;
   className?: string;
@@ -41,15 +44,16 @@ export function WhatsAppLink({
 }) {
   const ref = useRef<HTMLAnchorElement>(null);
   const [href, setHref] = useState(() =>
-    whatsappUrl(inquiryMessage(locale, { pageUrl, buttonLabel }, listing))
+    whatsappUrl(inquiryMessage(locale, { pageUrl, buttonLabel, placement }, listing))
   );
 
-  const build = (url: string) => whatsappUrl(inquiryMessage(locale, { pageUrl: url, buttonLabel }, listing));
+  const build = (url: string) =>
+    whatsappUrl(inquiryMessage(locale, { pageUrl: url, buttonLabel, placement }, listing));
 
   useEffect(() => {
     setHref(build(window.location.href));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locale, pageUrl, buttonLabel, listing?.code]);
+  }, [locale, pageUrl, buttonLabel, placement, listing?.code]);
 
   return (
     <a

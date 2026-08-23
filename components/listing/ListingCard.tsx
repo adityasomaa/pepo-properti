@@ -49,7 +49,9 @@ export function ListingCard({
           </span>
         </div>
 
-        <h3 className="mt-3.5 text-[1.0625rem] font-medium leading-[1.35] tracking-[-0.015em] text-ink">
+        {/* Two lines are reserved whether or not the title needs them, so a one-line
+            title and a two-line title still line their specs and prices up. */}
+        <h3 className="mt-3.5 min-h-[2.7em] text-[1.0625rem] font-medium leading-[1.35] tracking-[-0.015em] text-ink">
           <AppLink href={href} className="line-clamp-2 after:absolute after:inset-0 after:content-['']">
             {listing.title[locale]}
           </AppLink>

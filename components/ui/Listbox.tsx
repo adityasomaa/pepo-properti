@@ -247,6 +247,10 @@ export function Listbox({
           className="absolute left-0 right-0 top-[calc(100%+0.375rem)] z-[var(--z-overlay)] max-h-64 overflow-y-auto rounded-[var(--radius-field)] border border-line bg-white py-1 shadow-[0_18px_40px_-24px_rgba(18,38,29,0.55)] focus-visible:outline-none"
         >
           {options.map((option, index) => {
+            // Hover uses pointermove, never pointerenter. The popup can open
+            // underneath a cursor that has not moved, and pointerenter would
+            // then hand the active option to wherever the mouse happens to be
+            // resting, silently overriding what the keyboard just selected.
             const isSelected = option.value === value;
             const isActive = index === activeIndex;
             return (
@@ -256,7 +260,7 @@ export function Listbox({
                 role="option"
                 data-index={index}
                 aria-selected={isSelected}
-                onPointerEnter={() => setActiveIndex(index)}
+                onPointerMove={() => setActiveIndex(index)}
                 onClick={() => commit(index)}
                 className={`flex cursor-pointer items-center justify-between gap-3 px-3 py-2 text-[0.9375rem] leading-snug ${
                   isActive ? "bg-surface text-ink" : "text-ink"

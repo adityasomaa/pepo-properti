@@ -51,45 +51,51 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   return (
     <>
       {/*
-        The hero is exactly one screen tall and the search is inside it.
+        The hero is exactly one screen tall, and the search is inside it.
+
+        The height subtracts the sticky header, so the first screen is the
+        header plus the hero and nothing of the section below it. It also
+        subtracts whatever height the cookie banner currently reports, so on a
+        first visit the banner cannot sit on top of the search button.
 
         100svh, not 100vh: the small viewport unit is fixed at the size the
-        viewport has when the browser chrome is showing, so the hero does not
+        viewport has while the browser chrome is showing, so the hero does not
         resize under the reader's thumb when the address bar retracts on scroll.
 
-        The graphic is a static plane. It has no scroll-linked transform, so it
+        The graphic is a static plane with no scroll-linked transform, so it
         never zooms as the page moves.
       */}
-      <section className="relative flex h-[100svh] min-h-[34rem] flex-col justify-center overflow-hidden">
-        <div className="container grid w-full items-center gap-10 py-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.85fr)] lg:gap-16">
-          <div className="max-w-[36rem]">
-            <h1 className="text-[clamp(2rem,1.2rem+3.4vw,3.75rem)] font-medium leading-[1.05] tracking-[-0.035em] text-ink">
+      <section
+        className="relative overflow-hidden"
+        style={{ height: "calc(100svh - var(--header-h))", minHeight: "30rem" }}
+      >
+        <div
+          className="container grid h-full items-stretch gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.82fr)] lg:gap-14"
+          style={{ paddingTop: "1.5rem", paddingBottom: "calc(1.5rem + var(--cookie-h, 0px))" }}
+        >
+          <div className="flex min-w-0 flex-col justify-center">
+            <h1 className="max-w-[16ch] text-[clamp(1.875rem,1.1rem+3.2vw,3.75rem)] font-medium leading-[1.05] tracking-[-0.035em] text-ink">
               {dict.home.heroHeadline}
             </h1>
-            <p className="mt-5 max-w-[46ch] text-[1.0625rem] leading-[1.6] text-ink-muted">
+            <p className="mt-4 max-w-[44ch] text-[clamp(0.9375rem,0.9rem+0.2vw,1.0625rem)] leading-[1.55] text-ink-muted">
               {dict.home.heroDescription}
             </p>
-            <div className="mt-7 lg:hidden">
+            <div className="mt-6 max-w-[34rem]">
               <HeroSearch locale={locale} dict={dict} />
             </div>
           </div>
 
-          <div className="hidden lg:block">
-            <div className="relative">
-              <div className="overflow-hidden rounded-[var(--radius-card)] border border-line">
-                <img
-                  src="/graphics/hero.svg"
-                  alt=""
-                  width={2000}
-                  height={1250}
-                  fetchPriority="high"
-                  decoding="async"
-                  className="block h-[16rem] w-full object-cover xl:h-[19rem]"
-                />
-              </div>
-              <div className="mt-4">
-                <HeroSearch locale={locale} dict={dict} />
-              </div>
+          <div className="relative hidden min-w-0 lg:block">
+            <div className="absolute inset-0 overflow-hidden rounded-[var(--radius-card)] border border-line">
+              <img
+                src="/graphics/hero.svg"
+                alt=""
+                width={2000}
+                height={1250}
+                fetchPriority="high"
+                decoding="async"
+                className="h-full w-full object-cover"
+              />
             </div>
           </div>
         </div>

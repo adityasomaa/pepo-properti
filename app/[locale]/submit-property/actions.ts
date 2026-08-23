@@ -67,6 +67,7 @@ export async function submitProperty(
 
   const pageUrl = text(form, "pageUrl");
   const buttonLabel = text(form, "buttonLabel") || dict.submit.submit;
+  const placement = text(form, "placement") || "submit-form";
 
   const message = submissionMessage(
     locale,
@@ -79,7 +80,7 @@ export async function submitProperty(
       price: price ? formatPrice(Number(price), locale) : "",
       notes,
     },
-    { pageUrl, buttonLabel }
+    { pageUrl, buttonLabel, placement }
   );
 
   return { status: "ready", errors: {}, waUrl: whatsappUrl(message) };
