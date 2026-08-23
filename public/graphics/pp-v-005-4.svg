@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1200" width="1600" height="1200" role="presentation">
-<defs><linearGradient id="gbew" x1="0.21" y1="0" x2="0.79" y2="1">
-<stop offset="0" stop-color="#9db0a3"/><stop offset="1" stop-color="#1d3a2c"/>
-</linearGradient></defs>
-<rect width="1600" height="1200" fill="url(#gbew)"/>
-<circle cx="1066.38" cy="587.25" r="122" fill="#9db0a3" opacity="0.63"/><rect x="0" y="669.83" width="1600" height="76.4" fill="#9db0a3" opacity="0.22"/><rect x="0" y="746.23" width="1600" height="453.77" fill="#0d1f17"/><rect x="195.43" y="746.23" width="1404.57" height="132.89" fill="#4d7360" opacity="0.72"/><rect x="144.16" y="904.06" width="1455.84" height="141.88" fill="#4d7360" opacity="0.6"/><rect x="0" y="1050.02" width="1435.38" height="125.14" fill="#2e5442" opacity="0.74"/><rect x="0" y="1140.65" width="1458.29" height="74.93" fill="#1d3a2c" opacity="0.87"/><rect x="135.79" y="1204.91" width="1464.21" height="55.79" fill="#12261d" opacity="0.55"/><rect x="122.87" y="1018.24" width="1354.25" height="50.33" fill="#9db0a3" opacity="0.3"/><rect x="733.11" y="734.65" width="8.68" height="115.87" fill="#9c3517" opacity="0.9"/>
-</svg>

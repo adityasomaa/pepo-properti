@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1200" width="1600" height="1200" role="presentation">
-<defs><linearGradient id="g2bj" x1="0.17" y1="0" x2="0.83" y2="1">
-<stop offset="0" stop-color="#9db0a3"/><stop offset="1" stop-color="#1d3a2c"/>
-</linearGradient></defs>
-<rect width="1600" height="1200" fill="url(#g2bj)"/>
-<rect x="0" y="0" width="110.11" height="1200" fill="#9c3517" opacity="0.9"/><rect x="109.51" y="0" width="268.40000000000003" height="1200" fill="#4d7360" opacity="0.75"/><rect x="377.31" y="0" width="275.91" height="1200" fill="#2e5442" opacity="0.67"/><rect x="652.62" y="0" width="386.93" height="1200" fill="#4d7360" opacity="0.66"/><rect x="1038.95" y="0" width="208.06" height="1200" fill="#1d3a2c" opacity="0.88"/><rect x="1246.41" y="0" width="354.19" height="1200" fill="#0d1f17" opacity="0.72"/><rect x="0" y="600" width="1600" height="8.4" fill="#9db0a3" opacity="0.26"/><rect x="0" y="608.4" width="1600" height="4.8" fill="#0d1f17" opacity="0.22"/><rect x="0" y="965.93" width="1600" height="234.07" fill="#0d1f17" opacity="0.5"/>
-</svg>

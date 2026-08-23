@@ -270,7 +270,7 @@ async function freshPage(width = 1440, height = 900) {
   check("all links reach one of the two divisions", links.every((l) => NUMBERS.includes(l.number)),
     [...new Set(links.map((l) => l.number))].join(", "));
 
-  const listingLink = links.find((l) => l.message.includes("PP-V-006"));
+  const listingLink = links.find((l) => l.message.includes("KP-V-006"));
   check("the listing button carries the listing code", !!listingLink);
   check(
     "the listing button carries the full title",

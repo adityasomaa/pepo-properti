@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1200" width="1600" height="1200" role="presentation">
+<defs><linearGradient id="g183v" x1="0.17" y1="0" x2="0.83" y2="1">
+<stop offset="0" stop-color="#f2f3ef"/><stop offset="1" stop-color="#6e8c7a"/>
+</linearGradient></defs>
+<rect width="1600" height="1200" fill="url(#g183v)"/>
+<rect x="0" y="0" width="413.11" height="1200" fill="#12261d" opacity="0.65"/><rect x="412.51" y="0" width="394.64000000000004" height="1200" fill="#c2cdc2" opacity="0.67"/><rect x="806.55" y="0" width="110.78" height="1200" fill="#9c3517" opacity="0.9"/><rect x="916.73" y="0" width="179.87" height="1200" fill="#4d7360" opacity="0.84"/><rect x="1096" y="0" width="504.6" height="1200" fill="#1d3a2c" opacity="0.75"/><rect x="0" y="600" width="1600" height="8.4" fill="#f2f3ef" opacity="0.26"/><rect x="0" y="608.4" width="1600" height="4.8" fill="#0d1f17" opacity="0.22"/><rect x="0" y="976.7" width="1600" height="223.3" fill="#0d1f17" opacity="0.5"/>
+</svg>

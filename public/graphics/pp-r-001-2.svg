@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1200" width="1600" height="1200" role="presentation">
-<defs><linearGradient id="ggtl" x1="0.25" y1="0" x2="0.75" y2="1">
-<stop offset="0" stop-color="#c2cdc2"/><stop offset="1" stop-color="#2e5442"/>
-</linearGradient></defs>
-<rect width="1600" height="1200" fill="url(#ggtl)"/>
-<rect x="105.53" y="105.53" width="436.04" height="302.7" fill="#12261d" opacity="0.95"/><rect x="587.58" y="111.13" width="424.84" height="291.5" fill="none" stroke="#12261d" stroke-width="5.6" opacity="0.75"/><rect x="1058.44" y="105.53" width="436.04" height="302.7" fill="#6e8c7a" opacity="0.5"/><rect x="1058.44" y="256.88" width="436.04" height="151.35" fill="#12261d" opacity="0.7"/><rect x="111.13" y="454.25" width="424.84" height="291.5" fill="none" stroke="#12261d" stroke-width="5.6" opacity="0.75"/><rect x="581.98" y="448.65" width="436.04" height="302.7" fill="#9c3517" opacity="0.9"/><rect x="1058.44" y="448.65" width="436.04" height="302.7" fill="#6e8c7a" opacity="0.5"/><rect x="1058.44" y="448.65" width="436.04" height="151.35" fill="#12261d" opacity="0.7"/><rect x="105.53" y="791.77" width="436.04" height="302.7" fill="#12261d" opacity="0.67"/><rect x="581.98" y="791.77" width="436.04" height="302.7" fill="#12261d" opacity="0.7"/><rect x="1058.44" y="791.77" width="436.04" height="302.7" fill="#12261d" opacity="0.63"/>
-</svg>

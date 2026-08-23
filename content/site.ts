@@ -82,7 +82,7 @@ export const site = {
   ],
   closedDays: ["Sunday"],
 
-  url: process.env.NEXT_PUBLIC_SITE_URL || "https://pepo.onyxcreative.asia",
+  url: process.env.NEXT_PUBLIC_SITE_URL || "https://korva.onyxcreative.asia",
 } as const;
 
 export type Division = keyof typeof site.divisions;

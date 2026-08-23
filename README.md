@@ -1,6 +1,6 @@
 # KORVA
 
-Live at **https://pepo.onyxcreative.asia** (also reachable at
+Live at **https://korva.onyxcreative.asia** (also reachable at
 https://pepo-properti.vercel.app).
 
 Website for the **KORVA** ecosystem in Bali, which is two companies working as
@@ -69,7 +69,7 @@ npm run audit:seo        assets, routes, per-listing metadata, structured data,
 Each audit takes a base URL, so the same checks run against production:
 
 ```
-npm run audit -- https://pepo.onyxcreative.asia
+npm run audit -- https://korva.onyxcreative.asia
 ```
 
 The layout audit self-tests before reporting: it injects an over-wide element
