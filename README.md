@@ -1,5 +1,8 @@
 # Pepo Properti
 
+Live at **https://pepo.onyxcreative.asia** (also reachable at
+https://pepo-properti.vercel.app).
+
 Website for **Agency Pepo Properti Indonesia**, a property agency in Panjer, South
 Denpasar, Bali. Villas lead; houses, land, and shophouses follow.
 
@@ -29,11 +32,28 @@ once real listings replace the examples and the notice disappears everywhere.
 ## Scripts
 
 ```
-npm run dev        development server
-npm run build      production build
-npm run graphics   regenerate every SVG tile and Open Graph card
-npm run contrast   audit every colour pair against WCAG AA
+npm run dev              development server
+npm run build            production build
+npm run graphics         regenerate every SVG tile and Open Graph card
+
+npm run contrast         every colour pair against WCAG AA
+npm run audit            layout at 375 / 768 / 1440: overflow, broken images,
+                         hidden reveals, hero height, cookie banner clearance
+npm run audit:behaviour  50 interaction checks: menu, filters, listbox keyboard
+                         support, language memory, WhatsApp messages, lightbox,
+                         scroll locks, server-side validation
+npm run audit:seo        assets, routes, per-listing metadata, structured data,
+                         sitemap, robots
 ```
+
+Each audit takes a base URL, so the same checks run against production:
+
+```
+npm run audit -- https://pepo.onyxcreative.asia
+```
+
+The layout audit self-tests before reporting: it injects an over-wide element
+and refuses to report a pass unless its own detector catches it.
 
 `scripts/convert-fonts.py` regenerates the self-hosted WOFF2 faces from the
 licensed Neue Montreal TTFs.

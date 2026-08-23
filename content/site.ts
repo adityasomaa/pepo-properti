@@ -38,7 +38,9 @@ export const site = {
 
   mapsUrl: "https://maps.google.com/?cid=5181306759239992846",
 
-  // Domain preview. Diisi otomatis lewat NEXT_PUBLIC_SITE_URL saat deploy.
+  // Alamat website. Dipakai untuk canonical, sitemap, robots, gambar preview,
+  // dan tautan halaman yang ikut terkirim di setiap pesan WhatsApp.
+  // Diisi lewat NEXT_PUBLIC_SITE_URL saat deploy.
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://pepo.onyxcreative.asia",
 } as const;
 
