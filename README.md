@@ -57,8 +57,9 @@ npm run build            production build
 npm run graphics         regenerate every SVG tile and Open Graph card
 
 npm run contrast         every colour pair against WCAG AA
-npm run audit            layout at 375 / 768 / 1440: overflow, broken images,
-                         hidden reveals, hero height, cookie banner clearance
+npm run audit            layout at six viewports, short laptops included:
+                         overflow, broken images, hidden reveals, and content
+                         hidden behind the sticky header
 npm run audit:behaviour  50 interaction checks: menu, filters, listbox keyboard
                          support, language memory, WhatsApp routing, lightbox,
                          scroll locks, server-side validation
@@ -74,6 +75,10 @@ npm run audit -- https://korva.onyxcreative.asia
 
 The layout audit self-tests before reporting: it injects an over-wide element
 and refuses to report a pass unless its own detector catches it.
+
+Viewport **height** is part of that sweep, not just width. A full-height hero
+with centred content pushes its own top out of view when the viewport is
+shorter than the content, and only a short viewport reveals it.
 
 Point load-generating scripts at the `vercel.app` alias rather than the custom
 domain. A burst of automated traffic against a hostname triggers Vercel's

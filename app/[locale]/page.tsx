@@ -55,12 +55,18 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   return (
     <>
       {/*
-        The hero is exactly one screen tall, and the search is inside it.
+        The hero fills one screen, and the search is inside it.
 
-        The height subtracts the sticky header, so the first screen is the
-        header plus the hero and nothing of the section below it. It also
-        subtracts whatever height the cookie banner currently reports, so on a
-        first visit the banner cannot sit on top of the search.
+        min-height, not height. With a fixed height and centred content, a
+        viewport shorter than the content pushes the top of that content out of
+        the box and under the sticky header, which is exactly what happened on
+        laptops around 600 to 760px tall. Growing is the safe failure: the page
+        scrolls, and the headline is never cut off.
+
+        The cookie banner deliberately has no say in this height. It is an
+        overlay, and an overlay that reflows the page underneath it moves
+        content out from under the reader. It covers the bottom strip while it
+        is up, which is what a bottom bar does, and the page can scroll.
 
         100svh, not 100vh: the small viewport unit is fixed at the size the
         viewport has while the browser chrome is showing, so the hero does not
@@ -70,13 +76,10 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         never zooms as the page moves.
       */}
       <section
-        className="relative overflow-hidden"
-        style={{ height: "calc(100svh - var(--header-h))", minHeight: "34rem" }}
+        className="relative"
+        style={{ minHeight: "calc(100svh - var(--header-h))" }}
       >
-        <div
-          className="container flex h-full flex-col justify-center gap-5 sm:gap-6"
-          style={{ paddingTop: "1.25rem", paddingBottom: "calc(1.25rem + var(--cookie-h, 0px))" }}
-        >
+        <div className="container flex min-h-[inherit] flex-col justify-center gap-5 py-6 sm:gap-6 sm:py-8">
           <div className="grid items-stretch gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.75fr)] lg:gap-12">
             <div className="min-w-0">
               <h1 className="max-w-[19ch] text-[clamp(1.5rem,0.95rem+2.6vw,3.25rem)] font-medium leading-[1.08] tracking-[-0.035em] text-ink">

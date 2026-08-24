@@ -59,7 +59,13 @@ const ROUTES = [
 
 const BREAKPOINTS = [
   { name: "375", width: 375, height: 760, mobile: true },
+  // A short phone and two short laptops. Height matters as much as width: a
+  // full-height hero with centred content pushes its own top out of view when
+  // the viewport is shorter than the content, and only a short viewport shows it.
+  { name: "375-short", width: 375, height: 667, mobile: true },
   { name: "768", width: 768, height: 1024, mobile: true },
+  { name: "1280-short", width: 1280, height: 600, mobile: false },
+  { name: "1366-short", width: 1366, height: 660, mobile: false },
   { name: "1440", width: 1440, height: 900, mobile: false },
 ];
 
@@ -112,6 +118,21 @@ const probe = () => {
   const banner = document.querySelector('[role="region"]');
   const bannerRect = banner ? banner.getBoundingClientRect() : null;
 
+  // Nothing in main may start above the bottom of the sticky header while the
+  // page sits at the top. If it does, the header is covering it and the reader
+  // never sees it.
+  const headerBottom = header ? header.getBoundingClientRect().bottom : 0;
+  const underHeader = [];
+  if (window.scrollY <= 1) {
+    document.querySelectorAll("main h1, main h2, main h3, main p, main img").forEach((el) => {
+      const r = el.getBoundingClientRect();
+      if (r.height === 0) return;
+      if (r.top < headerBottom - 1 && r.bottom > 0) {
+        underHeader.push(`${el.tagName.toLowerCase()} "${(el.textContent || "").trim().slice(0, 28)}" top=${Math.round(r.top)} headerBottom=${Math.round(headerBottom)}`);
+      }
+    });
+  }
+
   return {
     contentWidth,
     scrollWidth: body.scrollWidth,
@@ -121,6 +142,7 @@ const probe = () => {
     brokenImages: broken,
     hiddenReveals,
     revealCount: reveals.length,
+    underHeader: underHeader.slice(0, 4),
     heroHeight: heroRect ? Math.round(heroRect.height) : null,
     headerHeight: Math.round(headerH),
     viewportHeight: document.documentElement.clientHeight,
@@ -197,7 +219,9 @@ for (const bp of BREAKPOINTS) {
     if (result.overflow) problems.push(`overflow ${result.scrollWidth}>${result.vw}`);
     if (result.brokenImages.length) problems.push(`broken images: ${result.brokenImages.join(", ")}`);
     if (result.hiddenReveals) problems.push(`${result.hiddenReveals}/${result.revealCount} reveals still hidden`);
-    if (result.searchClearOfBanner === false) problems.push("cookie banner covers the search button");
+    if (result.underHeader.length) {
+      problems.push(`content hidden behind the sticky header: ${result.underHeader.join(" | ")}`);
+    }
 
     if (problems.length) {
       failures++;

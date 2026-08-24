@@ -62,10 +62,10 @@ export function CookieBanner({ locale, dict }: { locale: Locale; dict: Dictionar
       aria-label={dict.cookies.label}
       className="fixed inset-x-0 bottom-0 z-[var(--z-cookie)] max-h-[45svh] overflow-y-auto border-t border-line bg-paper"
     >
-      <div className="container flex flex-col gap-3 py-3.5 lg:flex-row lg:items-center lg:justify-between lg:gap-8 lg:py-4">
+      <div className="container flex flex-col gap-2.5 py-3 lg:flex-row lg:items-center lg:justify-between lg:gap-8 lg:py-3.5">
         <div className="min-w-0">
-          <h2 className="text-[0.9375rem] font-medium text-ink">{dict.cookies.title}</h2>
-          <p className="mt-1 max-w-[68ch] text-[0.875rem] leading-relaxed text-ink-muted">
+          <h2 className="text-[0.875rem] font-medium text-ink">{dict.cookies.title}</h2>
+          <p className="mt-0.5 max-w-[78ch] text-[0.8125rem] leading-[1.45] text-ink-muted">
             {dict.cookies.body}{" "}
             <AppLink href={path(locale, "privacy")} className="text-accent-ink underline">
               {dict.cookies.more}
@@ -73,7 +73,7 @@ export function CookieBanner({ locale, dict }: { locale: Locale; dict: Dictionar
           </p>
         </div>
 
-        <div className="flex flex-none flex-wrap gap-2">
+        <div className="flex flex-none flex-wrap gap-2 [&_.btn]:min-h-[2.5rem] [&_.btn]:py-2">
           <button type="button" onClick={() => decide("granted")} className="btn" data-variant="primary">
             {dict.cookies.accept}
           </button>
