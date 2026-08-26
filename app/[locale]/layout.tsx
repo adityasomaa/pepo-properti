@@ -89,6 +89,10 @@ export default async function LocaleLayout({
             <SmoothScroll />
             <Header locale={locale} dict={dict} />
             <main id="main" tabIndex={-1}>
+              {/* Watched by the floating enquiry button: while this marker is
+                  still on screen the reader is at the top of the page, where
+                  the hero already offers the same routes. */}
+              <div id="top-sentinel" aria-hidden="true" className="h-px w-full" />
               {children}
             </main>
             <Footer locale={locale} dict={dict} />

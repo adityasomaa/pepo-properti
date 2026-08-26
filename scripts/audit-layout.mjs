@@ -18,7 +18,9 @@
  */
 
 import puppeteer from "puppeteer-core";
-import { existsSync } from "node:fs";
+import { existsSync, mkdtempSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 
 const BASE = process.argv[2] || "http://localhost:4311";
 
@@ -118,6 +120,33 @@ const probe = () => {
   const banner = document.querySelector('[role="region"]');
   const bannerRect = banner ? banner.getBoundingClientRect() : null;
 
+  // No button label may wrap.
+  //
+  // getClientRects() counts lines only for inline elements. A button is an
+  // inline-flex box, so its label span is a flex item and reports a single rect
+  // however many lines it occupies. Measuring the rendered height against one
+  // line-height is what actually detects it.
+  const wrappedButtons = [];
+  document.querySelectorAll(".btn").forEach((btn) => {
+    const br = btn.getBoundingClientRect();
+    if (br.width === 0 && br.height === 0) return;
+    btn.querySelectorAll("span").forEach((span) => {
+      const ownText = [...span.childNodes]
+        .filter((n) => n.nodeType === 3)
+        .map((n) => n.textContent.trim())
+        .join("");
+      if (!ownText) return;
+
+      const cs = getComputedStyle(span);
+      const lineHeight =
+        cs.lineHeight === "normal" ? parseFloat(cs.fontSize) * 1.2 : parseFloat(cs.lineHeight);
+      const lines = Math.round(span.getBoundingClientRect().height / lineHeight);
+      if (lines > 1) {
+        wrappedButtons.push(`"${ownText.slice(0, 34)}" on ${lines} lines`);
+      }
+    });
+  });
+
   // Nothing in main may start above the bottom of the sticky header while the
   // page sits at the top. If it does, the header is covering it and the reader
   // never sees it.
@@ -143,6 +172,7 @@ const probe = () => {
     hiddenReveals,
     revealCount: reveals.length,
     underHeader: underHeader.slice(0, 4),
+    wrappedButtons: wrappedButtons.slice(0, 5),
     heroHeight: heroRect ? Math.round(heroRect.height) : null,
     headerHeight: Math.round(headerH),
     viewportHeight: document.documentElement.clientHeight,
@@ -151,11 +181,29 @@ const probe = () => {
   };
 };
 
-const browser = await puppeteer.launch({
+async function launchChrome(attempts = 4) {
+  let last;
+  for (let i = 1; i <= attempts; i += 1) {
+    try {
+      return await puppeteer.launch({
   executablePath: CHROME,
   headless: "new",
   args: ["--no-sandbox", "--disable-dev-shm-usage", "--hide-scrollbars"],
+  // A unique profile per run. Puppeteer's shared default profile stays locked
+  // by any Chrome that crashed or was orphaned, which made the next audit die
+  // on launch rather than report anything.
+  userDataDir: mkdtempSync(join(tmpdir(), "korva-audit-")),
 });
+    } catch (error) {
+      last = error;
+      console.error(`Chrome launch attempt ${i} of ${attempts} failed: ${error.message}`);
+      await new Promise((r) => setTimeout(r, 1500 * i));
+    }
+  }
+  throw last;
+}
+
+const browser = await launchChrome();
 
 let failures = 0;
 const summary = [];
@@ -219,6 +267,9 @@ for (const bp of BREAKPOINTS) {
     if (result.overflow) problems.push(`overflow ${result.scrollWidth}>${result.vw}`);
     if (result.brokenImages.length) problems.push(`broken images: ${result.brokenImages.join(", ")}`);
     if (result.hiddenReveals) problems.push(`${result.hiddenReveals}/${result.revealCount} reveals still hidden`);
+    if (result.wrappedButtons.length) {
+      problems.push(`button label wraps: ${result.wrappedButtons.join(" | ")}`);
+    }
     if (result.underHeader.length) {
       problems.push(`content hidden behind the sticky header: ${result.underHeader.join(" | ")}`);
     }

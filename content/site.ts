@@ -82,6 +82,27 @@ export const site = {
   ],
   closedDays: ["Sunday"],
 
+  /* -------------------------------------------------------------------------
+     GAMBAR BESAR DI HALAMAN DEPAN
+
+     Sekarang masih memakai gambar tempat kosong yang dibuat otomatis.
+     Begitu foto asli dari klien sudah ada:
+       1. taruh filenya di folder public/photos,
+       2. ganti `src` di bawah, contoh: "/photos/hero.jpg",
+       3. ganti `alt` dengan keterangan singkat isi fotonya,
+       4. isi `width` dan `height` sesuai ukuran asli foto.
+     Tidak ada yang lain yang perlu diubah.
+     ------------------------------------------------------------------------- */
+  heroImage: {
+    src: "/graphics/hero.svg",
+    width: 1400,
+    height: 1000,
+    /* Kosongkan alt selama masih gambar tempat kosong: gambar ini tidak
+       menyampaikan informasi, jadi pembaca layar melewatinya. Setelah diganti
+       foto asli, isi dengan keterangan singkat apa yang terlihat di foto. */
+    alt: "",
+  },
+
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://korva.onyxcreative.asia",
 } as const;
 

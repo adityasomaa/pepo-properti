@@ -6,6 +6,7 @@ import { AppLink } from "@/components/AppLink";
 import { SectionHeader } from "@/components/SectionHeader";
 import { Reveal } from "@/components/ui/Reveal";
 import { HeroSearch } from "@/components/home/HeroSearch";
+import { Ticker } from "@/components/home/Ticker";
 import { ListingCard } from "@/components/listing/ListingCard";
 import { SampleNotice } from "@/components/listing/SampleNotice";
 import { BeforeAfter } from "@/components/portfolio/BeforeAfter";
@@ -75,50 +76,59 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         The graphic is a static plane with no scroll-linked transform, so it
         never zooms as the page moves.
       */}
-      <section
-        className="relative"
-        style={{ minHeight: "calc(100svh - var(--header-h))" }}
-      >
-        <div className="container flex min-h-[inherit] flex-col justify-center gap-5 py-6 sm:gap-6 sm:py-8">
-          <div className="grid items-stretch gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.75fr)] lg:gap-12">
+      <section className="relative" style={{ minHeight: "calc(100svh - var(--header-h))" }}>
+        <div className="container flex min-h-[inherit] flex-col justify-center gap-4 py-5 sm:gap-6 sm:py-8">
+          {/* Headline beside the picture. */}
+          <div className="grid items-center gap-4 sm:gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.82fr)] lg:gap-12">
+            <h1 className="max-w-[19ch] text-[clamp(1.5rem,0.95rem+2.6vw,3.25rem)] font-medium leading-[1.08] tracking-[-0.035em] text-ink">
+              {dict.home.heroHeadline}
+            </h1>
+
+            {/*
+              The picture is present at every width. It used to appear only from
+              1024px up, so anyone on a phone met a hero with no image at all.
+              Swapping in the client's photograph is one edit in content/site.ts.
+            */}
+            <div className="overflow-hidden rounded-[var(--radius-card)] border border-line bg-surface">
+              <img
+                src={site.heroImage.src}
+                alt={site.heroImage.alt}
+                width={site.heroImage.width}
+                height={site.heroImage.height}
+                fetchPriority="high"
+                decoding="async"
+                className="block h-[clamp(6rem,17svh,9rem)] w-full object-cover sm:h-[clamp(8rem,22svh,12rem)] lg:h-[clamp(14rem,34svh,22rem)]"
+              />
+            </div>
+          </div>
+
+          {/* The running band sits directly under the headline, as asked. */}
+          <Ticker items={dict.home.ticker} label={dict.home.tickerLabel} />
+
+          <div className="grid items-start gap-4 sm:gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.82fr)] lg:gap-12">
             <div className="min-w-0">
-              <h1 className="max-w-[19ch] text-[clamp(1.5rem,0.95rem+2.6vw,3.25rem)] font-medium leading-[1.08] tracking-[-0.035em] text-ink">
-                {dict.home.heroHeadline}
-              </h1>
-              <p className="mt-3.5 max-w-[54ch] text-[clamp(0.9375rem,0.9rem+0.2vw,1.0625rem)] leading-[1.5] text-ink-muted sm:mt-4">
+              <p className="max-w-[54ch] text-[clamp(0.9375rem,0.9rem+0.2vw,1.0625rem)] leading-[1.5] text-ink-muted">
                 {dict.home.heroDescription}
               </p>
 
-              {/* The two routes into the business, exactly as the brief frames them. */}
-              <div className="mt-5 grid grid-cols-2 gap-2.5 sm:mt-6 sm:flex sm:flex-wrap sm:gap-3">
-                <AppLink href={path(locale, "listings")} className="btn btn--wrap sm:whitespace-nowrap" data-variant="primary">
+              {/* The two routes into the business, exactly as the brief frames
+                  them. Stacked on the narrowest screens so each label keeps to
+                  one line at every width. */}
+              <div className="mt-5 flex flex-col gap-2.5 sm:mt-6 sm:flex-row sm:flex-wrap sm:gap-3">
+                <AppLink href={path(locale, "listings")} className="btn" data-variant="primary">
                   <Buildings weight="regular" aria-hidden="true" className="btn__icon" />
                   <span>{dict.division.proCta}</span>
                 </AppLink>
-                <AppLink href={path(locale, "build")} className="btn btn--wrap sm:whitespace-nowrap" data-variant="secondary">
+                <AppLink href={path(locale, "build")} className="btn" data-variant="secondary">
                   <Compass weight="regular" aria-hidden="true" className="btn__icon" />
                   <span>{dict.division.studioCta}</span>
                 </AppLink>
               </div>
             </div>
 
-            <div className="relative hidden min-w-0 lg:block">
-              <div className="absolute inset-0 overflow-hidden rounded-[var(--radius-card)] border border-line">
-                <img
-                  src="/graphics/hero.svg"
-                  alt=""
-                  width={1400}
-                  height={1000}
-                  fetchPriority="high"
-                  decoding="async"
-                  className="h-full w-full object-cover"
-                />
-              </div>
+            <div className="min-w-0">
+              <HeroSearch locale={locale} dict={dict} />
             </div>
-          </div>
-
-          <div className="min-w-0">
-            <HeroSearch locale={locale} dict={dict} />
           </div>
         </div>
       </section>

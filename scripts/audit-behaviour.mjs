@@ -11,7 +11,9 @@
  */
 
 import puppeteer from "puppeteer-core";
-import { existsSync } from "node:fs";
+import { existsSync, mkdtempSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 
 const BASE = process.argv[2] || "http://localhost:4311";
 
@@ -35,11 +37,29 @@ function check(name, condition, detail = "") {
 
 const settle = (ms) => new Promise((r) => setTimeout(r, ms));
 
-const browser = await puppeteer.launch({
+async function launchChrome(attempts = 4) {
+  let last;
+  for (let i = 1; i <= attempts; i += 1) {
+    try {
+      return await puppeteer.launch({
   executablePath: CHROME,
   headless: "new",
   args: ["--no-sandbox", "--disable-dev-shm-usage", "--hide-scrollbars"],
+  // A unique profile per run. Puppeteer's shared default profile stays locked
+  // by any Chrome that crashed or was orphaned, which made the next audit die
+  // on launch rather than report anything.
+  userDataDir: mkdtempSync(join(tmpdir(), "korva-audit-")),
 });
+    } catch (error) {
+      last = error;
+      console.error(`Chrome launch attempt ${i} of ${attempts} failed: ${error.message}`);
+      await new Promise((r) => setTimeout(r, 1500 * i));
+    }
+  }
+  throw last;
+}
+
+const browser = await launchChrome();
 
 async function freshPage(width = 1440, height = 900) {
   const context = await browser.createBrowserContext();
@@ -297,6 +317,43 @@ async function freshPage(width = 1440, height = 900) {
     return decodeURIComponent(new URL(a.href).searchParams.get("text"));
   });
   check("the message reflects the filtered URL", filtered.includes("type=tanah"), filtered.split("\n").find((x) => x.startsWith("Halaman")));
+
+  await context.close();
+}
+
+/* --- 4b. The floating button waits for the hero to pass ------------------- */
+{
+  const { page, context } = await freshPage(375, 760);
+  await page.goto(`${BASE}/id`, { waitUntil: "networkidle2" });
+  await settle(2500);
+
+  const atTop = await page.evaluate(
+    () => !!document.querySelector('[class*="fixed right-4"] button[aria-expanded]')
+  );
+  check("floating button stays out of the hero", atTop === false);
+
+  await page.evaluate(() => window.scrollTo(0, 1200));
+  await settle(1200);
+  const afterScroll = await page.evaluate(
+    () => !!document.querySelector('[class*="fixed right-4"] button[aria-expanded]')
+  );
+  check("floating button appears once past the hero", afterScroll === true);
+
+  if (afterScroll) {
+    await page.evaluate(() =>
+      document.querySelector('[class*="fixed right-4"] button[aria-expanded]').click()
+    );
+    await settle(500);
+    const chooser = await page.evaluate(() => {
+      const links = [...document.querySelectorAll('[role="group"] a[href^="https://wa.me/"]')];
+      return links.map((a) => new URL(a.href).pathname.slice(1));
+    });
+    check(
+      "the floating chooser offers both divisions",
+      chooser.length === 2 && new Set(chooser).size === 2,
+      chooser.join(", ")
+    );
+  }
 
   await context.close();
 }

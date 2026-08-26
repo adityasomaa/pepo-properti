@@ -23,11 +23,36 @@ export function FloatingWhatsApp({ locale, dict }: { locale: Locale; dict: Dicti
   const pathname = usePathname();
   const { anyOpen } = useOverlayRegistry();
   const [open, setOpen] = useState(false);
+  const [pastTop, setPastTop] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
 
-  // Arriving on a new page closes the chooser.
-  useEffect(() => setOpen(false), [pathname]);
+  // Arriving on a new page closes the chooser and puts the reader back at the top.
+  useEffect(() => {
+    setOpen(false);
+    setPastTop(false);
+  }, [pathname]);
+
+  // Hold the button back until the reader has left the top of the page. At the
+  // top it would sit on the hero's own buttons, two of the same offer stacked
+  // on each other.
+  useEffect(() => {
+    const sentinel = document.getElementById("top-sentinel");
+    if (!sentinel) {
+      setPastTop(true);
+      return;
+    }
+    const observer = new IntersectionObserver(
+      ([entry]) => setPastTop(!entry.isIntersecting),
+      // Positive, so the observed box grows upward past the top of the screen
+      // and the marker still counts as visible for the first 70% of a screen of
+      // scrolling. A negative margin shrinks the box instead, which reports the
+      // marker as gone immediately and shows the button straight away.
+      { rootMargin: "70% 0px 0px 0px" }
+    );
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [pathname]);
 
   useEffect(() => {
     if (!open) return;
@@ -51,7 +76,7 @@ export function FloatingWhatsApp({ locale, dict }: { locale: Locale; dict: Dicti
     };
   }, [open]);
 
-  if (anyOpen) return null;
+  if (anyOpen || !pastTop) return null;
 
   const pageUrl = site.url + pathname;
 

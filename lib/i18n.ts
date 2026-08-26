@@ -147,6 +147,26 @@ const id = {
     searchPlaceholder: "Cari villa, rumah, tanah, atau kawasan",
     searchSubmit: "Cari",
 
+    /* Pita berjalan di bawah judul. Isinya wilayah kerja dan lingkup layanan,
+       keduanya fakta dari brief. Tidak ada klaim di sini. */
+    tickerLabel: "Wilayah kerja dan lingkup layanan",
+    ticker: [
+      "Badung",
+      "Denpasar",
+      "Gianyar",
+      "Tabanan",
+      "Villa",
+      "Rumah",
+      "Tanah",
+      "Ruko",
+      "Arsitektur",
+      "Rendering 3D",
+      "Gambar struktur",
+      "Konstruksi",
+      "PBG",
+      "SLF",
+    ],
+
     synergy: {
       label: "Sekilas tentang kami",
       headline: "Dua entitas, satu alur kerja",
@@ -614,6 +634,24 @@ const en: Dict = {
     searchLabel: "Search properties",
     searchPlaceholder: "Search a villa, house, land plot, or area",
     searchSubmit: "Search",
+
+    tickerLabel: "Service areas and scope of work",
+    ticker: [
+      "Badung",
+      "Denpasar",
+      "Gianyar",
+      "Tabanan",
+      "Villas",
+      "Houses",
+      "Land",
+      "Shophouses",
+      "Architecture",
+      "3D rendering",
+      "Structural drawings",
+      "Construction",
+      "PBG",
+      "SLF",
+    ],
 
     synergy: {
       label: "About us",

@@ -33,6 +33,7 @@ graphic is generated as SVG at build time.
 | Korva Studio projects | `content/projects.ts` |
 | Build packages and calculator rates | `content/build.ts` |
 | Office, phone numbers, legal entities | `content/site.ts` |
+| The big picture on the home page | `content/site.ts`, `heroImage` |
 | Every piece of visible text | `lib/i18n.ts` (Indonesian and English) |
 
 Each of those files is commented in Indonesian for a non-technical editor.
@@ -58,11 +59,13 @@ npm run graphics         regenerate every SVG tile and Open Graph card
 
 npm run contrast         every colour pair against WCAG AA
 npm run audit            layout at six viewports, short laptops included:
-                         overflow, broken images, hidden reveals, and content
-                         hidden behind the sticky header
-npm run audit:behaviour  50 interaction checks: menu, filters, listbox keyboard
-                         support, language memory, WhatsApp routing, lightbox,
-                         scroll locks, server-side validation
+                         overflow, broken images, hidden reveals, button labels
+                         wrapping to a second line, and content hidden behind
+                         the sticky header
+npm run audit:behaviour  interaction checks: menu, filters, listbox keyboard
+                         support, language memory, WhatsApp routing, the
+                         floating button, lightbox, scroll locks, and
+                         server-side validation
 npm run audit:seo        assets, routes, per-listing metadata, structured data,
                          sitemap, robots
 ```
@@ -97,6 +100,11 @@ the before and after read as a sequence. Nothing imitates a photograph.
 
 To swap in real photography and renders, put files in `public/photos` and point
 the `images`, `before`, and `after` fields at them.
+
+The home page picture is a single entry, `heroImage` in `content/site.ts`: set
+`src`, `alt`, `width`, and `height` and nothing else needs touching. Leave `alt`
+empty only while it is a placeholder that carries no information; a real
+photograph needs a short description of what is in it.
 
 ## Third-party components
 
