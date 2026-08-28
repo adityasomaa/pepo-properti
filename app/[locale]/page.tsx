@@ -77,10 +77,10 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         never zooms as the page moves.
       */}
       <section className="relative" style={{ minHeight: "calc(100svh - var(--header-h))" }}>
-        <div className="container flex min-h-[inherit] flex-col justify-center gap-4 py-5 sm:gap-6 sm:py-8">
+        <div className="hero-stack container flex min-h-[inherit] flex-col [justify-content:var(--hero-justify)] [row-gap:var(--hero-gap)] [padding-block:var(--hero-pad)]">
           {/* Headline beside the picture. */}
-          <div className="grid items-center gap-4 sm:gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.82fr)] lg:gap-12">
-            <h1 className="max-w-[19ch] text-[clamp(1.5rem,0.95rem+2.6vw,3.25rem)] font-medium leading-[1.08] tracking-[-0.035em] text-ink">
+          <div className="grid items-center gap-3 sm:gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.82fr)] lg:gap-12">
+            <h1 className="max-w-[19ch] [font-size:var(--hero-h1)] font-medium leading-[1.08] tracking-[-0.035em] text-ink">
               {dict.home.heroHeadline}
             </h1>
 
@@ -97,7 +97,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                 height={site.heroImage.height}
                 fetchPriority="high"
                 decoding="async"
-                className="block h-[clamp(6rem,17svh,9rem)] w-full object-cover sm:h-[clamp(8rem,22svh,12rem)] lg:h-[clamp(14rem,34svh,22rem)]"
+                className="hero-figure block h-[var(--hero-figure-h)] w-full object-cover"
               />
             </div>
           </div>
@@ -105,8 +105,20 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           {/* The running band sits directly under the headline, as asked. */}
           <Ticker items={dict.home.ticker} label={dict.home.tickerLabel} />
 
-          <div className="grid items-start gap-4 sm:gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.82fr)] lg:gap-12">
-            <div className="min-w-0">
+          <div className="grid items-start gap-3 sm:gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.82fr)] lg:gap-12">
+            {/*
+              On a phone the consent notice is a sheet along the bottom edge,
+              and it sat squarely over this search button, so the page's primary
+              action could not be reached until the notice was dismissed.
+              Reserving space for the notice would push the hero up and hide its
+              top under the header, so the search leads on small screens
+              instead. From 1024px the two columns keep their original order.
+            */}
+            <div className="min-w-0 lg:order-2">
+              <HeroSearch locale={locale} dict={dict} />
+            </div>
+
+            <div className="min-w-0 lg:order-1">
               <p className="max-w-[54ch] text-[clamp(0.9375rem,0.9rem+0.2vw,1.0625rem)] leading-[1.5] text-ink-muted">
                 {dict.home.heroDescription}
               </p>
@@ -114,7 +126,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
               {/* The two routes into the business, exactly as the brief frames
                   them. Stacked on the narrowest screens so each label keeps to
                   one line at every width. */}
-              <div className="mt-5 flex flex-col gap-2.5 sm:mt-6 sm:flex-row sm:flex-wrap sm:gap-3">
+              <div className="mt-4 flex flex-col gap-2 sm:mt-6 sm:flex-row sm:flex-wrap sm:gap-3">
                 <AppLink href={path(locale, "listings")} className="btn" data-variant="primary">
                   <Buildings weight="regular" aria-hidden="true" className="btn__icon" />
                   <span>{dict.division.proCta}</span>
@@ -124,10 +136,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                   <span>{dict.division.studioCta}</span>
                 </AppLink>
               </div>
-            </div>
-
-            <div className="min-w-0">
-              <HeroSearch locale={locale} dict={dict} />
             </div>
           </div>
         </div>

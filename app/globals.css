@@ -166,6 +166,45 @@
       scroll-behavior: auto !important;
     }
   }
+  /*
+    The hero's vertical rhythm, as variables rather than as rules, because the
+    values are set by utility classes on the element and a rule in another
+    layer cannot override those. A short screen is the case that matters: the
+    hero is centred by default, which pushed its search button down into the
+    consent notice along the bottom edge.
+  */
+  :root {
+    --hero-justify: center;
+    --hero-pad: 0.75rem;
+    --hero-gap: 0.75rem;
+    --hero-figure-h: clamp(2.75rem, 9svh, 9rem);
+    --hero-h1: clamp(1.5rem, 0.95rem + 2.6vw, 3.25rem);
+  }
+
+  @media (min-width: 640px) {
+    :root {
+      --hero-pad: 2rem;
+      --hero-gap: 1.5rem;
+      --hero-figure-h: clamp(7rem, 18svh, 12rem);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    :root {
+      --hero-figure-h: clamp(6rem, 22svh, 22rem);
+    }
+  }
+
+  @media (min-width: 640px) and (max-height: 720px) {
+    :root {
+      --hero-justify: flex-start;
+      --hero-pad: 0.75rem;
+      --hero-gap: 0.5rem;
+      --hero-figure-h: clamp(3.5rem, 12svh, 9rem);
+      --hero-h1: clamp(1.5rem, 0.75rem + 2.2vw, 2.75rem);
+    }
+  }
+
 }
 
 @layer components {

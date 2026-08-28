@@ -116,6 +116,20 @@ const probe = () => {
   const header = document.querySelector("header");
   const headerH = header ? header.getBoundingClientRect().height : 0;
 
+  // The brief asks for a hero that is one screen and holds the search. Height
+  // alone was reported but never asserted, which is how a taller hero slipped
+  // through. Measure where the hero's own search actually ends.
+  const heroSearch = hero ? hero.querySelector("form") : null;
+  const heroSearchBottom = heroSearch
+    ? Math.round(
+        Math.max(
+          ...[...heroSearch.querySelectorAll("input, button, select")].map(
+            (el) => el.getBoundingClientRect().bottom
+          )
+        )
+      )
+    : null;
+
   const submit = document.querySelector('form[role="search"] button[type="submit"]');
   const banner = document.querySelector('[role="region"]');
   const bannerRect = banner ? banner.getBoundingClientRect() : null;
@@ -174,6 +188,7 @@ const probe = () => {
     underHeader: underHeader.slice(0, 4),
     wrappedButtons: wrappedButtons.slice(0, 5),
     heroHeight: heroRect ? Math.round(heroRect.height) : null,
+    heroSearchBottom,
     headerHeight: Math.round(headerH),
     viewportHeight: document.documentElement.clientHeight,
     searchClearOfBanner:
@@ -214,7 +229,10 @@ const summary = [];
   // audit is broken and a clean run would mean nothing.
   const page = await browser.newPage();
   await page.setViewport({ width: 375, height: 760, isMobile: true, hasTouch: true });
-  await page.goto(BASE + "/id", { waitUntil: "domcontentloaded", timeout: 45000 });
+  // The same wait the route sweep uses. On "domcontentloaded" the running band
+  // has its full width but not yet the rule that clips it, so the self-test was
+  // measuring a page mid-load and calling the detector broken.
+  await page.goto(BASE + "/id", { waitUntil: "networkidle2", timeout: 45000 });
   const before = await page.evaluate(probe);
   await page.evaluate(() => {
     const spike = document.createElement("div");
@@ -273,6 +291,14 @@ for (const bp of BREAKPOINTS) {
     if (result.underHeader.length) {
       problems.push(`content hidden behind the sticky header: ${result.underHeader.join(" | ")}`);
     }
+    if (result.heroSearchBottom !== null && result.heroSearchBottom > result.viewportHeight) {
+      problems.push(
+        `hero search falls below the first screen: ends at ${result.heroSearchBottom}, viewport is ${result.viewportHeight}`
+      );
+    }
+    if (result.searchClearOfBanner === false) {
+      problems.push("the cookie banner covers the hero search button");
+    }
 
     if (problems.length) {
       failures++;
@@ -281,7 +307,8 @@ for (const bp of BREAKPOINTS) {
       result.offenders.forEach((o) => summary.push(`        offender: ${o}`));
     } else {
       const hero = result.heroHeight
-        ? ` hero=${result.heroHeight} header=${result.headerHeight} vh=${result.viewportHeight}`
+        ? ` hero=${result.heroHeight} header=${result.headerHeight} vh=${result.viewportHeight}` +
+          (result.heroSearchBottom === null ? "" : ` searchEnds=${result.heroSearchBottom}`)
         : "";
       summary.push(`pass  ${bp.name}  ${route}${hero}`);
     }
