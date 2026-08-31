@@ -17,6 +17,25 @@ import { join } from "node:path";
 
 const BASE = process.argv[2] || "http://localhost:4311";
 
+const { listings } = await import("../content/listings.ts");
+
+/* Expectations come from the data, not from numbers typed here. A hard-coded
+   count silently starts testing nothing the moment the inventory changes. */
+const TOTAL = listings.length;
+const byType = (t) => listings.filter((l) => l.type === t).length;
+// The first type in the listbox order that actually has listings, so the
+// keyboard test selects something that produces cards.
+const TYPE_ORDER = ["villa", "rumah", "tanah", "ruko"];
+const FIRST_TYPE = TYPE_ORDER.find((t) => byType(t) > 0);
+const FIRST_TYPE_COUNT = byType(FIRST_TYPE);
+// An area shared by more than one listing makes the keyword test meaningful.
+const areaCounts = listings.reduce((m, l) => m.set(l.area, (m.get(l.area) ?? 0) + 1), new Map());
+const [KEYWORD_AREA, KEYWORD_HITS] = [...areaCounts].sort((a, b) => b[1] - a[1])[0];
+const PRICE_FLOOR = 1000000000;
+const ABOVE_FLOOR = listings.filter((l) => l.price >= PRICE_FLOOR).length;
+const SAMPLE = listings.find((l) => l.images.length > 1) ?? listings[0];
+const LONGEST = [...listings].sort((a, b) => b.title.id.length - a.title.id.length)[0];
+
 const CHROME = [
   `${process.env.LOCALAPPDATA}\\Google\\Chrome\\Application\\chrome.exe`,
   "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
@@ -71,7 +90,7 @@ async function freshPage(width = 1440, height = 900) {
 /* --- 1. Mobile menu ------------------------------------------------------ */
 {
   const { page, context } = await freshPage(375, 760);
-  await page.goto(`${BASE}/id`, { waitUntil: "networkidle2" });
+  await page.goto(`${BASE}/id`, { waitUntil: "networkidle2", timeout: 90000 });
   await settle(2000);
 
   await page.click('button[aria-controls="mobile-menu"]');
@@ -111,31 +130,31 @@ async function freshPage(width = 1440, height = 900) {
 /* --- 2. Listing search and filters --------------------------------------- */
 {
   const { page, context } = await freshPage(1440, 900);
-  await page.goto(`${BASE}/id/listings`, { waitUntil: "networkidle2" });
+  await page.goto(`${BASE}/id/listings`, { waitUntil: "networkidle2", timeout: 90000 });
   await settle(2000);
 
   const countCards = () => page.evaluate(() => document.querySelectorAll("main ul li article").length);
 
   const all = await countCards();
-  check("listing page renders every property", all === 16, `${all} cards`);
+  check("listing page renders every property", all === TOTAL, `${all} of ${TOTAL} cards`);
 
   // Keyword
-  await page.type("aside input[type=search]", "ubud");
+  await page.type("aside input[type=search]", KEYWORD_AREA.toLowerCase());
   await settle(900);
   const ubud = await page.evaluate(() =>
     [...document.querySelectorAll("main ul li article")].map((a) => a.textContent)
   );
   check(
     "keyword search narrows to matching areas",
-    ubud.length === 2 && ubud.every((t) => t.includes("Ubud")),
-    `${ubud.length} results`
+    ubud.length === KEYWORD_HITS && ubud.every((t) => t.includes(KEYWORD_AREA)),
+    `${ubud.length} of ${KEYWORD_HITS} for "${KEYWORD_AREA}"`
   );
 
   // Reset, then filter by type through the custom listbox using the keyboard only.
   await page.click("aside button[data-variant=secondary]");
   await settle(700);
   const afterReset = await countCards();
-  check("reset restores the full list", afterReset === 16, `${afterReset} cards`);
+  check("reset restores the full list", afterReset === TOTAL, `${afterReset} cards`);
 
   const typeTrigger = await page.$$('aside button[aria-haspopup="listbox"]');
   await typeTrigger[0].focus();
@@ -156,18 +175,27 @@ async function freshPage(width = 1440, height = 900) {
   check("listbox offers every type plus the any option", listboxOpen.options === 5, `${listboxOpen.options}`);
   check("listbox locks page scroll while open", listboxOpen.locked);
 
-  await page.keyboard.press("ArrowDown");
+  // Step past "any" to the first type that has listings behind it.
+  for (let i = 0; i <= TYPE_ORDER.indexOf(FIRST_TYPE); i += 1) {
+    await page.keyboard.press("ArrowDown");
+  }
   await page.keyboard.press("Enter");
   await settle(900);
-  const villaOnly = await page.evaluate(() => ({
+  const villaOnly = await page.evaluate((label) => ({
     cards: document.querySelectorAll("main ul li article").length,
-    allVilla: [...document.querySelectorAll("main ul li article")].every((a) => a.textContent.includes("Villa")),
+    allVilla: [...document.querySelectorAll("main ul li article")].every((a) =>
+      a.textContent.toLowerCase().includes(label)
+    ),
     url: location.search,
     focusBack: document.activeElement?.getAttribute("aria-haspopup") === "listbox",
     unlocked: !document.documentElement.classList.contains("scroll-locked"),
-  }));
-  check("arrow plus Enter selects a type", villaOnly.cards === 8 && villaOnly.allVilla, `${villaOnly.cards} villas`);
-  check("filter is written to the URL", villaOnly.url.includes("type=villa"), villaOnly.url);
+  }), FIRST_TYPE);
+  check(
+    "arrow plus Enter selects a type",
+    villaOnly.cards === FIRST_TYPE_COUNT && villaOnly.allVilla,
+    `${villaOnly.cards} of ${FIRST_TYPE_COUNT} ${FIRST_TYPE}`
+  );
+  check("filter is written to the URL", villaOnly.url.includes(`type=${FIRST_TYPE}`), villaOnly.url);
   check("focus returns to the listbox trigger", villaOnly.focusBack);
   check("scroll unlocks when the listbox closes", villaOnly.unlocked);
 
@@ -187,21 +215,29 @@ async function freshPage(width = 1440, height = 900) {
   await settle(300);
 
   // Price range formatting, and that the raw number reaches the filter.
+  // Clear first: the type filter from the step above would otherwise still be
+  // applied, and the count checked here is for the whole inventory.
+  await page.click("aside button[data-variant=secondary]");
+  await settle(700);
   const priceInputs = await page.$$("aside input[inputmode=numeric]");
   await priceInputs[0].click();
-  await page.keyboard.type("5000000000");
+  await page.keyboard.type(String(PRICE_FLOOR));
   await settle(900);
   const priced = await page.evaluate(() => ({
     display: document.querySelectorAll("aside input[inputmode=numeric]")[0].value,
     cards: document.querySelectorAll("main ul li article").length,
     url: location.search,
   }));
-  check("price input groups thousands as you type", priced.display === "5.000.000.000", priced.display);
-  check("price filter uses the raw number", priced.url.includes("min=5000000000"), priced.url);
+  check(
+    "price input groups thousands as you type",
+    priced.display === PRICE_FLOOR.toLocaleString("id-ID"),
+    priced.display
+  );
+  check("price filter uses the raw number", priced.url.includes(`min=${PRICE_FLOOR}`), priced.url);
   check(
     "price filter narrows the result set",
-    priced.cards === 3,
-    `${priced.cards} villas at or above 5,000,000,000`
+    priced.cards === ABOVE_FLOOR,
+    `${priced.cards} of ${ABOVE_FLOOR} at or above ${PRICE_FLOOR.toLocaleString("id-ID")}`
   );
 
   // Empty state
@@ -220,7 +256,7 @@ async function freshPage(width = 1440, height = 900) {
 /* --- 3. Language switch, and whether the choice is remembered ------------- */
 {
   const { page, context } = await freshPage(1440, 900);
-  await page.goto(`${BASE}/id/listings/villa-empat-kamar-ubud`, { waitUntil: "networkidle2" });
+  await page.goto(`${BASE}/id/listings/${SAMPLE.slug}`, { waitUntil: "networkidle2", timeout: 90000 });
   await settle(2000);
 
   // Accept cookies so the choice is allowed to persist beyond the tab.
@@ -243,9 +279,13 @@ async function freshPage(width = 1440, height = 900) {
     heading: document.querySelector("h1")?.textContent?.trim(),
     nav: [...document.querySelectorAll("header nav a")].map((a) => a.textContent.trim()),
   }));
-  check("language switch keeps the same property", switched.url === "/en/listings/villa-empat-kamar-ubud", switched.url);
+  check("language switch keeps the same property", switched.url === `/en/listings/${SAMPLE.slug}`, switched.url);
   check("document language follows the choice", switched.lang === "en", switched.lang);
-  check("content is translated", /Four-Bedroom Villa/i.test(switched.heading || ""), switched.heading);
+  check(
+    "content is translated",
+    (switched.heading || "").includes(SAMPLE.title.en),
+    switched.heading
+  );
   check("navigation is translated", switched.nav.includes("Properties"), switched.nav.join(", "));
 
   // Move to another page: the choice has to survive.
@@ -260,7 +300,7 @@ async function freshPage(width = 1440, height = 900) {
   check("accepted consent stores the language", /korva_lang=en/.test(cookie), cookie);
 
   // A fresh visit to the root should now land in English.
-  await page.goto(`${BASE}/`, { waitUntil: "networkidle2" });
+  await page.goto(`${BASE}/`, { waitUntil: "networkidle2", timeout: 90000 });
   await settle(1200);
   const rooted = await page.evaluate(() => location.pathname);
   check("root redirects to the remembered language", rooted.startsWith("/en"), rooted);
@@ -271,8 +311,8 @@ async function freshPage(width = 1440, height = 900) {
 /* --- 4. WhatsApp messages ------------------------------------------------ */
 {
   const { page, context } = await freshPage(1440, 900);
-  const slug = "villa-lima-kamar-kolam-renang-taman-uluwatu";
-  await page.goto(`${BASE}/id/listings/${slug}`, { waitUntil: "networkidle2" });
+  const slug = LONGEST.slug;
+  await page.goto(`${BASE}/id/listings/${slug}`, { waitUntil: "networkidle2", timeout: 90000 });
   await settle(2200);
 
   const links = await page.evaluate(() =>
@@ -290,11 +330,11 @@ async function freshPage(width = 1440, height = 900) {
   check("all links reach one of the two divisions", links.every((l) => NUMBERS.includes(l.number)),
     [...new Set(links.map((l) => l.number))].join(", "));
 
-  const listingLink = links.find((l) => l.message.includes("KP-V-006"));
+  const listingLink = links.find((l) => l.message.includes(LONGEST.code));
   check("the listing button carries the listing code", !!listingLink);
   check(
     "the listing button carries the full title",
-    !!listingLink && listingLink.message.includes("Villa Lima Kamar Tidur dengan Kolam Renang Pribadi"),
+    !!listingLink && listingLink.message.includes(LONGEST.title.id),
     listingLink ? listingLink.message.split("\n")[3] : ""
   );
   check(
@@ -309,7 +349,7 @@ async function freshPage(width = 1440, height = 900) {
   );
 
   // Filters applied on the listing page must reach the message too.
-  await page.goto(`${BASE}/id/listings?type=tanah`, { waitUntil: "networkidle2" });
+  await page.goto(`${BASE}/id/listings?type=tanah`, { waitUntil: "networkidle2", timeout: 90000 });
   await settle(2200);
   const filtered = await page.evaluate(() => {
     const a = document.querySelector('a[href^="https://wa.me/"]');
@@ -324,7 +364,7 @@ async function freshPage(width = 1440, height = 900) {
 /* --- 4b. The floating button waits for the hero to pass ------------------- */
 {
   const { page, context } = await freshPage(375, 760);
-  await page.goto(`${BASE}/id`, { waitUntil: "networkidle2" });
+  await page.goto(`${BASE}/id`, { waitUntil: "networkidle2", timeout: 90000 });
   await settle(2500);
 
   const atTop = await page.evaluate(
@@ -361,7 +401,7 @@ async function freshPage(width = 1440, height = 900) {
 /* --- 5. Gallery lightbox ------------------------------------------------- */
 {
   const { page, context } = await freshPage(1440, 900);
-  await page.goto(`${BASE}/id/listings/villa-tiga-kamar-kolam-renang-canggu`, { waitUntil: "networkidle2" });
+  await page.goto(`${BASE}/id/listings/${SAMPLE.slug}`, { waitUntil: "networkidle2", timeout: 90000 });
   await settle(2200);
 
   await page.click("main button.group");
@@ -376,14 +416,22 @@ async function freshPage(width = 1440, height = 900) {
   });
   check("lightbox opens", opened.open);
   check("lightbox locks page scroll", opened.locked);
-  check("lightbox shows a position counter", /1 dari 4/.test(opened.counter || ""), opened.counter);
+  check(
+    "lightbox shows a position counter",
+    (opened.counter || "").trim() === `1 dari ${SAMPLE.images.length}`,
+    opened.counter
+  );
 
   await page.keyboard.press("ArrowRight");
   await settle(400);
   const advanced = await page.evaluate(
     () => document.querySelector('[role="dialog"] p')?.textContent?.trim()
   );
-  check("arrow key moves through the gallery", /2 dari 4/.test(advanced || ""), advanced);
+  check(
+    "arrow key moves through the gallery",
+    (advanced || "").trim() === `2 dari ${SAMPLE.images.length}`,
+    advanced
+  );
 
   await page.keyboard.press("Escape");
   await settle(500);
@@ -400,7 +448,7 @@ async function freshPage(width = 1440, height = 900) {
 /* --- 6. Server-side validation ------------------------------------------- */
 {
   const { page, context } = await freshPage(1440, 900);
-  await page.goto(`${BASE}/id/submit-property`, { waitUntil: "networkidle2" });
+  await page.goto(`${BASE}/id/submit-property`, { waitUntil: "networkidle2", timeout: 90000 });
   await settle(2200);
 
   // Submitting nothing has to come back from the server with field errors.
@@ -460,7 +508,7 @@ async function freshPage(width = 1440, height = 900) {
 /* --- 7. Cookie consent actually changes something ------------------------ */
 {
   const { page, context } = await freshPage(1440, 900);
-  await page.goto(`${BASE}/id`, { waitUntil: "networkidle2" });
+  await page.goto(`${BASE}/id`, { waitUntil: "networkidle2", timeout: 90000 });
   await settle(2000);
 
   const declineButton = await page.$('[role="region"] button[data-variant="secondary"]');

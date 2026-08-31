@@ -1,4 +1,10 @@
-import villaRehan from "@/public/photos/villa-rehan/manifest.json";
+import kost_bulu_jaya from "@/public/photos/kost-bulu-jaya/manifest.json";
+import p11_klumpu from "@/public/photos/p11-klumpu/manifest.json";
+import p4_pejukutan from "@/public/photos/p4-pejukutan/manifest.json";
+import p6_sekartaji from "@/public/photos/p6-sekartaji/manifest.json";
+import p9_kelingking from "@/public/photos/p9-kelingking/manifest.json";
+import ruko_darmo_park from "@/public/photos/ruko-darmo-park/manifest.json";
+import villa_rehan from "@/public/photos/villa-rehan/manifest.json";
 
 /**
  * Every photo album the site can draw from.
@@ -18,7 +24,13 @@ export type PhotoEntry = {
 };
 
 const photoManifests: Record<string, PhotoEntry[]> = {
-  "villa-rehan": villaRehan as PhotoEntry[],
+  "kost-bulu-jaya": kost_bulu_jaya as PhotoEntry[],
+  "p11-klumpu": p11_klumpu as PhotoEntry[],
+  "p4-pejukutan": p4_pejukutan as PhotoEntry[],
+  "p6-sekartaji": p6_sekartaji as PhotoEntry[],
+  "p9-kelingking": p9_kelingking as PhotoEntry[],
+  "ruko-darmo-park": ruko_darmo_park as PhotoEntry[],
+  "villa-rehan": villa_rehan as PhotoEntry[],
 };
 
 export default photoManifests;

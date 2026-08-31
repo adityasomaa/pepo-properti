@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1200" width="1600" height="1200" role="presentation">
-<defs><linearGradient id="g1yew" x1="0.04" y1="0" x2="0.96" y2="1">
-<stop offset="0" stop-color="#c2cdc2"/><stop offset="1" stop-color="#2e5442"/>
-</linearGradient></defs>
-<rect width="1600" height="1200" fill="url(#g1yew)"/>
-<rect x="0" y="408.39" width="1600" height="108.32" fill="#c2cdc2" opacity="0.22"/><rect x="0" y="516.7" width="1600" height="683.3" fill="#12261d"/><rect x="0" y="516.7" width="1385.89" height="63.71" fill="#4d7360" opacity="0.58"/><rect x="0" y="578.27" width="1406.81" height="104.41" fill="#2e5442" opacity="0.5"/><rect x="476.58" y="666.45" width="1123.42" height="61.23" fill="#1d3a2c" opacity="0.68"/><rect x="186.15" y="714.22" width="1413.85" height="87.62" fill="#12261d" opacity="0.67"/><rect x="224.32" y="780.41" width="1375.68" height="93.18" fill="#6e8c7a" opacity="0.66"/><rect x="378.41" y="879.26" width="1221.59" height="77.24" fill="#4d7360" opacity="0.69"/><rect x="116.51" y="878.4" width="1366.97" height="121.73" fill="#c2cdc2" opacity="0.28"/><rect x="1020.48" y="488.12" width="9.18" height="285.8" fill="#9c3517" opacity="0.9"/>
-</svg>

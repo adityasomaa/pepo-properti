@@ -427,14 +427,9 @@ const STATUS_LABEL = { dijual: "Dijual", disewa: "Disewakan" };
 
 let tiles = 0;
 
-// One tile per listing image slot.
-for (const l of listings) {
-  l.images.forEach((path, i) => {
-    const file = path.replace("/graphics/", "");
-    writeFileSync(join(GRAPHICS, file), tile({ seed: `${l.code}#${i}`, type: l.type }));
-    tiles++;
-  });
-}
+// Listings carry real photographs now, so no tiles are generated for them.
+// What remains here is the furniture the site draws itself: the category
+// tiles, the hero plane, and the Open Graph cards.
 
 // Category tiles for the home page, wider crop.
 for (const type of ["villa", "rumah", "tanah", "ruko"]) {

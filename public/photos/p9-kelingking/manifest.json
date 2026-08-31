@@ -1,0 +1,111 @@
+[
+  {
+    "slug": "dji-0001-hdr-4",
+    "source": "DJI_0001_HDR 4.jpeg",
+    "width": 2400,
+    "height": 1348,
+    "widths": [
+      480,
+      768,
+      1200,
+      1800,
+      2400
+    ],
+    "blur": "data:image/webp;base64,UklGRnAAAABXRUJQVlA4IGQAAACwAwCdASoUAAsAPu1iqU2ppaOiMAgBMB2JZACdAA8krhycaIqgAAD4tQdOhIGtwwT+zHV1R8A9/Sqxa/X2H4uIMDxYlA/Vh/6kGBObtFps/qWAspfdSOTJvJYUx6Eze+DfsgAA"
+  },
+  {
+    "slug": "dji-0011-hdr-3",
+    "source": "DJI_0011_HDR 3.jpeg",
+    "width": 2400,
+    "height": 1348,
+    "widths": [
+      480,
+      768,
+      1200,
+      1800,
+      2400
+    ],
+    "blur": "data:image/webp;base64,UklGRmYAAABXRUJQVlA4IFoAAADwAwCdASoUAAsAPu1iqU2ppaQiMAgBMB2JZgCsACB/Zxu9oLeuWpnAAP6BHWIu/doLV1ZvJEcRmV+BKbcCgdDr0LNDaYhmAR/irOYHb0Y5rlOcNDguOK4AAAA="
+  },
+  {
+    "slug": "hotel-project-near-p9",
+    "source": "Hotel project near P9.jpeg",
+    "width": 1200,
+    "height": 1600,
+    "widths": [
+      480,
+      768,
+      1200
+    ],
+    "blur": "data:image/webp;base64,UklGRrwAAABXRUJQVlA4ILAAAABwBQCdASoUABsAPu1mrE+ppSQiMBgIATAdiUAX5waMQ1EmkRgEI19cFdj+UifcF9uvqLgAAP7qcK8T98O8CsQ3Nv2m9+bT3+fMJjBINnNAkxUxT3arzvLgpt7euyr0muHOEOPUdojkHUKuR9Rg4iFOAHS9nlUuHbfDDHDCw5248hah0LIEnzBiwAUsUnsbYINZ+29K0d3qsRPwj1XR4435ZYkd0npuvHyj3CJhZQAAAA=="
+  },
+  {
+    "slug": "p9-dropped-pin",
+    "source": "P9 Dropped pin.jpg",
+    "width": 768,
+    "height": 545,
+    "widths": [
+      480,
+      768
+    ],
+    "blur": "data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAADQAwCdASoUAA4APu1kqU2ppaQiMAgBMB2JQBOmUABp1oaWqLwgwSAA/tAuL/5BkLOx4G1AME6BRc+lOpOEr6XOXSmfhpNX1iwPgzggVgoFmi7F1lqCrG7XngmAAA=="
+  },
+  {
+    "slug": "sunset-kv-14",
+    "source": "SUNSET KV 14.jpg",
+    "width": 768,
+    "height": 579,
+    "widths": [
+      480,
+      768
+    ],
+    "blur": "data:image/webp;base64,UklGRl4AAABXRUJQVlA4IFIAAACQAwCdASoUAA8APu1mqk4ppaOiMAgBMB2JZwAAUGyKST+R+ZsAAP2XQOT9ZDsl1ygjmY+cmwW2Y9oxRx33qiL9m+2IjrAoCnHZBiD2dsascAAA"
+  },
+  {
+    "slug": "sunset-p914",
+    "source": "SUNSET P914 .jpg",
+    "width": 768,
+    "height": 1426,
+    "widths": [
+      480,
+      768
+    ],
+    "blur": "data:image/webp;base64,UklGRoYAAABXRUJQVlA4IHoAAACwBQCdASoUACUAPuFepE2opSOiNVgMARAcCWcA0qwSKxPCKpZxB2n7dzYucb35gOEZh7A2QgAA/hTLWxTKAleAwyy1eiXb58HbVC5BHZdnfGu8trVTmQi8SKxeMV2X+NWow8iCXJS97hwCuCrk3ic+RU3iNx+dY4AAAA=="
+  },
+  {
+    "slug": "screenshot-20230728-182232-chrome",
+    "source": "Screenshot_20230728_182232_Chrome.jpg",
+    "width": 768,
+    "height": 429,
+    "widths": [
+      480,
+      768
+    ],
+    "blur": "data:image/webp;base64,UklGRqAAAABXRUJQVlA4IJQAAAAwBACdASoUAAsAPu1iqU2ppaQiMAgBMB2JbACdMoMljDtjnWQu0BTDNGgA/tB0bqyLlecoLAhwsZ/GoY1cX7he09UN60hMNi3WOru9tMnXqTYvBe/lUuZfXoMXlxg8S55USAkkPktxIZio5ywhMq10Xo0GYQgOf/DEDS8agr9q1betXvF8QraGHP5+4WQR5+2IeQAA"
+  },
+  {
+    "slug": "view-kav-14",
+    "source": "View kav 14.jpg",
+    "width": 768,
+    "height": 1103,
+    "widths": [
+      480,
+      768
+    ],
+    "blur": "data:image/webp;base64,UklGRnwAAABXRUJQVlA4IHAAAADwBACdASoUAB0APu1krVAppSQisBgIATAdiWUAxvQ0a8YcH0xk9DK53sBkhghownwA3WWiYlAM9ndrNbdoYtWQJ0O/BreQwpN0zl0wkNvqCzRlVIVZp93k0xm+2yB/mkClMV6q16ncYSoFn2F334AA"
+  },
+  {
+    "slug": "l4-16122020-dji-0057-1",
+    "source": "l4_16122020_DJI_0057 1.png",
+    "width": 2400,
+    "height": 1349,
+    "widths": [
+      480,
+      768,
+      1200,
+      1800,
+      2400
+    ],
+    "blur": "data:image/webp;base64,UklGRnIAAABXRUJQVlA4IGYAAAAwBACdASoUAAsAPu1iqU2ppaOiMAgBMB2JbACdLoB+GYAo0v40mURRKhQA/Y/EZ4vMNvFkgQxnMTET7v9h5Yf6v9pqR2KZvrpJ7TTdBZ1CK0/Ng3IMSQfLIX9Ol1QEXdEcvlOHAAA="
+  }
+]

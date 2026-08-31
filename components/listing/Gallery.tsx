@@ -4,6 +4,9 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, X, ArrowsOut } from "@phosphor-icons/react/dist/ssr";
 import { useOverlay } from "../providers/OverlayProvider";
 import type { Dictionary } from "@/lib/i18n";
+import type { PhotoRef } from "@/content/listings";
+import { Photo } from "@/components/media/Photo";
+import { photoUrl } from "@/lib/photos";
 
 /**
  * Gallery with a lightbox.
@@ -19,7 +22,7 @@ export function Gallery({
   alt,
   dict,
 }: {
-  images: string[];
+  images: PhotoRef[];
   alt: string;
   dict: Dictionary;
 }) {
@@ -95,13 +98,12 @@ export function Gallery({
           className="group relative block w-full overflow-hidden rounded-[var(--radius-card)] border border-line bg-surface"
         >
           <span className="sr-only-focusable">{dict.listing.openGallery}</span>
-          <img
-            src={images[index]}
+          <Photo
+            album={images[index].album}
+            slug={images[index].slug}
             alt={`${alt}. ${dict.common.image} ${counter}.`}
-            width={1600}
-            height={1200}
-            fetchPriority="high"
-            decoding="async"
+            priority
+            sizes="(min-width: 1024px) 60vw, 92vw"
             className="block aspect-[16/9] w-full object-cover"
           />
           <span
@@ -115,8 +117,8 @@ export function Gallery({
 
         {images.length > 1 ? (
           <ul className="mt-3 flex snap-x snap-mandatory gap-3 overflow-x-auto pb-1">
-            {images.map((src, i) => (
-              <li key={src} className="w-24 flex-none snap-start sm:w-28">
+            {images.map((ref, i) => (
+              <li key={`${ref.album}/${ref.slug}`} className="w-24 flex-none snap-start sm:w-28">
                 <button
                   type="button"
                   onClick={() => setIndex(i)}
@@ -126,13 +128,11 @@ export function Gallery({
                   }`}
                 >
                   <span className="sr-only-focusable">{`${dict.common.image} ${i + 1}`}</span>
-                  <img
-                    src={src}
+                  <Photo
+                    album={ref.album}
+                    slug={ref.slug}
                     alt=""
-                    width={1600}
-                    height={1200}
-                    loading="lazy"
-                    decoding="async"
+                    sizes="7rem"
                     className="block aspect-[16/9] w-full object-cover"
                   />
                 </button>
@@ -162,10 +162,8 @@ export function Gallery({
 
             <div className="flex min-h-0 flex-1 items-center justify-center px-4 pb-4">
               <img
-                src={images[index]}
+                src={photoUrl(images[index], 1800)}
                 alt={`${alt}. ${dict.common.image} ${counter}.`}
-                width={1600}
-                height={1200}
                 decoding="async"
                 className="max-h-full max-w-full rounded-[var(--radius-card)] object-contain"
               />

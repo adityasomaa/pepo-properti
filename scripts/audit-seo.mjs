@@ -11,6 +11,7 @@
  */
 
 import { listings } from "../content/listings.ts";
+import { readFileSync } from "node:fs";
 import { projects } from "../content/projects.ts";
 import { locales, path, routes } from "../lib/i18n.ts";
 
@@ -44,7 +45,24 @@ async function text(url) {
 /* --- Every asset the pages reference ------------------------------------- */
 {
   const assets = new Set();
-  for (const listing of listings) listing.images.forEach((i) => assets.add(i));
+  // Ask the manifest which widths exist rather than assuming 1200 does: a
+  // source narrower than that never gets one, and the audit would chase a file
+  // the pipeline was right not to write.
+  const manifests = new Map();
+  for (const listing of listings) {
+    for (const i of listing.images) {
+      if (!manifests.has(i.album)) {
+        manifests.set(
+          i.album,
+          JSON.parse(readFileSync(`public/photos/${i.album}/manifest.json`, "utf8"))
+        );
+      }
+      const entry = manifests.get(i.album).find((p) => p.slug === i.slug);
+      const widths = entry ? entry.widths : [];
+      const best = widths.filter((w) => w <= 1200).pop() ?? widths[0];
+      assets.add(`/photos/${i.album}/${i.slug}-${best}.jpg`);
+    }
+  }
   for (const type of ["villa", "rumah", "tanah", "ruko"]) assets.add(`/graphics/category-${type}.svg`);
   assets.add("/graphics/hero.svg");
   for (const project of projects) {

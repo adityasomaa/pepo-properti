@@ -1,4 +1,5 @@
 import { Bed, Shower, Ruler } from "@phosphor-icons/react/dist/ssr";
+import { Photo } from "@/components/media/Photo";
 import { AppLink } from "../AppLink";
 import { formatArea, formatPrice, priceUnitSuffix } from "@/lib/format";
 import { path, type Dictionary, type Locale } from "@/lib/i18n";
@@ -27,14 +28,13 @@ export function ListingCard({
   return (
     <article className="group relative flex h-full flex-col overflow-hidden rounded-[var(--radius-card)] border border-line bg-white transition-colors duration-300 hover:border-ink/35 focus-within:border-ink/35">
       <div className="relative aspect-[16/9] w-full overflow-hidden bg-surface">
-        <img
-          src={listing.images[0]}
-          alt={`${dict.type[listing.type]}, ${listing.area}. ${dict.common.sampleBadge}.`}
-          width={1600}
-          height={1200}
-          loading={priority ? "eager" : "lazy"}
-          decoding="async"
-          fetchPriority={priority ? "high" : "auto"}
+        <Photo
+          album={listing.images[0].album}
+          slug={listing.images[0].slug}
+          alt={`${dict.type[listing.type]}, ${listing.area}`}
+          priority={priority}
+          /* Three across on a desktop, two on a tablet, one on a phone. */
+          sizes="(min-width: 1280px) 30vw, (min-width: 768px) 45vw, 92vw"
           className="h-full w-full object-cover"
         />
       </div>

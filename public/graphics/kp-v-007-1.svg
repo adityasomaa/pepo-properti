@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1200" width="1600" height="1200" role="presentation">
-<defs><linearGradient id="ge3z" x1="0.25" y1="0" x2="0.75" y2="1">
-<stop offset="0" stop-color="#9db0a3"/><stop offset="1" stop-color="#1d3a2c"/>
-</linearGradient></defs>
-<rect width="1600" height="1200" fill="url(#ge3z)"/>
-<rect x="0" y="367.31" width="1600" height="51.08" fill="#9db0a3" opacity="0.22"/><rect x="0" y="418.39" width="1600" height="781.61" fill="#0d1f17"/><rect x="0" y="418.39" width="1597" height="86.18" fill="#4d7360" opacity="0.47"/><rect x="188.94" y="503.58" width="1411.06" height="63.92" fill="#2e5442" opacity="0.76"/><rect x="0" y="565.68" width="1337.04" height="125.79" fill="#1d3a2c" opacity="0.86"/><rect x="0" y="702.37" width="1123.33" height="122.82" fill="#12261d" opacity="0.77"/><rect x="0" y="850.16" width="1558.51" height="69.95" fill="#4d7360" opacity="0.58"/><rect x="158.06" y="781.44" width="1283.89" height="105.76" fill="#9db0a3" opacity="0.4"/><rect x="310.13" y="405.42" width="8.32" height="129.68" fill="#9c3517" opacity="0.9"/>
-</svg>

@@ -1,4 +1,5 @@
 import { site, divisionList } from "@/content/site";
+import { photoUrl } from "@/lib/photos";
 import { path, type Dictionary, type Locale } from "@/lib/i18n";
 import type { Listing } from "@/content/listings";
 import type { Project } from "@/content/projects";
@@ -116,7 +117,7 @@ export function ListingSchema({
     identifier: listing.code,
     datePosted: listing.publishedAt,
     inLanguage: dict.meta.htmlLang,
-    image: [site.url + listing.images[0], `${site.url}/og/${listing.slug}.png`],
+    image: [site.url + photoUrl(listing.images[0]), `${site.url}/og/${listing.slug}.png`],
     provider: { "@id": `${site.url}/#korva-pro` },
     offers: {
       "@type": "Offer",

@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1200" width="1600" height="1200" role="presentation">
-<defs><linearGradient id="gh5y" x1="0.08" y1="0" x2="0.92" y2="1">
-<stop offset="0" stop-color="#c2cdc2"/><stop offset="1" stop-color="#2e5442"/>
-</linearGradient></defs>
-<rect width="1600" height="1200" fill="url(#gh5y)"/>
-<circle cx="1036.79" cy="510.02" r="161.08" fill="#c2cdc2" opacity="0.44"/><rect x="0" y="563.42" width="1600" height="97.48" fill="#c2cdc2" opacity="0.22"/><rect x="0" y="660.9" width="1600" height="539.1" fill="#12261d"/><rect x="62.37" y="660.9" width="1537.63" height="146.82" fill="#6e8c7a" opacity="0.51"/><rect x="188.74" y="772.76" width="1411.26" height="105.46" fill="#4d7360" opacity="0.73"/><rect x="0" y="890.51" width="1561.43" height="138.12" fill="#2e5442" opacity="0.56"/><rect x="155.61" y="921" width="1288.77" height="87.47" fill="#c2cdc2" opacity="0.39"/><rect x="811.58" y="651.04" width="13.28" height="98.62" fill="#9c3517" opacity="0.9"/>
-</svg>

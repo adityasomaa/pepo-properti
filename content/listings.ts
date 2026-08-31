@@ -7,16 +7,22 @@
    daftar di bawah lalu simpan.
 
    ---------------------------------------------------------------------------
-   PENTING: ISI FILE INI MASIH DATA CONTOH
+   ASAL DATA
    ---------------------------------------------------------------------------
-   Semua properti di bawah adalah contoh untuk memperlihatkan tampilan website,
-   bukan properti yang sedang dijual. Website menampilkan penanda "data contoh"
-   di halaman listing dan di setiap halaman detail selama tanda di bawah ini
-   masih bernilai true. Setelah data asli dimasukkan, ubah menjadi false dan
-   penanda itu hilang dari seluruh situs.
+   Dari sales kit Korva di Google Drive: dokumen INFORMATION dan Pricelist tiap
+   proyek. Kalau dokumen dan ringkasan di chat berbeda, yang dipakai Pricelist,
+   karena itu yang paling rinci dan paling baru.
+
+   Foto yang dipakai hanya foto properti. Tangkapan layar peta, gambar daftar
+   harga, dan satu spanduk yang memuat nomor telepon pribadi sengaja TIDAK
+   dipakai. Jangan masukkan kembali.
+
+   Harga ditulis apa adanya sesuai Pricelist. Korva pernah menyebut markup
+   Rp 35 juta untuk harga jual, tetapi pesan itu menyusul listing Bali daratan,
+   bukan proyek Nusa Penida ini, jadi belum diterapkan di sini.
    =========================================================================== */
 
-export const SAMPLE_DATA = true;
+export const SAMPLE_DATA = false;
 
 /* ---------------------------------------------------------------------------
    CARA MENAMBAH PROPERTI BARU
@@ -27,64 +33,57 @@ export const SAMPLE_DATA = true;
 
    ARTI SETIAP KOLOM
 
-   code         Kode listing, dipakai di pesan WhatsApp. Contoh: "KP-V-009".
-                Harus unik, tidak boleh sama dengan properti lain.
+   code         Kode listing, dipakai di pesan WhatsApp. Harus unik.
 
-   slug         Potongan alamat website untuk properti ini. Contoh:
-                "villa-tiga-kamar-canggu" akan bisa dibuka di
-                /id/listing/villa-tiga-kamar-canggu
-                Huruf kecil semua, tanpa spasi, pakai tanda minus.
-                Harus unik. Kalau sudah pernah dibagikan ke calon pembeli,
-                jangan diubah lagi supaya link lama tidak mati.
+   slug         Potongan alamat website untuk properti ini, misalnya
+                "tanah-kavling-pejukutan-d" akan bisa dibuka di
+                /id/listings/tanah-kavling-pejukutan-d
+                Huruf kecil semua, tanpa spasi, pakai tanda minus. Harus unik.
+                Kalau sudah pernah dibagikan ke calon pembeli, jangan diubah
+                lagi supaya link lama tidak mati.
 
-   type         Jenis properti. Hanya boleh salah satu dari:
-                "villa" | "rumah" | "tanah" | "ruko"
+   type         "villa" | "rumah" | "tanah" | "ruko"
+   status       "dijual" | "disewa"
 
-   status       Hanya boleh salah satu dari:
-                "dijual" | "disewa"
-
-   area         Nama kecamatan atau kawasan. Ini yang dipakai filter Lokasi.
-                Tulis persis sama untuk properti di kawasan yang sama supaya
-                tidak muncul dua pilihan yang sebenarnya sama.
+   area         Nama desa, kecamatan, atau kawasan. Ini yang dipakai filter
+                Lokasi. Tulis persis sama untuk properti di kawasan yang sama.
 
    regency      Kabupaten atau kota.
 
    price        Harga dalam Rupiah, angka saja, tanpa titik dan tanpa "Rp".
-                Contoh: 4850000000
+   priceUnit    "total" | "per_tahun" | "per_bulan"
 
-   priceUnit    Satuan harga. Hanya boleh salah satu dari:
-                "total"     harga keseluruhan, dipakai untuk properti dijual
-                "per_tahun" harga sewa per tahun
-                "per_bulan" harga sewa per bulan
-
-   bedrooms     Jumlah kamar tidur. Tulis null kalau tidak berlaku (tanah).
-   bathrooms    Jumlah kamar mandi. Tulis null kalau tidak berlaku.
+   bedrooms     Jumlah kamar tidur, null kalau tidak berlaku (tanah).
+   bathrooms    Jumlah kamar mandi, null kalau tidak berlaku.
    landSize     Luas tanah dalam meter persegi, angka saja.
-   buildingSize Luas bangunan dalam meter persegi. Tulis null untuk tanah.
-   certificate  Jenis sertifikat. Contoh: "SHM", "HGB".
+   buildingSize Luas bangunan dalam meter persegi, null kalau tidak ada angka
+                resminya. Jangan dihitung sendiri dari ukuran ruangan.
+   certificate  "SHM", "HGB", dan seterusnya.
 
-   tenure       Status hak. Hanya boleh salah satu dari:
-                "freehold"  hak milik, dijual putus
+   tenure       "freehold" hak milik, dijual putus
                 "leasehold" hak sewa untuk jangka waktu tertentu
 
-   zoning       Peruntukan lahan menurut ITR. Hanya boleh salah satu dari:
-                "perumahan" | "komersial" | "pariwisata"
-                Tulis null kalau peruntukannya belum dipastikan.
+   zoning       "perumahan" | "komersial" | "pariwisata"
+                Tulis null kalau peruntukannya belum ada dokumennya. Jangan
+                menebak dari "cocok untuk villa" di brosur.
 
-   featured     true kalau mau ditandai di halaman depan, selain itu false.
-   publishedAt  Tanggal masuk, format "TAHUN-BULAN-TANGGAL". Dipakai untuk
-                mengurutkan mana yang terbaru.
+   featured     true kalau mau ditandai di halaman depan.
+   publishedAt  Tanggal masuk, format "TAHUN-BULAN-TANGGAL".
 
-   title        Judul properti. Isi dua-duanya:
-                  id  judul bahasa Indonesia
-                  en  judul bahasa Inggris
-   description  Keterangan properti, juga dua bahasa.
+   title        Judul properti, dua bahasa.
+   description  Keterangan properti, dua bahasa. Tulis fakta terukur saja:
+                luas, jarak, sertifikat, utilitas. Tanpa klaim keuntungan,
+                tanpa kata "murah", tanpa janji waktu.
 
-   images       Daftar gambar. Sekarang masih memakai gambar tempat kosong
-                yang dibuat otomatis oleh sistem. Kalau nanti sudah ada foto
-                asli, unggah foto ke folder public/photos lalu ganti isinya
-                menjadi contoh: ["/photos/villa-canggu-1.jpg", ...]
-                Gambar pertama dipakai sebagai gambar utama.
+   images       Daftar foto. Setiap foto ditulis sebagai album dan slug, bukan
+                alamat file:  { album: "p4-pejukutan", slug: "dji-0149-hdr" }
+                Album adalah nama folder di public/photos, slug diambil dari
+                manifest.json di folder itu. Website memilih sendiri ukuran dan
+                format paling kecil yang cocok untuk layar pembaca.
+
+                Menambah foto:
+                  npm run photos -- "<folder asal>" "<nama-album>"
+                Foto pertama dipakai sebagai foto utama.
    --------------------------------------------------------------------------- */
 
 export type PropertyType = "villa" | "rumah" | "tanah" | "ruko";
@@ -92,6 +91,9 @@ export type ListingStatus = "dijual" | "disewa";
 export type PriceUnit = "total" | "per_tahun" | "per_bulan";
 export type Tenure = "freehold" | "leasehold";
 export type Zoning = "perumahan" | "komersial" | "pariwisata";
+
+/** Satu foto, ditunjuk lewat album dan slug di public/photos. */
+export type PhotoRef = { album: string; slug: string };
 
 export type Listing = {
   code: string;
@@ -113,414 +115,36 @@ export type Listing = {
   publishedAt: string;
   title: { id: string; en: string };
   description: { id: string; en: string };
-  images: string[];
+  images: PhotoRef[];
 };
+
+const PEJUKUTAN = [
+  { album: "p4-pejukutan", slug: "dji-0149-hdr" },
+  { album: "p4-pejukutan", slug: "dji-0154-hdr" },
+  { album: "p4-pejukutan", slug: "dji-0159-hdr" },
+  { album: "p4-pejukutan", slug: "photo-from-moniq" },
+  { album: "p4-pejukutan", slug: "whatsapp-image-2024-03-20-at-17-04-33" },
+  { album: "p4-pejukutan", slug: "whatsapp-image-2017-02-04-at-1-59-05-pm" },
+];
+
+const KELINGKING = [
+  { album: "p9-kelingking", slug: "l4-16122020-dji-0057-1" },
+  { album: "p9-kelingking", slug: "dji-0001-hdr-4" },
+  { album: "p9-kelingking", slug: "dji-0011-hdr-3" },
+  { album: "p9-kelingking", slug: "view-kav-14" },
+  { album: "p9-kelingking", slug: "sunset-kv-14" },
+  { album: "p9-kelingking", slug: "sunset-p914" },
+];
 
 export const listings: Listing[] = [
   {
-    code: "KP-V-001",
-    slug: "villa-tiga-kamar-kolam-renang-canggu",
-    type: "villa",
-    status: "dijual",
-    area: "Kuta Utara",
-    regency: "Badung",
-    price: 4850000000,
-    priceUnit: "total",
-    bedrooms: 3,
-    bathrooms: 3,
-    landSize: 320,
-    buildingSize: 210,
-    certificate: "SHM",
-    tenure: "freehold",
-    zoning: "pariwisata",
-    featured: true,
-    publishedAt: "2026-08-14",
-    title: {
-      id: "Villa Tiga Kamar dengan Kolam Renang di Canggu",
-      en: "Three-Bedroom Villa with Pool in Canggu",
-    },
-    description: {
-      id: "Villa satu lantai dengan tiga kamar tidur dan kolam renang di halaman belakang. Ruang tamu terbuka menghadap taman, dapur terpisah, dan carport untuk satu mobil. Berada di kawasan Kuta Utara.",
-      en: "Single-storey villa with three bedrooms and a pool in the rear garden. Open living area facing the garden, a separate kitchen, and a carport for one car. Located in the Kuta Utara area.",
-    },
-    images: [
-      "/graphics/kp-v-001-1.svg",
-      "/graphics/kp-v-001-2.svg",
-      "/graphics/kp-v-001-3.svg",
-      "/graphics/kp-v-001-4.svg",
-    ],
-  },
-  {
-    code: "KP-V-002",
-    slug: "villa-dua-kamar-seminyak",
-    type: "villa",
-    status: "disewa",
-    area: "Kuta",
-    regency: "Badung",
-    price: 385000000,
-    priceUnit: "per_tahun",
-    bedrooms: 2,
-    bathrooms: 2,
-    landSize: 190,
-    buildingSize: 140,
-    certificate: "HGB",
-    tenure: "leasehold",
-    zoning: "pariwisata",
-    featured: true,
-    publishedAt: "2026-08-11",
-    title: {
-      id: "Villa Dua Kamar di Seminyak",
-      en: "Two-Bedroom Villa in Seminyak",
-    },
-    description: {
-      id: "Villa dua lantai dengan dua kamar tidur, kolam renang kecil, dan teras atas. Sudah berisi perabot. Disewakan per tahun di kawasan Seminyak, Kuta.",
-      en: "Two-storey villa with two bedrooms, a small pool, and an upper terrace. Comes furnished. Available on a yearly rental in the Seminyak area of Kuta.",
-    },
-    images: [
-      "/graphics/kp-v-002-1.svg",
-      "/graphics/kp-v-002-2.svg",
-      "/graphics/kp-v-002-3.svg",
-      "/graphics/kp-v-002-4.svg",
-    ],
-  },
-  {
-    code: "KP-V-003",
-    slug: "villa-empat-kamar-ubud",
-    type: "villa",
-    status: "dijual",
-    area: "Ubud",
-    regency: "Gianyar",
-    price: 7250000000,
-    priceUnit: "total",
-    bedrooms: 4,
-    bathrooms: 4,
-    landSize: 640,
-    buildingSize: 380,
-    certificate: "SHM",
-    tenure: "freehold",
-    zoning: "pariwisata",
-    featured: true,
-    publishedAt: "2026-08-09",
-    title: {
-      id: "Villa Empat Kamar dengan Taman di Ubud",
-      en: "Four-Bedroom Villa with Garden in Ubud",
-    },
-    description: {
-      id: "Villa empat kamar tidur dengan taman di sekeliling bangunan dan kolam renang memanjang. Terdapat paviliun terpisah yang bisa dipakai sebagai ruang kerja. Berada di Ubud, Gianyar.",
-      en: "Four-bedroom villa with garden on all sides and a lap pool. A separate pavilion can be used as a workspace. Located in Ubud, Gianyar.",
-    },
-    images: [
-      "/graphics/kp-v-003-1.svg",
-      "/graphics/kp-v-003-2.svg",
-      "/graphics/kp-v-003-3.svg",
-      "/graphics/kp-v-003-4.svg",
-    ],
-  },
-  {
-    code: "KP-V-004",
-    slug: "villa-tiga-kamar-jimbaran",
-    type: "villa",
-    status: "disewa",
-    area: "Kuta Selatan",
-    regency: "Badung",
-    price: 295000000,
-    priceUnit: "per_tahun",
-    bedrooms: 3,
-    bathrooms: 2,
-    landSize: 250,
-    buildingSize: 165,
-    certificate: "HGB",
-    tenure: "leasehold",
-    zoning: "pariwisata",
-    featured: false,
-    publishedAt: "2026-08-06",
-    title: {
-      id: "Villa Tiga Kamar di Jimbaran",
-      en: "Three-Bedroom Villa in Jimbaran",
-    },
-    description: {
-      id: "Villa tiga kamar tidur dengan kolam renang dan halaman belakang tertutup. Terletak di Jimbaran, Kuta Selatan. Disewakan per tahun.",
-      en: "Three-bedroom villa with a pool and an enclosed rear yard. Located in Jimbaran, Kuta Selatan. Available on a yearly rental.",
-    },
-    images: [
-      "/graphics/kp-v-004-1.svg",
-      "/graphics/kp-v-004-2.svg",
-      "/graphics/kp-v-004-3.svg",
-      "/graphics/kp-v-004-4.svg",
-    ],
-  },
-  {
-    code: "KP-V-005",
-    slug: "villa-dua-kamar-sanur",
-    type: "villa",
-    status: "dijual",
-    area: "Denpasar Selatan",
-    regency: "Denpasar",
-    price: 3150000000,
-    priceUnit: "total",
-    bedrooms: 2,
-    bathrooms: 2,
-    landSize: 210,
-    buildingSize: 135,
-    certificate: "SHM",
-    tenure: "freehold",
-    zoning: "pariwisata",
-    featured: true,
-    publishedAt: "2026-08-04",
-    title: {
-      id: "Villa Dua Kamar di Sanur",
-      en: "Two-Bedroom Villa in Sanur",
-    },
-    description: {
-      id: "Villa dua kamar tidur dengan kolam renang kecil dan teras kayu. Bangunan satu lantai di kawasan Sanur, Denpasar Selatan.",
-      en: "Two-bedroom villa with a small pool and a timber deck. Single-storey building in the Sanur area of Denpasar Selatan.",
-    },
-    images: [
-      "/graphics/kp-v-005-1.svg",
-      "/graphics/kp-v-005-2.svg",
-      "/graphics/kp-v-005-3.svg",
-      "/graphics/kp-v-005-4.svg",
-    ],
-  },
-  {
-    code: "KP-V-006",
-    slug: "villa-lima-kamar-kolam-renang-taman-uluwatu",
-    type: "villa",
-    status: "dijual",
-    area: "Kuta Selatan",
-    regency: "Badung",
-    price: 12400000000,
-    priceUnit: "total",
-    bedrooms: 5,
-    bathrooms: 5,
-    landSize: 980,
-    buildingSize: 520,
-    certificate: "SHM",
-    tenure: "freehold",
-    zoning: "pariwisata",
-    featured: false,
-    publishedAt: "2026-08-02",
-    title: {
-      id: "Villa Lima Kamar Tidur dengan Kolam Renang Pribadi dan Area Taman Luas di Kawasan Uluwatu, Kuta Selatan",
-      en: "Five-Bedroom Villa with Private Swimming Pool and Extensive Garden Grounds in the Uluwatu Area of Kuta Selatan",
-    },
-    description: {
-      id: "Villa lima kamar tidur di atas tanah luas dengan kolam renang pribadi dan area taman di sisi depan dan belakang bangunan. Terdiri dari bangunan utama dan satu bangunan tamu terpisah. Berada di kawasan Uluwatu, Kuta Selatan.",
-      en: "Five-bedroom villa on a large plot with a private pool and garden areas to the front and rear of the building. Comprises a main building and one separate guest building. Located in the Uluwatu area of Kuta Selatan.",
-    },
-    images: [
-      "/graphics/kp-v-006-1.svg",
-      "/graphics/kp-v-006-2.svg",
-      "/graphics/kp-v-006-3.svg",
-      "/graphics/kp-v-006-4.svg",
-    ],
-  },
-  {
-    code: "KP-V-007",
-    slug: "villa-satu-kamar-tabanan",
-    type: "villa",
-    status: "disewa",
-    area: "Kediri",
-    regency: "Tabanan",
-    price: 18500000,
-    priceUnit: "per_bulan",
-    bedrooms: 1,
-    bathrooms: 1,
-    landSize: 145,
-    buildingSize: 78,
-    certificate: "HGB",
-    tenure: "leasehold",
-    zoning: "pariwisata",
-    featured: false,
-    publishedAt: "2026-07-29",
-    title: {
-      id: "Villa Satu Kamar di Tabanan",
-      en: "One-Bedroom Villa in Tabanan",
-    },
-    description: {
-      id: "Villa satu kamar tidur dengan dapur terbuka dan teras menghadap sawah. Disewakan per bulan di Kediri, Tabanan.",
-      en: "One-bedroom villa with an open kitchen and a terrace facing rice fields. Available on a monthly rental in Kediri, Tabanan.",
-    },
-    images: [
-      "/graphics/kp-v-007-1.svg",
-      "/graphics/kp-v-007-2.svg",
-      "/graphics/kp-v-007-3.svg",
-      "/graphics/kp-v-007-4.svg",
-    ],
-  },
-  {
-    code: "KP-V-008",
-    slug: "villa-tiga-kamar-pererenan",
-    type: "villa",
-    status: "dijual",
-    area: "Mengwi",
-    regency: "Badung",
-    price: 5680000000,
-    priceUnit: "total",
-    bedrooms: 3,
-    bathrooms: 3,
-    landSize: 400,
-    buildingSize: 245,
-    certificate: "SHM",
-    tenure: "freehold",
-    zoning: "pariwisata",
-    featured: false,
-    publishedAt: "2026-07-25",
-    title: {
-      id: "Villa Tiga Kamar di Pererenan",
-      en: "Three-Bedroom Villa in Pererenan",
-    },
-    description: {
-      id: "Villa tiga kamar tidur dengan kolam renang dan ruang keluarga terbuka. Dua kamar berada di lantai atas dengan balkon. Berada di Pererenan, Mengwi.",
-      en: "Three-bedroom villa with a pool and an open family room. Two bedrooms sit on the upper floor with a balcony. Located in Pererenan, Mengwi.",
-    },
-    images: [
-      "/graphics/kp-v-008-1.svg",
-      "/graphics/kp-v-008-2.svg",
-      "/graphics/kp-v-008-3.svg",
-      "/graphics/kp-v-008-4.svg",
-    ],
-  },
-  {
-    code: "KP-R-001",
-    slug: "rumah-dua-lantai-panjer",
-    type: "rumah",
-    status: "dijual",
-    area: "Denpasar Selatan",
-    regency: "Denpasar",
-    price: 2340000000,
-    priceUnit: "total",
-    bedrooms: 4,
-    bathrooms: 3,
-    landSize: 180,
-    buildingSize: 195,
-    certificate: "SHM",
-    tenure: "freehold",
-    zoning: "perumahan",
-    featured: false,
-    publishedAt: "2026-08-12",
-    title: {
-      id: "Rumah Dua Lantai Empat Kamar di Panjer",
-      en: "Two-Storey Four-Bedroom House in Panjer",
-    },
-    description: {
-      id: "Rumah dua lantai dengan empat kamar tidur, ruang keluarga di lantai atas, dan carport untuk dua mobil. Berada di Panjer, Denpasar Selatan.",
-      en: "Two-storey house with four bedrooms, an upstairs family room, and a carport for two cars. Located in Panjer, Denpasar Selatan.",
-    },
-    images: [
-      "/graphics/kp-r-001-1.svg",
-      "/graphics/kp-r-001-2.svg",
-      "/graphics/kp-r-001-3.svg",
-      "/graphics/kp-r-001-4.svg",
-    ],
-  },
-  {
-    code: "KP-R-002",
-    slug: "rumah-tiga-kamar-denpasar-barat",
-    type: "rumah",
-    status: "disewa",
-    area: "Denpasar Barat",
-    regency: "Denpasar",
-    price: 95000000,
-    priceUnit: "per_tahun",
-    bedrooms: 3,
-    bathrooms: 2,
-    landSize: 150,
-    buildingSize: 120,
-    certificate: "SHM",
-    tenure: "leasehold",
-    zoning: "perumahan",
-    featured: false,
-    publishedAt: "2026-08-08",
-    title: {
-      id: "Rumah Tiga Kamar di Denpasar Barat",
-      en: "Three-Bedroom House in Denpasar Barat",
-    },
-    description: {
-      id: "Rumah satu lantai dengan tiga kamar tidur dan halaman depan. Kondisi kosong tanpa perabot. Disewakan per tahun di Denpasar Barat.",
-      en: "Single-storey house with three bedrooms and a front yard. Unfurnished. Available on a yearly rental in Denpasar Barat.",
-    },
-    images: [
-      "/graphics/kp-r-002-1.svg",
-      "/graphics/kp-r-002-2.svg",
-      "/graphics/kp-r-002-3.svg",
-      "/graphics/kp-r-002-4.svg",
-    ],
-  },
-  {
-    code: "KP-R-003",
-    slug: "rumah-lima-kamar-denpasar-timur",
-    type: "rumah",
-    status: "dijual",
-    area: "Denpasar Timur",
-    regency: "Denpasar",
-    price: 3720000000,
-    priceUnit: "total",
-    bedrooms: 5,
-    bathrooms: 4,
-    landSize: 300,
-    buildingSize: 280,
-    certificate: "SHM",
-    tenure: "freehold",
-    zoning: "perumahan",
-    featured: false,
-    publishedAt: "2026-07-31",
-    title: {
-      id: "Rumah Lima Kamar di Denpasar Timur",
-      en: "Five-Bedroom House in Denpasar Timur",
-    },
-    description: {
-      id: "Rumah dua lantai dengan lima kamar tidur, ruang makan terpisah, dan taman belakang. Berada di Denpasar Timur.",
-      en: "Two-storey house with five bedrooms, a separate dining room, and a rear garden. Located in Denpasar Timur.",
-    },
-    images: [
-      "/graphics/kp-r-003-1.svg",
-      "/graphics/kp-r-003-2.svg",
-      "/graphics/kp-r-003-3.svg",
-      "/graphics/kp-r-003-4.svg",
-    ],
-  },
-  {
-    code: "KP-R-004",
-    slug: "rumah-dua-kamar-kuta-utara",
-    type: "rumah",
-    status: "dijual",
-    area: "Kuta Utara",
-    regency: "Badung",
-    price: 1890000000,
-    priceUnit: "total",
-    bedrooms: 2,
-    bathrooms: 1,
-    landSize: 125,
-    buildingSize: 90,
-    certificate: "SHM",
-    tenure: "freehold",
-    zoning: "perumahan",
-    featured: false,
-    publishedAt: "2026-07-22",
-    title: {
-      id: "Rumah Dua Kamar di Kuta Utara",
-      en: "Two-Bedroom House in Kuta Utara",
-    },
-    description: {
-      id: "Rumah satu lantai dengan dua kamar tidur dan halaman kecil di belakang. Berada di Kuta Utara, Badung.",
-      en: "Single-storey house with two bedrooms and a small rear yard. Located in Kuta Utara, Badung.",
-    },
-    images: [
-      "/graphics/kp-r-004-1.svg",
-      "/graphics/kp-r-004-2.svg",
-      "/graphics/kp-r-004-3.svg",
-      "/graphics/kp-r-004-4.svg",
-    ],
-  },
-  {
-    code: "KP-T-001",
-    slug: "tanah-lima-are-kuta-utara",
+    code: "P4-D",
+    slug: "tanah-kavling-pejukutan-kavling-d",
     type: "tanah",
     status: "dijual",
-    area: "Kuta Utara",
-    regency: "Badung",
-    price: 4200000000,
+    area: "Pejukutan",
+    regency: "Klungkung",
+    price: 350000000,
     priceUnit: "total",
     bedrooms: null,
     bathrooms: null,
@@ -529,116 +153,238 @@ export const listings: Listing[] = [
     certificate: "SHM",
     tenure: "freehold",
     zoning: "pariwisata",
-    featured: false,
-    publishedAt: "2026-08-10",
+    featured: true,
+    publishedAt: "2026-08-28",
     title: {
-      id: "Tanah Lima Are di Kuta Utara",
-      en: "Five-Are Land Plot in Kuta Utara",
+      id: "Tanah Kavling 500 m² di Pejukutan, Nusa Penida",
+      en: "500 sqm Land Plot in Pejukutan, Nusa Penida",
     },
     description: {
-      id: "Tanah kosong seluas 500 meter persegi dengan bentuk persegi panjang dan akses jalan di sisi depan. Berada di Kuta Utara, Badung.",
-      en: "Vacant plot of 500 square metres, rectangular in shape with road access along the front boundary. Located in Kuta Utara, Badung.",
+      id: "Kavling D di Desa Pejukutan, Nusa Penida. Luas 500 m² dengan lebar depan 20 meter, kontur teras siring, dan akses jalan aspal selebar 8 meter. Listrik PLN dan air PDAM sudah tersedia. Berada di ketinggian dengan pemandangan laut. Jarak tempuh 15 menit ke Dermaga Sampalan, 20 menit ke pusat kota, dan 20 menit ke Pantai Atuh. Sertifikat SHM. Tersedia dokumen KKPR untuk villa.",
+      en: "Plot D in Pejukutan village, Nusa Penida. 500 sqm with a 20-metre frontage, terraced contour, and an 8-metre asphalt access road. Mains electricity and water are connected. Elevated position with a sea view. Fifteen minutes to Sampalan harbour, twenty to the town centre, twenty to Atuh Beach. Freehold title. KKPR documentation for villa use is available.",
     },
-    images: [
-      "/graphics/kp-t-001-1.svg",
-      "/graphics/kp-t-001-2.svg",
-      "/graphics/kp-t-001-3.svg",
-    ],
+    images: PEJUKUTAN,
   },
   {
-    code: "KP-T-002",
-    slug: "tanah-delapan-are-ubud",
+    code: "P4-E",
+    slug: "tanah-kavling-pejukutan-kavling-e",
     type: "tanah",
     status: "dijual",
-    area: "Ubud",
-    regency: "Gianyar",
-    price: 3480000000,
+    area: "Pejukutan",
+    regency: "Klungkung",
+    price: 350000000,
     priceUnit: "total",
     bedrooms: null,
     bathrooms: null,
-    landSize: 800,
+    landSize: 480,
     buildingSize: null,
     certificate: "SHM",
     tenure: "freehold",
     zoning: "pariwisata",
     featured: false,
-    publishedAt: "2026-07-27",
+    publishedAt: "2026-08-28",
     title: {
-      id: "Tanah Delapan Are di Ubud",
-      en: "Eight-Are Land Plot in Ubud",
+      id: "Tanah Kavling 480 m² di Pejukutan, Nusa Penida",
+      en: "480 sqm Land Plot in Pejukutan, Nusa Penida",
     },
     description: {
-      id: "Tanah kosong seluas 800 meter persegi berkontur landai dengan pandangan ke arah lembah. Berada di Ubud, Gianyar.",
-      en: "Vacant plot of 800 square metres with a gentle slope and an outlook toward the valley. Located in Ubud, Gianyar.",
+      id: "Kavling E di Desa Pejukutan, Nusa Penida. Luas 480 m², kontur teras siring, akses jalan aspal selebar 8 meter. Listrik PLN dan air PDAM sudah tersedia. Berada di ketinggian dengan pemandangan laut. Jarak tempuh 15 menit ke Dermaga Sampalan dan 20 menit ke pusat kota. Sertifikat SHM. Tersedia dokumen KKPR untuk villa.",
+      en: "Plot E in Pejukutan village, Nusa Penida. 480 sqm, terraced contour, 8-metre asphalt access road. Mains electricity and water are connected. Elevated position with a sea view. Fifteen minutes to Sampalan harbour, twenty to the town centre. Freehold title. KKPR documentation for villa use is available.",
     },
-    images: [
-      "/graphics/kp-t-002-1.svg",
-      "/graphics/kp-t-002-2.svg",
-      "/graphics/kp-t-002-3.svg",
-    ],
+    images: PEJUKUTAN,
   },
   {
-    code: "KP-K-001",
-    slug: "ruko-dua-lantai-denpasar-selatan",
-    type: "ruko",
-    status: "disewa",
-    area: "Denpasar Selatan",
-    regency: "Denpasar",
-    price: 145000000,
-    priceUnit: "per_tahun",
-    bedrooms: null,
-    bathrooms: 2,
-    landSize: 90,
-    buildingSize: 160,
-    certificate: "HGB",
-    tenure: "leasehold",
-    zoning: "komersial",
-    featured: false,
-    publishedAt: "2026-08-13",
-    title: {
-      id: "Ruko Dua Lantai di Denpasar Selatan",
-      en: "Two-Storey Shophouse in Denpasar Selatan",
-    },
-    description: {
-      id: "Ruko dua lantai dengan ruang usaha terbuka di lantai bawah dan dua ruang tertutup di lantai atas. Menghadap jalan dua arah di Denpasar Selatan.",
-      en: "Two-storey shophouse with an open commercial floor at ground level and two enclosed rooms upstairs. Fronting a two-way road in Denpasar Selatan.",
-    },
-    images: [
-      "/graphics/kp-k-001-1.svg",
-      "/graphics/kp-k-001-2.svg",
-      "/graphics/kp-k-001-3.svg",
-    ],
-  },
-  {
-    code: "KP-K-002",
-    slug: "ruko-tiga-lantai-denpasar-barat",
-    type: "ruko",
+    code: "P6-6",
+    slug: "tanah-kavling-tebing-sekartaji",
+    type: "tanah",
     status: "dijual",
-    area: "Denpasar Barat",
-    regency: "Denpasar",
-    price: 5950000000,
+    area: "Sekartaji",
+    regency: "Klungkung",
+    price: 1901376750,
     priceUnit: "total",
     bedrooms: null,
-    bathrooms: 3,
-    landSize: 120,
-    buildingSize: 310,
+    bathrooms: null,
+    landSize: 650,
+    buildingSize: null,
+    certificate: "SHM",
+    tenure: "freehold",
+    zoning: null,
+    featured: true,
+    publishedAt: "2026-08-28",
+    title: {
+      id: "Tanah Kavling 650 m² Tepi Tebing di Sekartaji, Nusa Penida",
+      en: "650 sqm Clifftop Land Plot in Sekartaji, Nusa Penida",
+    },
+    description: {
+      id: "Kavling 6 di Desa Sekartaji, Nusa Penida. Luas 650 m² atau 6,5 are, dimensi sekitar 44 × 15 meter dengan lebar depan 15 meter. Berada tepat di tepi tebing menghadap Samudra Hindia. Kontur tanah rata, akses jalan aspal selebar 8 meter. Listrik PLN sudah tersedia; pipa PDAM sudah terpasang, namun air dari pemerintah belum mengalir dan waktunya belum diketahui. Jarak tempuh 40 menit ke Dermaga Toyapakeh dan 30 menit ke pusat kota. Sertifikat SHM.",
+      en: "Plot 6 in Sekartaji village, Nusa Penida. 650 sqm, roughly 44 × 15 metres with a 15-metre frontage, sitting directly on the cliff edge above the Indian Ocean. Level ground, 8-metre asphalt access road. Mains electricity is connected; water pipes are laid but the municipal supply is not yet flowing and no date has been given. Forty minutes to Toyapakeh harbour, thirty to the town centre. Freehold title.",
+    },
+    images: [
+      { album: "p6-sekartaji", slug: "sekartaji-cliff-6-on-the-land-1" },
+      { album: "p6-sekartaji", slug: "20170716-141935-1" },
+      { album: "p6-sekartaji", slug: "20170716-142004-effects-1" },
+      { album: "p6-sekartaji", slug: "20170716-141736-1" },
+    ],
+  },
+  {
+    code: "P9-9",
+    slug: "tanah-kavling-tebing-kelingking-9",
+    type: "tanah",
+    status: "dijual",
+    area: "Bunga Mekar",
+    regency: "Klungkung",
+    price: 1200000000,
+    priceUnit: "total",
+    bedrooms: null,
+    bathrooms: null,
+    landSize: 545,
+    buildingSize: null,
+    certificate: "SHM",
+    tenure: "freehold",
+    zoning: "pariwisata",
+    featured: true,
+    publishedAt: "2026-08-28",
+    title: {
+      id: "Tanah Kavling 545 m² Tepi Tebing dekat Pantai Kelingking",
+      en: "545 sqm Clifftop Land Plot near Kelingking Beach",
+    },
+    description: {
+      id: "Kavling 9 di Desa Bunga Mekar, Nusa Penida. Luas 545 m² dengan dimensi 15 × 39 meter, kontur teras siring, akses jalan aspal selebar 8 meter. Berada di tepi tebing dengan dua arah pandang: Pantai Kelingking di depan kavling dan matahari terbenam di belakangnya. Listrik PLN dan air PDAM belum tersedia; pilihannya membeli air atau membuat sumur bor. Jarak tempuh 5 menit ke Pantai Kelingking, 35 menit ke Dermaga Toyapakeh, dan 35 menit ke RS Pratama. Sertifikat SHM. Tersedia dokumen KKPR untuk villa.",
+      en: "Plot 9 in Bunga Mekar village, Nusa Penida. 545 sqm measuring 15 × 39 metres, terraced contour, 8-metre asphalt access road. On the cliff edge with two outlooks: Kelingking Beach in front and the sunset behind. Neither mains electricity nor water is connected; the options are trucked water or a bore well. Five minutes to Kelingking Beach, thirty-five to Toyapakeh harbour, thirty-five to Pratama hospital. Freehold title. KKPR documentation for villa use is available.",
+    },
+    images: KELINGKING,
+  },
+  {
+    code: "P9-14",
+    slug: "tanah-kavling-tebing-kelingking-14",
+    type: "tanah",
+    status: "dijual",
+    area: "Bunga Mekar",
+    regency: "Klungkung",
+    price: 1000000000,
+    priceUnit: "total",
+    bedrooms: null,
+    bathrooms: null,
+    landSize: 446,
+    buildingSize: null,
+    certificate: "SHM",
+    tenure: "freehold",
+    zoning: "pariwisata",
+    featured: false,
+    publishedAt: "2026-08-28",
+    title: {
+      id: "Tanah Kavling 446 m² Tepi Tebing dekat Pantai Kelingking",
+      en: "446 sqm Clifftop Land Plot near Kelingking Beach",
+    },
+    description: {
+      id: "Kavling 14 di Desa Bunga Mekar, Nusa Penida. Luas 446 m², kontur teras siring, akses jalan aspal selebar 8 meter. Berada di tepi tebing dengan pandangan ke laut dan matahari terbenam. Listrik PLN dan air PDAM belum tersedia; pilihannya membeli air atau membuat sumur bor. Jarak tempuh 5 menit ke Pantai Kelingking dan 35 menit ke Dermaga Toyapakeh. Sertifikat SHM. Tersedia dokumen KKPR untuk villa.",
+      en: "Plot 14 in Bunga Mekar village, Nusa Penida. 446 sqm, terraced contour, 8-metre asphalt access road. On the cliff edge looking out to sea and to the sunset. Neither mains electricity nor water is connected; the options are trucked water or a bore well. Five minutes to Kelingking Beach, thirty-five to Toyapakeh harbour. Freehold title. KKPR documentation for villa use is available.",
+    },
+    images: KELINGKING,
+  },
+  {
+    code: "P11-A1",
+    slug: "tanah-kavling-klumpu-a1",
+    type: "tanah",
+    status: "dijual",
+    area: "Klumpu",
+    regency: "Klungkung",
+    price: 275000000,
+    priceUnit: "total",
+    bedrooms: null,
+    bathrooms: null,
+    landSize: 330,
+    buildingSize: null,
+    certificate: "SHM",
+    tenure: "freehold",
+    zoning: null,
+    featured: false,
+    publishedAt: "2026-08-28",
+    title: {
+      id: "Tanah Kavling 330 m² di Klumpu, Nusa Penida",
+      en: "330 sqm Land Plot in Klumpu, Nusa Penida",
+    },
+    description: {
+      id: "Kavling A1 di Desa Klumpu, Nusa Penida. Luas 330 m² atau 3,3 are, kontur tanah rata dan lahan sudah selesai ditata. Listrik PLN dan air PDAM sudah tersedia, tiang listrik sudah berdiri. Berada di tengah pemukiman, 500 meter dari jalan poros menuju Broken Beach, dekat SPBU, bank, dan jalan lingkar. Jarak tempuh 10 menit ke Dermaga Toyapakeh, 20 menit ke pusat kota, 15 menit ke Pura Dalem Ped. Sertifikat SHM.",
+      en: "Plot A1 in Klumpu village, Nusa Penida. 330 sqm on level, already-graded ground. Mains electricity and water are connected and the power poles are up. Set among housing, 500 metres from the main road to Broken Beach, close to a petrol station, a bank, and the ring road. Ten minutes to Toyapakeh harbour, twenty to the town centre, fifteen to Pura Dalem Ped. Freehold title.",
+    },
+    images: [
+      { album: "p11-klumpu", slug: "klumpu" },
+      { album: "p11-klumpu", slug: "20210724-112126" },
+      { album: "p11-klumpu", slug: "20210724-112136" },
+      { album: "p11-klumpu", slug: "20190712-094921" },
+      { album: "p11-klumpu", slug: "20190712-095156" },
+      { album: "p11-klumpu", slug: "photo-from-moniq" },
+    ],
+  },
+  {
+    code: "SBY-KOST",
+    slug: "rumah-kost-24-kamar-pradah-indah-surabaya",
+    type: "rumah",
+    status: "dijual",
+    area: "Pradah Indah",
+    regency: "Surabaya",
+    price: 14000000000,
+    priceUnit: "total",
+    bedrooms: 24,
+    bathrooms: 24,
+    landSize: 1883,
+    buildingSize: null,
+    certificate: "SHM",
+    tenure: "freehold",
+    zoning: "komersial",
+    featured: false,
+    publishedAt: "2026-08-28",
+    title: {
+      id: "Rumah Kost 24 Kamar di Pradah Indah, Surabaya Barat",
+      en: "24-Room Boarding House in Pradah Indah, West Surabaya",
+    },
+    description: {
+      id: "Rumah kost di Jalan Bulu Jaya 6, Pradah Indah Lontar, Surabaya Barat. Luas tanah 1.883 m² termasuk 188 m² akses jalan. Terdiri dari bangunan kost dua lantai berisi 24 kamar berukuran 3 × 6 meter yang masing-masing sudah memiliki kamar mandi dalam dan meteran PDAM sendiri, rumah induk tiga lantai berukuran 9 × 12 meter per lantai, dan paviliun dua lantai berukuran 8 × 12 meter. Daya listrik terpisah untuk tiap bangunan. Sertifikat SHM. Harga masih dapat dinegosiasikan.",
+      en: "Boarding house on Jalan Bulu Jaya 6, Pradah Indah Lontar, West Surabaya. 1,883 sqm of land including a 188 sqm access road. It comprises a two-storey block of 24 rooms, each 3 × 6 metres with its own bathroom and water meter; a three-storey main house of 9 × 12 metres per floor; and a two-storey pavilion of 8 × 12 metres. Each building has its own electricity supply. Freehold title. The price is negotiable.",
+    },
+    images: [
+      { album: "kost-bulu-jaya", slug: "whatsapp-image-2024-03-06-at-13-41-53" },
+      { album: "kost-bulu-jaya", slug: "whatsapp-image-2024-03-06-at-13-41-54" },
+      { album: "kost-bulu-jaya", slug: "whatsapp-image-2024-03-06-at-13-41-55" },
+      { album: "kost-bulu-jaya", slug: "whatsapp-image-2024-03-06-at-13-41-56" },
+      { album: "kost-bulu-jaya", slug: "whatsapp-image-2024-03-06-at-13-41-57" },
+      { album: "kost-bulu-jaya", slug: "whatsapp-image-2024-03-06-at-13-41-54-1" },
+    ],
+  },
+  {
+    code: "SBY-RUKO",
+    slug: "ruko-tiga-unit-darmo-park-surabaya",
+    type: "ruko",
+    status: "dijual",
+    area: "Darmo Park",
+    regency: "Surabaya",
+    price: 4000000000,
+    priceUnit: "total",
+    bedrooms: null,
+    bathrooms: null,
+    landSize: 180,
+    buildingSize: null,
     certificate: "HGB",
     tenure: "freehold",
     zoning: "komersial",
     featured: false,
-    publishedAt: "2026-07-20",
+    publishedAt: "2026-08-28",
     title: {
-      id: "Ruko Tiga Lantai di Denpasar Barat",
-      en: "Three-Storey Shophouse in Denpasar Barat",
+      id: "Tiga Ruko Tersambung Dua Lantai di Darmo Park, Surabaya",
+      en: "Three Connected Two-Storey Shophouses in Darmo Park, Surabaya",
     },
     description: {
-      id: "Ruko tiga lantai dengan lantai dasar untuk ruang usaha dan dua lantai di atasnya untuk ruang kerja atau gudang. Berada di Denpasar Barat.",
-      en: "Three-storey shophouse with a ground-floor commercial space and two upper floors suited to office or storage use. Located in Denpasar Barat.",
+      id: "Tiga unit ruko yang tersambung menjadi satu di Komplek Darmo Park 1, Jalan Mayjen Sungkono, Kecamatan Sawahan, Surabaya. Luas tanah 180 m², tiap unit berukuran 5 × 12 meter dan bertingkat dua. Terdapat ruang dapur bekas restoran dengan cerobong besar, teras di lantai dua berukuran 1,8 × 10 meter, dan gudang. Tangga ke lantai dua hanya satu. Daya listrik 10.800 watt dari dua token PLN. Dibeli dari pengembang tahun 1984 dan direnovasi tahun 2016. Sertifikat HGB.",
+      en: "Three shophouse units joined into one at Darmo Park 1, Jalan Mayjen Sungkono, Sawahan, Surabaya. 180 sqm of land, each unit 5 × 12 metres over two floors. It includes a former restaurant kitchen with a large extraction flue, a 1.8 × 10 metre first-floor terrace, and a store room. There is a single staircase to the upper floor. Electricity is 10,800 watts across two meters. Bought from the developer in 1984 and renovated in 2016. Leasehold-to-build title (HGB).",
     },
     images: [
-      "/graphics/kp-k-002-1.svg",
-      "/graphics/kp-k-002-2.svg",
-      "/graphics/kp-k-002-3.svg",
+      { album: "ruko-darmo-park", slug: "2" },
+      { album: "ruko-darmo-park", slug: "3" },
+      { album: "ruko-darmo-park", slug: "10" },
+      { album: "ruko-darmo-park", slug: "11" },
+      { album: "ruko-darmo-park", slug: "12" },
+      { album: "ruko-darmo-park", slug: "13" },
     ],
   },
 ];
