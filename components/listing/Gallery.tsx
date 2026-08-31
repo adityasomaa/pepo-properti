@@ -102,7 +102,7 @@ export function Gallery({
             height={1200}
             fetchPriority="high"
             decoding="async"
-            className="block aspect-[4/3] w-full object-cover"
+            className="block aspect-[16/9] w-full object-cover"
           />
           <span
             aria-hidden="true"
@@ -133,7 +133,7 @@ export function Gallery({
                     height={1200}
                     loading="lazy"
                     decoding="async"
-                    className="block aspect-[4/3] w-full object-cover"
+                    className="block aspect-[16/9] w-full object-cover"
                   />
                 </button>
               </li>

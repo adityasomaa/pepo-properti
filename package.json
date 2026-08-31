@@ -11,7 +11,8 @@
     "contrast": "node scripts/check-contrast.mjs",
     "audit": "node scripts/audit-layout.mjs",
     "audit:behaviour": "node scripts/audit-behaviour.mjs",
-    "audit:seo": "node scripts/audit-seo.mjs"
+    "audit:seo": "node scripts/audit-seo.mjs",
+    "photos": "node scripts/optimize-photos.mjs"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",

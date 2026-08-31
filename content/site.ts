@@ -94,13 +94,14 @@ export const site = {
      Tidak ada yang lain yang perlu diubah.
      ------------------------------------------------------------------------- */
   heroImage: {
-    src: "/graphics/hero.svg",
-    width: 1400,
-    height: 1000,
-    /* Kosongkan alt selama masih gambar tempat kosong: gambar ini tidak
-       menyampaikan informasi, jadi pembaca layar melewatinya. Setelah diganti
-       foto asli, isi dengan keterangan singkat apa yang terlihat di foto. */
-    alt: "",
+    /* Foto dari folder Drive VILLA REHAN milik Korva sendiri, sudah diperkecil
+       jadi lima lebar dalam AVIF/WebP/JPEG oleh scripts/optimize-photos.mjs.
+       BELUM dikonfirmasi bahwa foto inilah yang dimaksud klien untuk hero —
+       ganti `photo` dengan slug lain dari public/photos/villa-rehan/manifest.json
+       kalau klien memilih yang berbeda. */
+    album: "villa-rehan",
+    photo: "dsc09404-hdr",
+    alt: "Kolam renang villa dengan tanaman tropis dan bangunan di sekitarnya.",
   },
 
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://korva.onyxcreative.asia",

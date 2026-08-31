@@ -63,7 +63,7 @@ export function BeforeAfter({
           height={1200}
           loading={priority ? "eager" : "lazy"}
           decoding="async"
-          className="block aspect-[4/3] w-full object-cover"
+          className="block aspect-[16/9] w-full object-cover"
         />
 
         {/* The plan stage, clipped to the divider position. */}
@@ -78,7 +78,7 @@ export function BeforeAfter({
             height={1200}
             loading={priority ? "eager" : "lazy"}
             decoding="async"
-            className="block aspect-[4/3] w-full object-cover"
+            className="block aspect-[16/9] w-full object-cover"
           />
         </div>
 

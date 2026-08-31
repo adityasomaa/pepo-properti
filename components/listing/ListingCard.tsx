@@ -26,7 +26,7 @@ export function ListingCard({
 
   return (
     <article className="group relative flex h-full flex-col overflow-hidden rounded-[var(--radius-card)] border border-line bg-white transition-colors duration-300 hover:border-ink/35 focus-within:border-ink/35">
-      <div className="relative aspect-[4/3] w-full overflow-hidden bg-surface">
+      <div className="relative aspect-[16/9] w-full overflow-hidden bg-surface">
         <img
           src={listing.images[0]}
           alt={`${dict.type[listing.type]}, ${listing.area}. ${dict.common.sampleBadge}.`}

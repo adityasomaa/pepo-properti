@@ -16,6 +16,7 @@ import { latestListings } from "@/lib/listings";
 import { studioServices } from "@/content/build";
 import { projects, SAMPLE_PROJECTS } from "@/content/projects";
 import { site } from "@/content/site";
+import { Photo } from "@/components/media/Photo";
 
 export async function generateMetadata({
   params,
@@ -79,7 +80,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <section className="relative" style={{ minHeight: "calc(100svh - var(--header-h))" }}>
         <div className="hero-stack container flex min-h-[inherit] flex-col [justify-content:var(--hero-justify)] [row-gap:var(--hero-gap)] [padding-block:var(--hero-pad)]">
           {/* Headline beside the picture. */}
-          <div className="grid items-center gap-3 sm:gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.82fr)] lg:gap-12">
+          <div className="grid items-center gap-3 sm:gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.62fr)] lg:gap-12">
             <h1 className="max-w-[19ch] [font-size:var(--hero-h1)] font-medium leading-[1.08] tracking-[-0.035em] text-ink">
               {dict.home.heroHeadline}
             </h1>
@@ -90,14 +91,15 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
               Swapping in the client's photograph is one edit in content/site.ts.
             */}
             <div className="overflow-hidden rounded-[var(--radius-card)] border border-line bg-surface">
-              <img
-                src={site.heroImage.src}
+              <Photo
+                album={site.heroImage.album}
+                slug={site.heroImage.photo}
                 alt={site.heroImage.alt}
-                width={site.heroImage.width}
-                height={site.heroImage.height}
-                fetchPriority="high"
-                decoding="async"
-                className="hero-figure block h-[var(--hero-figure-h)] w-full object-cover"
+                priority
+                /* Full width on a phone, and just under half the container from
+                   1024px up, where the picture sits beside the headline. */
+                sizes="(min-width: 1024px) 45vw, 100vw"
+                className="hero-figure mx-auto block aspect-[16/9] w-full max-w-[var(--hero-figure-max-w)] object-cover"
               />
             </div>
           </div>
@@ -269,39 +271,52 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         </ul>
       </section>
 
-      {/* One full-width comparison, the clearest evidence of what Studio does. */}
+      {/*
+        The clearest evidence of what Studio does. Across a full desktop width
+        the comparison swallowed most of a screen on its own, so from 1024px it
+        sits in the right-hand column beside the heading. Below that it stays
+        stacked and full width, where the extra size is what makes the slider
+        usable with a thumb.
+      */}
       {lead ? (
         <section aria-labelledby="portfolio-heading" className="container mt-24 md:mt-32">
-          <Reveal>
-            <SectionHeader
-              id="portfolio-heading"
-              label={dict.home.portfolio.label}
-              headline={dict.home.portfolio.headline}
-              description={dict.home.portfolio.description}
-              cta={{ href: path(locale, "portfolio"), label: dict.home.portfolio.cta }}
-            />
-          </Reveal>
+          <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-12">
+            <div className="min-w-0">
+              <Reveal>
+                <SectionHeader
+                  id="portfolio-heading"
+                  label={dict.home.portfolio.label}
+                  headline={dict.home.portfolio.headline}
+                  description={dict.home.portfolio.description}
+                  cta={{ href: path(locale, "portfolio"), label: dict.home.portfolio.cta }}
+                />
+              </Reveal>
 
-          {SAMPLE_PROJECTS ? (
-            <div className="mt-8">
-              <SampleNotice text={dict.common.sampleNoteProjects} badge={dict.common.sampleBadge} />
+              {SAMPLE_PROJECTS ? (
+                <div className="mt-8">
+                  <SampleNotice
+                    text={dict.common.sampleNoteProjects}
+                    badge={dict.common.sampleBadge}
+                  />
+                </div>
+              ) : null}
             </div>
-          ) : null}
 
-          <Reveal className="mt-8">
-            <BeforeAfter
-              before={lead.before}
-              after={lead.after}
-              beforeAlt={`${dict.portfolio.beforeLabel}. ${lead.title[locale]}.`}
-              afterAlt={`${dict.portfolio.afterLabel}. ${lead.title[locale]}.`}
-              beforeLabel={dict.portfolio.beforeLabel}
-              afterLabel={dict.portfolio.afterLabel}
-              sliderLabel={dict.portfolio.sliderLabel}
-            />
-            <p className="mt-3 text-[0.875rem] text-ink-muted">
-              {lead.title[locale]}. {dict.portfolio.sliderInstruction}
-            </p>
-          </Reveal>
+            <Reveal className="min-w-0">
+              <BeforeAfter
+                before={lead.before}
+                after={lead.after}
+                beforeAlt={`${dict.portfolio.beforeLabel}. ${lead.title[locale]}.`}
+                afterAlt={`${dict.portfolio.afterLabel}. ${lead.title[locale]}.`}
+                beforeLabel={dict.portfolio.beforeLabel}
+                afterLabel={dict.portfolio.afterLabel}
+                sliderLabel={dict.portfolio.sliderLabel}
+              />
+              <p className="mt-3 text-[0.875rem] text-ink-muted">
+                {lead.title[locale]}. {dict.portfolio.sliderInstruction}
+              </p>
+            </Reveal>
+          </div>
         </section>
       ) : null}
 
@@ -328,7 +343,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                     className="group flex h-full flex-col overflow-hidden rounded-[var(--radius-card)] border border-line bg-white transition-colors duration-300 hover:border-ink/35"
                   >
                     <span
-                      className={`block w-full overflow-hidden bg-surface ${isLead ? "aspect-[4/3] md:aspect-auto md:flex-1" : "aspect-[16/7]"}`}
+                      className={`block w-full overflow-hidden bg-surface ${isLead ? "aspect-[16/9] md:aspect-square" : "aspect-square"}`}
                     >
                       <img
                         src={`/graphics/category-${type}.svg`}

@@ -177,21 +177,23 @@
     --hero-justify: center;
     --hero-pad: 0.75rem;
     --hero-gap: 0.75rem;
-    --hero-figure-h: clamp(2.75rem, 9svh, 9rem);
+    --hero-figure-max-w: none;
     --hero-h1: clamp(1.5rem, 0.95rem + 2.6vw, 3.25rem);
+  }
+
+  /* A short phone. The picture gives up most of its width so the search stays
+     clear of the consent notice along the bottom edge. */
+  @media (max-height: 700px) {
+    :root {
+      --hero-figure-max-w: 11rem;
+    }
   }
 
   @media (min-width: 640px) {
     :root {
       --hero-pad: 2rem;
       --hero-gap: 1.5rem;
-      --hero-figure-h: clamp(7rem, 18svh, 12rem);
-    }
-  }
-
-  @media (min-width: 1024px) {
-    :root {
-      --hero-figure-h: clamp(6rem, 22svh, 22rem);
+      --hero-figure-max-w: 34rem;
     }
   }
 
@@ -200,7 +202,9 @@
       --hero-justify: flex-start;
       --hero-pad: 0.75rem;
       --hero-gap: 0.5rem;
-      --hero-figure-h: clamp(3.5rem, 12svh, 9rem);
+      /* Wide but short: cap the width so the 16:9 picture is shorter,
+         rather than cropping it to a letterbox. */
+      --hero-figure-max-w: 13rem;
       --hero-h1: clamp(1.5rem, 0.75rem + 2.2vw, 2.75rem);
     }
   }
