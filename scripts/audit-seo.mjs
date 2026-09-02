@@ -12,7 +12,6 @@
 
 import { listings } from "../content/listings.ts";
 import { readFileSync } from "node:fs";
-import { projects } from "../content/projects.ts";
 import { locales, path, routes } from "../lib/i18n.ts";
 
 const BASE = process.argv[2] || "http://localhost:4311";
@@ -62,10 +61,6 @@ async function text(url) {
       const best = widths.filter((w) => w <= 1200).pop() ?? widths[0];
       assets.add(`/photos/${i.album}/${i.slug}-${best}.jpg`);
     }
-  }
-  for (const project of projects) {
-    assets.add(project.before);
-    assets.add(project.after);
   }
   assets.add("/icon.svg");
   assets.add("/apple-icon.png");

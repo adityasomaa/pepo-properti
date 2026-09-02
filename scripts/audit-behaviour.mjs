@@ -33,6 +33,9 @@ const areaCounts = listings.reduce((m, l) => m.set(l.area, (m.get(l.area) ?? 0) 
 const [KEYWORD_AREA, KEYWORD_HITS] = [...areaCounts].sort((a, b) => b[1] - a[1])[0];
 const PRICE_FLOOR = 1000000000;
 const ABOVE_FLOOR = listings.filter((l) => l.price >= PRICE_FLOOR).length;
+// Setiap rute yang muncul di navigasi. Halaman hukum tidak ada di menu.
+const { routes } = await import("../lib/i18n.ts");
+const MENU_LINKS = Object.keys(routes).filter((k) => !['privacy', 'terms'].includes(k)).length;
 const SAMPLE = listings.find((l) => l.images.length > 1) ?? listings[0];
 const LONGEST = [...listings].sort((a, b) => b.title.id.length - a.title.id.length)[0];
 
@@ -109,7 +112,11 @@ async function freshPage(width = 1440, height = 900) {
   });
   check("mobile menu opens", open.present && open.modal);
   check("mobile menu locks page scroll", open.locked && open.bodyFixed);
-  check("mobile menu lists every page", open.links === 6, `${open.links} links`);
+  check(
+    "mobile menu lists every page",
+    open.links === MENU_LINKS,
+    `${open.links} of ${MENU_LINKS} links`
+  );
   check("cookie banner steps aside for the menu", open.cookieBannerVisible === false);
 
   await page.keyboard.press("Escape");

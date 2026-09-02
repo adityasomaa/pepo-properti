@@ -15,7 +15,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "home",
     "listings",
     "build",
-    "portfolio",
     "submit",
     "contact",
     "privacy",

@@ -29,22 +29,20 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
     return key === "home" ? pathname === href : pathname.startsWith(href);
   };
 
-  const secondaryOrder: RouteKey[] = ["listings", "build", "submit", "portfolio", "contact"];
+  const secondaryOrder: RouteKey[] = ["listings", "build", "submit", "contact"];
   const secondaryKey = secondaryOrder.find((key) => !isCurrent(key)) ?? "listings";
   const secondaryLabel: Record<string, string> = {
     listings: dict.footer.ctaListings,
     build: dict.footer.ctaBuild,
     submit: dict.footer.ctaSubmit,
-    portfolio: dict.footer.ctaPortfolio,
     contact: dict.footer.ctaContact,
   };
 
-  const navKeys: RouteKey[] = ["home", "listings", "build", "portfolio", "submit", "contact"];
+  const navKeys: RouteKey[] = ["home", "listings", "build", "submit", "contact"];
   const navLabel: Record<string, string> = {
     home: dict.nav.home,
     listings: dict.nav.listings,
     build: dict.nav.build,
-    portfolio: dict.nav.portfolio,
     submit: dict.nav.submit,
     contact: dict.nav.contact,
   };

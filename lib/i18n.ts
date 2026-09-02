@@ -29,7 +29,6 @@ export const routes = {
   home: "",
   listings: "listings",
   build: "build",
-  portfolio: "portfolio",
   submit: "submit-property",
   contact: "contact",
   privacy: "privacy",

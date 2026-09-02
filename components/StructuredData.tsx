@@ -2,7 +2,6 @@ import { site, divisionList } from "@/content/site";
 import { photoUrl } from "@/lib/photos";
 import { path, type Dictionary, type Locale } from "@/lib/i18n";
 import type { Listing } from "@/content/listings";
-import type { Project } from "@/content/projects";
 
 /**
  * Machine readable identity for a business that is actually two businesses.
@@ -146,36 +145,6 @@ export function ListingSchema({
     },
   };
 
-  return <Json data={data} />;
-}
-
-export function ProjectSchema({
-  project,
-  locale,
-  dict,
-}: {
-  project: Project;
-  locale: Locale;
-  dict: Dictionary;
-}) {
-  const data = {
-    "@context": "https://schema.org",
-    "@type": "CreativeWork",
-    name: project.title[locale],
-    description: project.description[locale],
-    inLanguage: dict.meta.htmlLang,
-    creator: { "@id": `${site.url}/#korva-studio` },
-    image: [site.url + project.after, site.url + project.before],
-    locationCreated: {
-      "@type": "Place",
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: project.area,
-        addressRegion: `${project.regency}, ${site.address.region}`,
-        addressCountry: site.address.country,
-      },
-    },
-  };
   return <Json data={data} />;
 }
 

@@ -15,7 +15,6 @@ const NAV: { key: RouteKey; label: (d: Dictionary) => string }[] = [
   { key: "home", label: (d) => d.nav.home },
   { key: "listings", label: (d) => d.nav.listings },
   { key: "build", label: (d) => d.nav.build },
-  { key: "portfolio", label: (d) => d.nav.portfolio },
   { key: "submit", label: (d) => d.nav.submit },
   { key: "contact", label: (d) => d.nav.contact },
 ];

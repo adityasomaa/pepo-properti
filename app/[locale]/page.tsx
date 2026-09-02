@@ -9,12 +9,10 @@ import { HeroSearch } from "@/components/home/HeroSearch";
 import { Ticker } from "@/components/home/Ticker";
 import { ListingCard } from "@/components/listing/ListingCard";
 import { SampleNotice } from "@/components/listing/SampleNotice";
-import { BeforeAfter } from "@/components/portfolio/BeforeAfter";
 import { ItemListSchema } from "@/components/StructuredData";
 import { getDict, isLocale, path, type Locale } from "@/lib/i18n";
 import { latestListings } from "@/lib/listings";
 import { studioServices } from "@/content/build";
-import { projects, SAMPLE_PROJECTS } from "@/content/projects";
 import { listings, type PropertyType, type PhotoRef } from "@/content/listings";
 import { site } from "@/content/site";
 import { Photo } from "@/components/media/Photo";
@@ -59,7 +57,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   const dict = getDict(locale);
 
   const latest = latestListings(3);
-  const lead = projects[0];
 
   return (
     <>
@@ -274,55 +271,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           ))}
         </ul>
       </section>
-
-      {/*
-        The clearest evidence of what Studio does. Across a full desktop width
-        the comparison swallowed most of a screen on its own, so from 1024px it
-        sits in the right-hand column beside the heading. Below that it stays
-        stacked and full width, where the extra size is what makes the slider
-        usable with a thumb.
-      */}
-      {lead ? (
-        <section aria-labelledby="portfolio-heading" className="container mt-24 md:mt-32">
-          <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-12">
-            <div className="min-w-0">
-              <Reveal>
-                <SectionHeader
-                  id="portfolio-heading"
-                  label={dict.home.portfolio.label}
-                  headline={dict.home.portfolio.headline}
-                  description={dict.home.portfolio.description}
-                  cta={{ href: path(locale, "portfolio"), label: dict.home.portfolio.cta }}
-                />
-              </Reveal>
-
-              {SAMPLE_PROJECTS ? (
-                <div className="mt-8">
-                  <SampleNotice
-                    text={dict.common.sampleNoteProjects}
-                    badge={dict.common.sampleBadge}
-                  />
-                </div>
-              ) : null}
-            </div>
-
-            <Reveal className="min-w-0">
-              <BeforeAfter
-                before={lead.before}
-                after={lead.after}
-                beforeAlt={`${dict.portfolio.beforeLabel}. ${lead.title[locale]}.`}
-                afterAlt={`${dict.portfolio.afterLabel}. ${lead.title[locale]}.`}
-                beforeLabel={dict.portfolio.beforeLabel}
-                afterLabel={dict.portfolio.afterLabel}
-                sliderLabel={dict.portfolio.sliderLabel}
-              />
-              <p className="mt-3 text-[0.875rem] text-ink-muted">
-                {lead.title[locale]}. {dict.portfolio.sliderInstruction}
-              </p>
-            </Reveal>
-          </div>
-        </section>
-      ) : null}
 
       {/*
         One tile per category that actually has listings behind it, each sized
