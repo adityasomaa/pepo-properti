@@ -53,7 +53,6 @@ const id = {
     home: "Beranda",
     listings: "Properti",
     build: "Bangun & Desain",
-    portfolio: "Portofolio",
     submit: "Titipkan Properti",
     contact: "Kontak",
     openMenu: "Buka menu",
@@ -74,7 +73,6 @@ const id = {
     askAboutThis: "Tanya properti ini",
     askBuild: "Konsultasi bangun",
     backToListings: "Kembali ke daftar properti",
-    backToPortfolio: "Kembali ke portofolio",
     sampleBadge: "Data contoh",
     sampleNoteShort:
       "Properti di bawah ini adalah data contoh untuk memperlihatkan tampilan situs, bukan properti yang sedang ditawarkan.",
@@ -111,11 +109,6 @@ const id = {
     rumah: "Rumah",
     tanah: "Tanah",
     ruko: "Ruko",
-  },
-  projectType: {
-    villa: "Villa",
-    rumah: "Rumah",
-    komersial: "Komersial",
   },
   status: {
     dijual: "Dijual",
@@ -218,13 +211,6 @@ const id = {
       cta: "Buka halaman Bangun & Desain",
     },
 
-    portfolio: {
-      label: "Portofolio",
-      headline: "Rencana di sebelah kiri, hasil di sebelah kanan",
-      description: "Geser pembatas untuk membandingkan tahap rencana dengan hasil pembangunan.",
-      cta: "Lihat seluruh portofolio",
-    },
-
     categories: {
       label: "Kategori properti",
       headline: "Rumah, tanah, dan ruko",
@@ -320,10 +306,6 @@ const id = {
       "Perancangan arsitektur, gambar kerja dan struktur, visualisasi rendering 3D, jasa kontraktor pembangunan, hingga pengurusan PBG dan SLF.",
     cta: "Konsultasi desain & konstruksi",
     servicesHeading: "Lingkup layanan",
-    packagesLabel: "Paket pembangunan",
-    packagesHeadline: "Tiga tingkat spesifikasi",
-    packagesDescription: "Setiap paket menyebutkan apa saja yang termasuk di dalamnya.",
-    packagesCta: "Hitung estimasi",
     perSqm: "per m2",
     includes: "Termasuk",
     calculator: {
@@ -347,21 +329,6 @@ const id = {
     permitsDescription:
       "Pengurusan Persetujuan Bangunan Gedung dan Sertifikat Laik Fungsi sesuai regulasi daerah di Bali.",
     permitsCta: "Tanya soal perizinan",
-  },
-  portfolio: {
-    metaTitle: "Portofolio Korva Studio",
-    metaDescription: "Proyek arsitektur dan konstruksi Korva Studio di Bali, dari tahap rencana sampai hasil jadi.",
-    label: "Portofolio",
-    headline: "Proyek Korva Studio",
-    description: "Bandingkan tahap rencana dengan hasil pembangunan pada setiap proyek.",
-    cta: "Konsultasi desain & konstruksi",
-    scope: "Lingkup pekerjaan",
-    buildingSize: "Luas bangunan",
-    beforeLabel: "Rencana",
-    afterLabel: "Hasil",
-    sliderLabel: "Geser untuk membandingkan rencana dan hasil",
-    sliderInstruction: "Geser dengan tetikus, sentuhan, atau tombol panah kiri dan kanan.",
-    empty: "Belum ada proyek yang ditampilkan.",
   },
   submit: {
     metaTitle: "Titipkan Properti",
@@ -440,7 +407,6 @@ const id = {
     ctaSubmit: "Titipkan properti",
     ctaListings: "Cek listing properti",
     ctaBuild: "Konsultasi desain & konstruksi",
-    ctaPortfolio: "Lihat portofolio",
     ctaContact: "Lihat kontak",
     navHeading: "Halaman",
     contactHeading: "Kantor",
@@ -543,7 +509,6 @@ const en: Dict = {
     home: "Home",
     listings: "Properties",
     build: "Build & Design",
-    portfolio: "Portfolio",
     submit: "List Your Property",
     contact: "Contact",
     openMenu: "Open menu",
@@ -564,7 +529,6 @@ const en: Dict = {
     askAboutThis: "Ask about this property",
     askBuild: "Ask about building",
     backToListings: "Back to properties",
-    backToPortfolio: "Back to portfolio",
     sampleBadge: "Sample data",
     sampleNoteShort:
       "The properties below are sample data used to show how the site works. They are not properties currently on offer.",
@@ -601,11 +565,6 @@ const en: Dict = {
     rumah: "Houses",
     tanah: "Land",
     ruko: "Shophouses",
-  },
-  projectType: {
-    villa: "Villa",
-    rumah: "House",
-    komersial: "Commercial",
   },
   status: {
     dijual: "For sale",
@@ -706,13 +665,6 @@ const en: Dict = {
       cta: "Open Build & Design",
     },
 
-    portfolio: {
-      label: "Portfolio",
-      headline: "The plan on one side, the result on the other",
-      description: "Drag the divider to compare the planning stage with the finished build.",
-      cta: "See the full portfolio",
-    },
-
     categories: {
       label: "Property categories",
       headline: "Houses, land, and shophouses",
@@ -808,10 +760,6 @@ const en: Dict = {
       "Architectural design, working and structural drawings, 3D visualisation, construction contracting, and PBG and SLF permit handling.",
     cta: "Design & construction enquiry",
     servicesHeading: "What we cover",
-    packagesLabel: "Build packages",
-    packagesHeadline: "Three specification levels",
-    packagesDescription: "Each package states exactly what is included in it.",
-    packagesCta: "Work out an estimate",
     perSqm: "per m2",
     includes: "Includes",
     calculator: {
@@ -835,21 +783,6 @@ const en: Dict = {
     permitsDescription:
       "Handling of Building Approval (PBG) and Certificate of Fitness for Use (SLF) under Bali regional regulations.",
     permitsCta: "Ask about permits",
-  },
-  portfolio: {
-    metaTitle: "Korva Studio Portfolio",
-    metaDescription: "Korva Studio architecture and construction projects in Bali, from planning stage to finished build.",
-    label: "Portfolio",
-    headline: "Korva Studio projects",
-    description: "Compare the planning stage with the finished build on each project.",
-    cta: "Design & construction enquiry",
-    scope: "Scope of work",
-    buildingSize: "Building area",
-    beforeLabel: "Plan",
-    afterLabel: "Result",
-    sliderLabel: "Drag to compare plan and result",
-    sliderInstruction: "Drag with a mouse, with touch, or with the left and right arrow keys.",
-    empty: "No projects to show yet.",
   },
   submit: {
     metaTitle: "List Your Property",
@@ -928,7 +861,6 @@ const en: Dict = {
     ctaSubmit: "List your property",
     ctaListings: "Browse properties",
     ctaBuild: "Design & construction enquiry",
-    ctaPortfolio: "See the portfolio",
     ctaContact: "See contact details",
     navHeading: "Pages",
     contactHeading: "Office",
