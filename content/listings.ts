@@ -17,26 +17,17 @@
    harga, dan satu spanduk yang memuat nomor telepon pribadi sengaja TIDAK
    dipakai. Jangan masukkan kembali.
 
-   Harga ditulis apa adanya sesuai sumber, TANPA markup. Korva menyebut
-   "semua harga jual diatas ditambahkan 35jt" pada pukul 23:19, di dalam blok
-   listing mahar01. Kata "diatas" membuatnya berlaku untuk listing sebelum
-   pesan itu, tetapi belum jelas apakah dekpi01 dan buyand01 yang dikirim
-   sesudahnya ikut terkena. Konfirmasi dulu sebelum menaikkan harga di situs.
+   MARKUP SUDAH DITERAPKAN untuk listing Bali daratan.
 
-   ---------------------------------------------------------------------------
-   BELUM DIPASANG: mbakind01 (Jimbaran, 8,32 are)
-   ---------------------------------------------------------------------------
-   Datanya paling lengkap dari semua listing Bali daratan, tetapi harganya
-   ambigu dan salah tebak berakibat fatal. Penjual menulis:
+   Korva menyebut "semua harga jual diatas ditambahkan 35jt", dan klien sudah
+   memastikan itu berlaku untuk seluruh listing dari utas WhatsApp. Jadi harga
+   yang tertulis di bawah untuk mbakind01, mahar01, dekpi01, buyand01, dan
+   buyand02 SUDAH termasuk markup Rp 35 juta.
 
-     "HARGA JUAL : 850Jt nego"
-     "Turun harga 850/are waktu Pasaran 850-950jt."
+   Listing Nusa Penida dan Surabaya TIDAK ditambah markup: harganya berasal
+   dari Pricelist di sales kit, bukan dari utas itu. Kalau ternyata markup
+   berlaku di sana juga, tambahkan Rp 35 juta ke masing-masing.
 
-   Baris kedua jelas per are. Kalau baris pertama juga per are, totalnya
-   8,32 x Rp 850 juta = Rp 7,07 miliar. Kalau maksudnya total, harganya
-   Rp 850 juta untuk 832 m2 di Jimbaran dekat pantai. Selisihnya delapan kali
-   lipat. Fotonya sudah siap di public/photos/mbakind01-jimbaran, tinggal
-   menambahkan blok listing setelah harganya dipastikan.
    =========================================================================== */
 
 export const SAMPLE_DATA = false;
@@ -415,7 +406,7 @@ export const listings: Listing[] = [
     regency: "Klungkung",
     /* Rp 55 juta per are x 77 are. Penjual menyebut "buka harga 55/are",
        jadi angka ini hasil perkalian, bukan total yang dia sebut langsung. */
-    price: 4235000000,
+    price: 4270000000,
     priceUnit: "total",
     bedrooms: null,
     bathrooms: null,
@@ -451,7 +442,7 @@ export const listings: Listing[] = [
     status: "dijual",
     area: "Saba",
     regency: "Gianyar",
-    price: 700000000,
+    price: 735000000,
     priceUnit: "total",
     bedrooms: null,
     bathrooms: null,
@@ -484,7 +475,7 @@ export const listings: Listing[] = [
     status: "dijual",
     area: "Ungasan",
     regency: "Badung",
-    price: 528000000,
+    price: 563000000,
     priceUnit: "total",
     bedrooms: null,
     bathrooms: null,
@@ -507,6 +498,73 @@ export const listings: Listing[] = [
       { album: "buyand01-ungasan", slug: "buyand01-ungasan-01" },
       { album: "buyand01-ungasan", slug: "buyand01-ungasan-02" },
       { album: "buyand01-ungasan", slug: "buyand01-ungasan-03" },
+    ],
+  },
+  {
+    code: "mbakind01",
+    slug: "tanah-8-32-are-jimbaran-badung",
+    type: "tanah",
+    status: "dijual",
+    area: "Jimbaran",
+    regency: "Badung",
+    /* Rp 850 juta per are, dikonfirmasi klien, x 8,32 are = Rp 7,072 M,
+       ditambah markup Rp 35 juta. */
+    price: 7107000000,
+    priceUnit: "total",
+    bedrooms: null,
+    bathrooms: null,
+    landSize: 832,
+    buildingSize: null,
+    certificate: "SHM",
+    tenure: "freehold",
+    zoning: "perumahan",
+    featured: true,
+    publishedAt: "2026-08-28",
+    title: {
+      id: "Tanah 8,32 Are di Jimbaran, Kuta Selatan",
+      en: "832 sqm Land in Jimbaran, South Kuta",
+    },
+    description: {
+      id: "Tanah seluas 8,32 are di Jimbaran, Kuta Selatan, Badung. Bentuk kotak dengan kontur rata, lebar depan 22 meter dan menghadap langsung ke jalan. Akses jalan paving selebar 6 meter. Berjarak satu menit ke Pantai Jimbaran dan 150 meter dari Harley Davidson Jimbaran, dekat Intercontinental Hotel. Sertifikat SHM dengan aspek perumahan. Harga masih dapat dinegosiasikan.",
+      en: "A 832 sqm plot in Jimbaran, South Kuta, Badung. Square in shape and level, with a 22-metre frontage facing directly onto the road. Access is a 6-metre paved road. One minute from Jimbaran Beach and 150 metres from Harley Davidson Jimbaran, near the Intercontinental Hotel. Freehold title, zoned residential. The price is negotiable.",
+    },
+    images: [{ album: "mbakind01-jimbaran", slug: "mbakind01-jimbaran-01" }],
+  },
+  {
+    /* Bidang di sebelah buyand01, dikonfirmasi klien sebagai properti terpisah.
+       Korva mengirimnya dengan kode yang sama, jadi kode di sini dibedakan agar
+       pesan WhatsApp tiap listing tetap bisa ditelusuri. Foto yang dipakai sama
+       persis dengan buyand01 — sudah diverifikasi identik — karena Korva memang
+       mengirim satu set foto untuk kedua bidang yang bersebelahan itu. */
+    code: "buyand02",
+    slug: "tanah-140-m2-ungasan-badung",
+    type: "tanah",
+    status: "dijual",
+    area: "Ungasan",
+    regency: "Badung",
+    price: 885000000,
+    priceUnit: "total",
+    bedrooms: null,
+    bathrooms: null,
+    landSize: 140,
+    buildingSize: null,
+    certificate: "Belum dikonfirmasi",
+    tenure: "freehold",
+    zoning: null,
+    featured: false,
+    publishedAt: "2026-08-28",
+    title: {
+      id: "Tanah 140 m² di Ungasan, Kuta Selatan",
+      en: "140 sqm Land in Ungasan, South Kuta",
+    },
+    description: {
+      id: "Tanah seluas 140 m² di Ungasan, Kecamatan Kuta Selatan, Badung. Bersebelahan dengan bidang 1,09 are yang juga ditawarkan. Ditawarkan Rp 850 juta untuk keseluruhan bidang dan masih dapat dinegosiasikan. Jenis sertifikat belum dikonfirmasi penjual.",
+      en: "A 140 sqm plot in Ungasan, South Kuta, Badung, adjoining the 109 sqm parcel also on offer. Offered at Rp 850 million for the whole parcel, negotiable. The certificate type has not yet been confirmed by the seller.",
+    },
+    images: [
+      { album: "buyand01-ungasan", slug: "buyand01-ungasan-02" },
+      { album: "buyand01-ungasan", slug: "buyand01-ungasan-03" },
+      { album: "buyand01-ungasan", slug: "buyand01-ungasan-01" },
     ],
   },
 ];
