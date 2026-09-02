@@ -1,0 +1,83 @@
+[
+  {
+    "slug": "dekpi01-getakan-01-selatan",
+    "source": "dekpi01-getakan-01-selatan.jpg",
+    "width": 1200,
+    "height": 675,
+    "widths": [
+      480,
+      768,
+      1200
+    ],
+    "blur": "data:image/webp;base64,UklGRngAAABXRUJQVlA4IGwAAADwAwCdASoUAAsAPu1iqk2ppaQiMAgBMB2JQBOgBEMaS796+XqmXsawAN4R1NBVb1SsZw2sP5RPM3FAKeVxRFzp9/E27VV1ly77MufEE6eUnkF/AOA4q/9Qe1TIa5WXMHHUAo0H4yY40i1hAAA="
+  },
+  {
+    "slug": "dekpi01-getakan-02-barat",
+    "source": "dekpi01-getakan-02-barat.jpg",
+    "width": 1200,
+    "height": 675,
+    "widths": [
+      480,
+      768,
+      1200
+    ],
+    "blur": "data:image/webp;base64,UklGRnwAAABXRUJQVlA4IHAAAADQAwCdASoUAAsAPu1iqU2ppaOiMAgBMB2JZAAu9UAmFynfXjE74QAA/h167VvoQ+ObWtYTAoQ2n/2/Xv6S2yPicA09JBB5+P73qElFXsW3BGITMOc9/ndhBZe681NqutbQhRiFKMNDKucLHtfYXQAA"
+  },
+  {
+    "slug": "dekpi01-getakan-03-utara",
+    "source": "dekpi01-getakan-03-utara.jpg",
+    "width": 1200,
+    "height": 675,
+    "widths": [
+      480,
+      768,
+      1200
+    ],
+    "blur": "data:image/webp;base64,UklGRoAAAABXRUJQVlA4IHQAAADQAwCdASoUAAsAPu1iqU2ppaOiMAgBMB2JZgAANGhuxDQlDNJU4AAAyeFZMSDACP38lfu81wu0kOxQXr0skYxAhY8Urj6Evwh/1N3KuF1J5dwhT89qleWyL+kFtgbVbmvPJJzY4eZCrPEhIIShtCA3csAAAA=="
+  },
+  {
+    "slug": "dekpi01-getakan-04-timur",
+    "source": "dekpi01-getakan-04-timur.jpg",
+    "width": 1200,
+    "height": 675,
+    "widths": [
+      480,
+      768,
+      1200
+    ],
+    "blur": "data:image/webp;base64,UklGRnIAAABXRUJQVlA4IGYAAAAQBACdASoUAAsAPu1iqU2ppaOiMAgBMB2JZQC/PHAApVJ0fCBpHhT4gAD3c4IvCYGWzJoZswkxsXEnfffT5+96PHWr75kxkAosU345syv2SfXIeMnxuxNA8gbZRY8I3hkFgLVgAAA="
+  },
+  {
+    "slug": "dekpi01-getakan-05",
+    "source": "dekpi01-getakan-05.jpg",
+    "width": 768,
+    "height": 944,
+    "widths": [
+      480,
+      768
+    ],
+    "blur": "data:image/webp;base64,UklGRrQAAABXRUJQVlA4IKgAAAAwBQCdASoUABkAPu1qr1CppaQiqAqpMB2JQBdgAel1Ky75HfMrR4n8TMZTcDkstXM7OAD+jOm9PsxnpEzd98rXZl7F+sCR1QQdDtBx5vgtOAgopkRKdEbunYPdsAl+f4mxZBT6d/poujmKHNVQkHCxshrBSWvWSnGUUWpm+cQxvGW4rRcEgr9nI4Gozj00+jgIwWDAeeDDkrZ+5N9a6snKlXUv0VIwAAA="
+  },
+  {
+    "slug": "dekpi01-getakan-06",
+    "source": "dekpi01-getakan-06.jpg",
+    "width": 768,
+    "height": 1157,
+    "widths": [
+      480,
+      768
+    ],
+    "blur": "data:image/webp;base64,UklGRrIAAABXRUJQVlA4IKYAAAAwBQCdASoUAB4APu1kq1AppSOisBgIATAdiUAX7WyAJyQ9fBt4jR9S+SCjE+b88HreIAD+6x4rW/QihLt9JlHFCJUra2VuPcjAHi6tBHkOGCggaAcwoYsW5csueZAjqDeQdCS59pek5HZzNj3gJMkBD3AUfoSbqDfpmVpzYw0GSv7TtDPuU+lzdZ/KpWNnBuDLAq1VySR+9ZIFrHEA4xCgPznLAAAA"
+  },
+  {
+    "slug": "dekpi01-getakan-07",
+    "source": "dekpi01-getakan-07.jpg",
+    "width": 768,
+    "height": 1129,
+    "widths": [
+      480,
+      768
+    ],
+    "blur": "data:image/webp;base64,UklGRqoAAABXRUJQVlA4IJ4AAABwBQCdASoUAB0APu1qrlCppaQiqAqpMB2JQBjAgfr7Im9EPC0KVw2DI1tcn+EPiP15TvAAAP7WzVqUIJDbU4iubUNchXn5nh66kIzw8DJyQPkCGTtnQ8l4/GFSE0zR5eDMa5r3glRQ/KcZuq0uG/xF7LagXAkxoOIFJwBmxornN/MKejiH1YQdJJUuwqt1oy2htH2qha3SiesEKgAAAA=="
+  }
+]

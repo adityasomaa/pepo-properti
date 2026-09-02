@@ -1,0 +1,46 @@
+[
+  {
+    "slug": "mahar01-saba-01",
+    "source": "mahar01-saba-01.jpg",
+    "width": 480,
+    "height": 273,
+    "widths": [
+      480
+    ],
+    "blur": "data:image/webp;base64,UklGRnIAAABXRUJQVlA4IGYAAADwAwCdASoUAAsAPu1iqk2ppaQiMAgBMB2JZwC7ABdMF0zwRodb1HwAAP7aEeJl56avl88c9t3N72lV6vke8FWJQy9X0Y8MGKsqoUIfNnYLm0nyvLW/KT07JcAibhffqSlkN8v0AAA="
+  },
+  {
+    "slug": "mahar01-saba-02",
+    "source": "mahar01-saba-02.jpg",
+    "width": 480,
+    "height": 267,
+    "widths": [
+      480
+    ],
+    "blur": "data:image/webp;base64,UklGRngAAABXRUJQVlA4IGwAAADwAwCdASoUAAsAPu1kqU2ppaOiMAgBMB2JZQAAYYIyuU7HbRU0kTKAAP2nDL7t0anAFdJJytwzgNmgUvA0JWIX1A22SaFmK4PV2xT4/na9MIiZtJLt9lXMJEfRNgLxF1Y8hopld+hor22AAAA="
+  },
+  {
+    "slug": "mahar01-saba-03",
+    "source": "mahar01-saba-03.jpg",
+    "width": 1200,
+    "height": 900,
+    "widths": [
+      480,
+      768,
+      1200
+    ],
+    "blur": "data:image/webp;base64,UklGRnYAAABXRUJQVlA4IGoAAACQAwCdASoUAA8APu1iqU2ppaOiMAgBMB2JZQC7ABm1fXJQMjxYAP6NRuwgBUUUmC+pmNsPHUrD6H0ZBJwqdpjSONZ4MkbopcuJBY7nQRRsTJ98qaDwx992o1+uHl171q/BuS6ws4WpQAAA"
+  },
+  {
+    "slug": "mahar01-saba-04",
+    "source": "mahar01-saba-04.jpg",
+    "width": 1200,
+    "height": 900,
+    "widths": [
+      480,
+      768,
+      1200
+    ],
+    "blur": "data:image/webp;base64,UklGRoYAAABXRUJQVlA4IHoAAADwAwCdASoUAA8APu1iqU2ppaOiMAgBMB2JZQC2ydwA4DtBmPiOCmU2AN5Jh+5rhAaxUwCHGoYAK3Kjr9/20jnIWthWLvXnPSoea2srFXCfxVs3MI3nY/zgmFl0wzH8qwVhxwN28SFGTSm+zVj0lT4EltfbJMlx6jKAAA=="
+  }
+]

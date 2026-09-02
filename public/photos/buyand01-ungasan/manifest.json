@@ -1,0 +1,38 @@
+[
+  {
+    "slug": "buyand01-ungasan-01",
+    "source": "buyand01-ungasan-01.jpg",
+    "width": 1200,
+    "height": 900,
+    "widths": [
+      480,
+      768,
+      1200
+    ],
+    "blur": "data:image/webp;base64,UklGRngAAABXRUJQVlA4IGwAAAAQBACdASoUAA8APu1iqU2ppaQiMAgBMB2JYgCdACPTFOg7oJ81zhZtsADLTUMUTMjlw9q9I0CyQBUlWKi4Bt2L7c93gilopOTfaYouYZGZ0nnAkeYs9P+3TGDgqAPH29WU4ldu0f1pcFSYVAA="
+  },
+  {
+    "slug": "buyand01-ungasan-02",
+    "source": "buyand01-ungasan-02.jpg",
+    "width": 1200,
+    "height": 900,
+    "widths": [
+      480,
+      768,
+      1200
+    ],
+    "blur": "data:image/webp;base64,UklGRm4AAABXRUJQVlA4IGIAAABQBACdASoUAA8APu1iqU2ppaOiMAgBMB2JZQC06CPVrX/tKA2wQSfExwwAAP66eGdU/hUPAODIEVj7Ub+K+eHNvmEugJg2BxLDq3tloRaEANcirAPwVELXUNTF7s22dZbAAA=="
+  },
+  {
+    "slug": "buyand01-ungasan-03",
+    "source": "buyand01-ungasan-03.jpg",
+    "width": 1200,
+    "height": 900,
+    "widths": [
+      480,
+      768,
+      1200
+    ],
+    "blur": "data:image/webp;base64,UklGRnwAAABXRUJQVlA4IHAAAABQBACdASoUAA8APu1iqU2ppaOiMAgBMB2JQBOmUABsfHIa9lXHj2zcYrYAAP5qiFLkL/tKjMjaAzetoXWYfZP/5n2oX6F9CUqQD5ggpFhx0ijP6EZTAr6/uG0cuv9g41Bqx1vDUdBQ8zBhXHn0CAAA"
+  }
+]

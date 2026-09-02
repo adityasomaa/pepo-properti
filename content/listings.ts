@@ -17,9 +17,26 @@
    harga, dan satu spanduk yang memuat nomor telepon pribadi sengaja TIDAK
    dipakai. Jangan masukkan kembali.
 
-   Harga ditulis apa adanya sesuai Pricelist. Korva pernah menyebut markup
-   Rp 35 juta untuk harga jual, tetapi pesan itu menyusul listing Bali daratan,
-   bukan proyek Nusa Penida ini, jadi belum diterapkan di sini.
+   Harga ditulis apa adanya sesuai sumber, TANPA markup. Korva menyebut
+   "semua harga jual diatas ditambahkan 35jt" pada pukul 23:19, di dalam blok
+   listing mahar01. Kata "diatas" membuatnya berlaku untuk listing sebelum
+   pesan itu, tetapi belum jelas apakah dekpi01 dan buyand01 yang dikirim
+   sesudahnya ikut terkena. Konfirmasi dulu sebelum menaikkan harga di situs.
+
+   ---------------------------------------------------------------------------
+   BELUM DIPASANG: mbakind01 (Jimbaran, 8,32 are)
+   ---------------------------------------------------------------------------
+   Datanya paling lengkap dari semua listing Bali daratan, tetapi harganya
+   ambigu dan salah tebak berakibat fatal. Penjual menulis:
+
+     "HARGA JUAL : 850Jt nego"
+     "Turun harga 850/are waktu Pasaran 850-950jt."
+
+   Baris kedua jelas per are. Kalau baris pertama juga per are, totalnya
+   8,32 x Rp 850 juta = Rp 7,07 miliar. Kalau maksudnya total, harganya
+   Rp 850 juta untuk 832 m2 di Jimbaran dekat pantai. Selisihnya delapan kali
+   lipat. Fotonya sudah siap di public/photos/mbakind01-jimbaran, tinggal
+   menambahkan blok listing setelah harganya dipastikan.
    =========================================================================== */
 
 export const SAMPLE_DATA = false;
@@ -387,6 +404,109 @@ export const listings: Listing[] = [
       { album: "ruko-darmo-park", slug: "9" },
       { album: "ruko-darmo-park", slug: "7" },
       { album: "ruko-darmo-park", slug: "10" },
+    ],
+  },
+  {
+    code: "dekpi01",
+    slug: "tanah-77-are-getakan-klungkung",
+    type: "tanah",
+    status: "dijual",
+    area: "Getakan",
+    regency: "Klungkung",
+    /* Rp 55 juta per are x 77 are. Penjual menyebut "buka harga 55/are",
+       jadi angka ini hasil perkalian, bukan total yang dia sebut langsung. */
+    price: 4235000000,
+    priceUnit: "total",
+    bedrooms: null,
+    bathrooms: null,
+    landSize: 7700,
+    buildingSize: null,
+    certificate: "Belum dikonfirmasi",
+    tenure: "freehold",
+    zoning: null,
+    featured: false,
+    publishedAt: "2026-08-28",
+    title: {
+      id: "Lahan 77 Are di Getakan, Klungkung",
+      en: "7,700 sqm Land in Getakan, Klungkung",
+    },
+    description: {
+      id: "Lahan seluas 77 are di daerah Getakan, Klungkung. Berada di samping jalan raya. Di atas lahan terdapat tanaman pohon cengkeh. Harga pembuka Rp 55 juta per are. Jenis sertifikat belum dikonfirmasi penjual.",
+      en: "A 7,700 sqm parcel in Getakan, Klungkung, beside the main road, planted with clove trees. Asking price is Rp 55 million per are. The certificate type has not yet been confirmed by the seller.",
+    },
+    images: [
+      { album: "dekpi01-getakan", slug: "dekpi01-getakan-01-selatan" },
+      { album: "dekpi01-getakan", slug: "dekpi01-getakan-02-barat" },
+      { album: "dekpi01-getakan", slug: "dekpi01-getakan-03-utara" },
+      { album: "dekpi01-getakan", slug: "dekpi01-getakan-04-timur" },
+      { album: "dekpi01-getakan", slug: "dekpi01-getakan-05" },
+      { album: "dekpi01-getakan", slug: "dekpi01-getakan-06" },
+      { album: "dekpi01-getakan", slug: "dekpi01-getakan-07" },
+    ],
+  },
+  {
+    code: "mahar01",
+    slug: "tanah-2-are-saba-gianyar",
+    type: "tanah",
+    status: "dijual",
+    area: "Saba",
+    regency: "Gianyar",
+    price: 700000000,
+    priceUnit: "total",
+    bedrooms: null,
+    bathrooms: null,
+    landSize: 200,
+    buildingSize: null,
+    certificate: "Belum dikonfirmasi",
+    tenure: "freehold",
+    zoning: null,
+    featured: false,
+    publishedAt: "2026-08-28",
+    title: {
+      id: "Tanah 2 Are di Kawasan Villa dekat Saba, Gianyar",
+      en: "200 sqm Land in a Villa Area near Saba, Gianyar",
+    },
+    description: {
+      id: "Tanah seluas 2 are di kawasan villa dekat Saba, Gianyar. Ditawarkan Rp 700 juta untuk keseluruhan bidang. Jenis sertifikat belum dikonfirmasi penjual.",
+      en: "A 200 sqm plot in a villa area near Saba, Gianyar. Offered at Rp 700 million for the whole parcel. The certificate type has not yet been confirmed by the seller.",
+    },
+    images: [
+      { album: "mahar01-saba", slug: "mahar01-saba-03" },
+      { album: "mahar01-saba", slug: "mahar01-saba-04" },
+      { album: "mahar01-saba", slug: "mahar01-saba-01" },
+      { album: "mahar01-saba", slug: "mahar01-saba-02" },
+    ],
+  },
+  {
+    code: "buyand01",
+    slug: "tanah-1-09-are-ungasan-badung",
+    type: "tanah",
+    status: "dijual",
+    area: "Ungasan",
+    regency: "Badung",
+    price: 528000000,
+    priceUnit: "total",
+    bedrooms: null,
+    bathrooms: null,
+    landSize: 109,
+    buildingSize: null,
+    certificate: "Belum dikonfirmasi",
+    tenure: "freehold",
+    zoning: null,
+    featured: false,
+    publishedAt: "2026-08-28",
+    title: {
+      id: "Tanah 1,09 Are di Ungasan, Kuta Selatan",
+      en: "109 sqm Land in Ungasan, South Kuta",
+    },
+    description: {
+      id: "Tanah seluas 1,09 are di Ungasan, Kecamatan Kuta Selatan, Badung. Harga Rp 528 juta dan masih dapat dinegosiasikan. Penjual mengoreksi luasnya dari 96 m² menjadi 1,09 are. Surat ukur tersedia; jenis sertifikat belum dikonfirmasi penjual.",
+      en: "A 109 sqm plot in Ungasan, South Kuta, Badung. Priced at Rp 528 million, negotiable. The seller corrected the area from 96 sqm to 1.09 are. A survey letter is available; the certificate type has not yet been confirmed by the seller.",
+    },
+    images: [
+      { album: "buyand01-ungasan", slug: "buyand01-ungasan-01" },
+      { album: "buyand01-ungasan", slug: "buyand01-ungasan-02" },
+      { album: "buyand01-ungasan", slug: "buyand01-ungasan-03" },
     ],
   },
 ];

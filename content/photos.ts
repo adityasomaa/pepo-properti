@@ -1,4 +1,8 @@
+import buyand01_ungasan from "@/public/photos/buyand01-ungasan/manifest.json";
+import dekpi01_getakan from "@/public/photos/dekpi01-getakan/manifest.json";
 import kost_bulu_jaya from "@/public/photos/kost-bulu-jaya/manifest.json";
+import mahar01_saba from "@/public/photos/mahar01-saba/manifest.json";
+import mbakind01_jimbaran from "@/public/photos/mbakind01-jimbaran/manifest.json";
 import p11_klumpu from "@/public/photos/p11-klumpu/manifest.json";
 import p4_pejukutan from "@/public/photos/p4-pejukutan/manifest.json";
 import p6_sekartaji from "@/public/photos/p6-sekartaji/manifest.json";
@@ -24,7 +28,11 @@ export type PhotoEntry = {
 };
 
 const photoManifests: Record<string, PhotoEntry[]> = {
+  "buyand01-ungasan": buyand01_ungasan as PhotoEntry[],
+  "dekpi01-getakan": dekpi01_getakan as PhotoEntry[],
   "kost-bulu-jaya": kost_bulu_jaya as PhotoEntry[],
+  "mahar01-saba": mahar01_saba as PhotoEntry[],
+  "mbakind01-jimbaran": mbakind01_jimbaran as PhotoEntry[],
   "p11-klumpu": p11_klumpu as PhotoEntry[],
   "p4-pejukutan": p4_pejukutan as PhotoEntry[],
   "p6-sekartaji": p6_sekartaji as PhotoEntry[],
