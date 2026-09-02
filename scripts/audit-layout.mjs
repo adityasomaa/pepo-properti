@@ -108,6 +108,14 @@ const probe = () => {
     .filter((i) => i.complete && i.naturalWidth === 0)
     .map((i) => i.getAttribute("src"));
 
+  // Nothing on the page may be drawn artwork. The client asked for photographs
+  // only, with the mark as the single exception, so a generated placeholder
+  // creeping back in should fail here rather than be noticed on the live site.
+  const drawn = [...document.images]
+    .map((i) => i.currentSrc || i.src)
+    .filter((src) => /\.svg(\?|$)/i.test(src))
+    .filter((src) => !/(wordmark|mark-light|icon)\.svg/i.test(src));
+
   const reveals = [...document.querySelectorAll(".reveal")];
   const hiddenReveals = reveals.filter((e) => e.dataset.visible !== "true").length;
 
@@ -183,6 +191,7 @@ const probe = () => {
     offenders: offenders.slice(0, 10),
     offenderCount: offenders.length,
     brokenImages: broken,
+    drawnArtwork: [...new Set(drawn)].slice(0, 4),
     hiddenReveals,
     revealCount: reveals.length,
     underHeader: underHeader.slice(0, 4),
@@ -284,6 +293,9 @@ for (const bp of BREAKPOINTS) {
     const problems = [];
     if (result.overflow) problems.push(`overflow ${result.scrollWidth}>${result.vw}`);
     if (result.brokenImages.length) problems.push(`broken images: ${result.brokenImages.join(", ")}`);
+    if (result.drawnArtwork.length) {
+      problems.push(`drawn artwork instead of a photograph: ${result.drawnArtwork.join(", ")}`);
+    }
     if (result.hiddenReveals) problems.push(`${result.hiddenReveals}/${result.revealCount} reveals still hidden`);
     if (result.wrappedButtons.length) {
       problems.push(`button label wraps: ${result.wrappedButtons.join(" | ")}`);

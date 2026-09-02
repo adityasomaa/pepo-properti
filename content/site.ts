@@ -93,16 +93,26 @@ export const site = {
        4. isi `width` dan `height` sesuai ukuran asli foto.
      Tidak ada yang lain yang perlu diubah.
      ------------------------------------------------------------------------- */
-  heroImage: {
-    /* Foto dari folder Drive VILLA REHAN milik Korva sendiri, sudah diperkecil
-       jadi lima lebar dalam AVIF/WebP/JPEG oleh scripts/optimize-photos.mjs.
-       BELUM dikonfirmasi bahwa foto inilah yang dimaksud klien untuk hero —
-       ganti `photo` dengan slug lain dari public/photos/villa-rehan/manifest.json
-       kalau klien memilih yang berbeda. */
-    album: "villa-rehan",
-    photo: "dsc09404-hdr",
-    alt: "Kolam renang villa dengan tanaman tropis dan bangunan di sekitarnya.",
-  },
+  /* -------------------------------------------------------------------------
+     FOTO HERO
+
+     Slideshow di halaman depan. Ganti daftar di bawah untuk mengubah foto yang
+     tampil. Setiap baris menunjuk satu foto: `album` adalah nama folder di
+     public/photos, `slug` diambil dari manifest.json di folder itu.
+
+     Menambah foto baru:
+       npm run photos -- "<folder asal>" "<nama-album>"
+
+     BELUM dikonfirmasi bahwa folder VILLA REHAN inilah yang dimaksud klien
+     untuk halaman depan.
+     ------------------------------------------------------------------------- */
+  heroPhotos: [
+    { album: "villa-rehan", slug: "dsc09404-hdr" },
+    { album: "villa-rehan", slug: "dsc09413-hdr" },
+    { album: "villa-rehan", slug: "dsc09675-hdr" },
+    { album: "villa-rehan", slug: "dsc09605-hdr" },
+  ],
+  heroAlt: "Kolam renang villa dengan tanaman tropis dan bangunan di sekitarnya.",
 
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://korva.onyxcreative.asia",
 } as const;

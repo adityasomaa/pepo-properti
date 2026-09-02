@@ -431,43 +431,9 @@ let tiles = 0;
 // What remains here is the furniture the site draws itself: the category
 // tiles, the hero plane, and the Open Graph cards.
 
-// Category tiles for the home page, wider crop.
-for (const type of ["villa", "rumah", "tanah", "ruko"]) {
-  writeFileSync(
-    join(GRAPHICS, `category-${type}.svg`),
-    tile({ seed: `category:${type}`, type, width: 1200, height: 900 })
-  );
-  tiles++;
-}
-
-// The hero plane. Wide, quiet, and deliberately the calmest tile in the set.
-// Authored at the aspect the hero slot actually uses. A source in the wrong
-// orientation loses its horizon to object-cover, which is the whole picture.
-writeFileSync(
-  join(GRAPHICS, "hero.svg"),
-  tile({ seed: "korva:hero:v2", type: "villa", width: 1400, height: 1000 })
-);
-tiles++;
-
-const { projects } = await import("../content/projects.ts");
-const PROJECT_FAMILY = { villa: "villa", rumah: "rumah", komersial: "ruko" };
-
-for (const project of projects) {
-  writeFileSync(
-    join(GRAPHICS, `project-${project.slug}-before.svg`),
-    tile({ seed: `plan:${project.slug}`, type: "tanah" })
-  );
-  writeFileSync(
-    join(GRAPHICS, `project-${project.slug}-after.svg`),
-    tile({ seed: `built:${project.slug}`, type: PROJECT_FAMILY[project.type] })
-  );
-  tiles += 2;
-}
-
-// Brand marks.
-writeFileSync(join(ROOT, "public", "icon.svg"), mark("#12261d"));
-writeFileSync(join(GRAPHICS, "mark-light.svg"), mark("#eff1ea"));
-writeFileSync(join(GRAPHICS, "wordmark.svg"), wordmarkSvg());
+// Nothing on the site is drawn any more except the mark itself. Category
+// tiles and the hero plane used to be generated here; both now show the
+// client's own photographs, so no placeholder art is produced at all.
 
 // Open Graph: one default card plus one per listing, in both languages.
 renderPng(

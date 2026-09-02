@@ -818,3 +818,67 @@
     }
   }
 }
+@layer components {
+  /*
+    The hero slideshow. Frames are stacked in one box so the height never
+    changes between slides, and only opacity moves. The first frame is in flow
+    and sets the box size; the rest are absolute on top of it.
+  */
+  .hero-slideshow {
+    overflow: hidden;
+    border-radius: var(--radius-card);
+    isolation: isolate;
+  }
+
+  .hero-slideshow__frame {
+    opacity: 0;
+    transition: opacity 900ms ease;
+  }
+
+  .hero-slideshow__frame--stacked {
+    position: absolute;
+    inset: 0;
+  }
+
+  .hero-slideshow__frame[data-current="true"] {
+    opacity: 1;
+  }
+
+  .hero-slideshow__dots {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0.625rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.4375rem;
+  }
+
+  .hero-slideshow__dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 999px;
+    /* Readable over a photograph of any brightness: a light dot with its own
+       shadow, rather than a colour that only works on some frames. */
+    background: rgb(255 255 255 / 0.55);
+    box-shadow: 0 1px 3px rgb(18 38 29 / 0.45);
+    transition: background-color 200ms ease, transform 200ms ease;
+  }
+
+  .hero-slideshow__dot:hover {
+    background: rgb(255 255 255 / 0.8);
+  }
+
+  .hero-slideshow__dot[aria-current="true"] {
+    background: rgb(255 255 255);
+    transform: scale(1.25);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    /* No crossfade, and the timer never starts, so the dots are the only way
+       through. The change is instant rather than absent. */
+    .hero-slideshow__frame {
+      transition: none;
+    }
+  }
+}
+

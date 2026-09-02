@@ -378,13 +378,15 @@ export const listings: Listing[] = [
       id: "Tiga unit ruko yang tersambung menjadi satu di Komplek Darmo Park 1, Jalan Mayjen Sungkono, Kecamatan Sawahan, Surabaya. Luas tanah 180 m², tiap unit berukuran 5 × 12 meter dan bertingkat dua. Terdapat ruang dapur bekas restoran dengan cerobong besar, teras di lantai dua berukuran 1,8 × 10 meter, dan gudang. Tangga ke lantai dua hanya satu. Daya listrik 10.800 watt dari dua token PLN. Dibeli dari pengembang tahun 1984 dan direnovasi tahun 2016. Sertifikat HGB.",
       en: "Three shophouse units joined into one at Darmo Park 1, Jalan Mayjen Sungkono, Sawahan, Surabaya. 180 sqm of land, each unit 5 × 12 metres over two floors. It includes a former restaurant kitchen with a large extraction flue, a 1.8 × 10 metre first-floor terrace, and a store room. There is a single staircase to the upper floor. Electricity is 10,800 watts across two meters. Bought from the developer in 1984 and renovated in 2016. Leasehold-to-build title (HGB).",
     },
+    /* Foto "2" tidak dipakai: di situ terpampang papan DIJUAL milik agen lain
+       lengkap dengan nomor teleponnya, dan itu akan ikut tayang di situs. */
     images: [
-      { album: "ruko-darmo-park", slug: "2" },
+      { album: "ruko-darmo-park", slug: "17" },
       { album: "ruko-darmo-park", slug: "3" },
+      { album: "ruko-darmo-park", slug: "16" },
+      { album: "ruko-darmo-park", slug: "9" },
+      { album: "ruko-darmo-park", slug: "7" },
       { album: "ruko-darmo-park", slug: "10" },
-      { album: "ruko-darmo-park", slug: "11" },
-      { album: "ruko-darmo-park", slug: "12" },
-      { album: "ruko-darmo-park", slug: "13" },
     ],
   },
 ];

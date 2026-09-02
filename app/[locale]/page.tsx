@@ -15,8 +15,10 @@ import { getDict, isLocale, path, type Locale } from "@/lib/i18n";
 import { latestListings } from "@/lib/listings";
 import { studioServices } from "@/content/build";
 import { projects, SAMPLE_PROJECTS } from "@/content/projects";
+import { listings, type PropertyType, type PhotoRef } from "@/content/listings";
 import { site } from "@/content/site";
 import { Photo } from "@/components/media/Photo";
+import { HeroSlideshow } from "@/components/home/HeroSlideshow";
 
 export async function generateMetadata({
   params,
@@ -43,7 +45,12 @@ export async function generateMetadata({
   };
 }
 
-const CATEGORIES = ["rumah", "tanah", "ruko"] as const;
+const CATEGORIES = (["villa", "rumah", "tanah", "ruko"] as const)
+  .map((type) => {
+    const first = listings.find((l) => l.type === type && l.images.length > 0);
+    return first ? { type, photo: first.images[0] } : null;
+  })
+  .filter((c): c is { type: PropertyType; photo: PhotoRef } => c !== null);
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale: raw } = await params;
@@ -91,15 +98,12 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
               Swapping in the client's photograph is one edit in content/site.ts.
             */}
             <div className="overflow-hidden rounded-[var(--radius-card)] border border-line bg-surface">
-              <Photo
-                album={site.heroImage.album}
-                slug={site.heroImage.photo}
-                alt={site.heroImage.alt}
-                priority
-                /* Full width on a phone, and just under half the container from
-                   1024px up, where the picture sits beside the headline. */
-                sizes="(min-width: 1024px) 45vw, 100vw"
-                className="hero-figure mx-auto block aspect-[16/9] w-full max-w-[var(--hero-figure-max-w)] object-cover"
+              <HeroSlideshow
+                photos={site.heroPhotos}
+                alt={site.heroAlt}
+                label={dict.home.heroSlideshowLabel}
+                slideLabelTemplate={dict.home.heroSlideLabel}
+                className="hero-figure mx-auto w-full max-w-[var(--hero-figure-max-w)]"
               />
             </div>
           </div>
@@ -320,39 +324,39 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         </section>
       ) : null}
 
-      {/* A bento: one lead tile, two supporting. Exactly three cells for three. */}
-      <section aria-labelledby="categories-heading" className="container mt-24 md:mt-32">
-        <Reveal>
-          <SectionHeader
-            id="categories-heading"
-            label={dict.home.categories.label}
-            headline={dict.home.categories.headline}
-            description={dict.home.categories.description}
-            cta={{ href: path(locale, "listings"), label: dict.home.categories.cta }}
-          />
-        </Reveal>
+      {/*
+        One tile per category that actually has listings behind it, each sized
+        by its own content. The earlier version pinned a lead tile across two
+        rows and stretched the rest to match, which left a tall empty panel
+        whenever the text in one tile was shorter than in another.
+      */}
+      {CATEGORIES.length > 0 ? (
+        <section aria-labelledby="categories-heading" className="container mt-24 md:mt-32">
+          <Reveal>
+            <SectionHeader
+              id="categories-heading"
+              label={dict.home.categories.label}
+              headline={dict.home.categories.headline}
+              description={dict.home.categories.description}
+              cta={{ href: path(locale, "listings"), label: dict.home.categories.cta }}
+            />
+          </Reveal>
 
-        <ul className="mt-10 grid gap-4 md:grid-cols-2 md:grid-rows-2">
-          {CATEGORIES.map((type, index) => {
-            const isLead = index === 0;
-            return (
-              <li key={type} className={isLead ? "md:row-span-2" : ""}>
-                <Reveal delay={index * 90} className="h-full">
+          <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {CATEGORIES.map(({ type, photo }, index) => (
+              <li key={type}>
+                <Reveal delay={index * 90}>
                   <AppLink
                     href={path(locale, "listings") + `?type=${type}`}
-                    className="group flex h-full flex-col overflow-hidden rounded-[var(--radius-card)] border border-line bg-white transition-colors duration-300 hover:border-ink/35"
+                    className="group flex flex-col overflow-hidden rounded-[var(--radius-card)] border border-line bg-white transition-colors duration-300 hover:border-ink/35"
                   >
-                    <span
-                      className={`block w-full overflow-hidden bg-surface ${isLead ? "aspect-[16/9] md:aspect-square" : "aspect-square"}`}
-                    >
-                      <img
-                        src={`/graphics/category-${type}.svg`}
+                    <span className="block w-full overflow-hidden bg-surface">
+                      <Photo
+                        album={photo.album}
+                        slug={photo.slug}
                         alt=""
-                        width={1200}
-                        height={900}
-                        loading="lazy"
-                        decoding="async"
-                        className="h-full w-full object-cover"
+                        sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 92vw"
+                        className="block aspect-[16/9] w-full object-cover"
                       />
                     </span>
                     <span className="flex items-center justify-between gap-4 p-5">
@@ -367,10 +371,10 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                   </AppLink>
                 </Reveal>
               </li>
-            );
-          })}
-        </ul>
-      </section>
+            ))}
+          </ul>
+        </section>
+      ) : null}
 
       <ItemListSchema listings={latest} locale={locale} />
     </>

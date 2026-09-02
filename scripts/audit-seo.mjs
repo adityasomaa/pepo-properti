@@ -63,8 +63,6 @@ async function text(url) {
       assets.add(`/photos/${i.album}/${i.slug}-${best}.jpg`);
     }
   }
-  for (const type of ["villa", "rumah", "tanah", "ruko"]) assets.add(`/graphics/category-${type}.svg`);
-  assets.add("/graphics/hero.svg");
   for (const project of projects) {
     assets.add(project.before);
     assets.add(project.after);

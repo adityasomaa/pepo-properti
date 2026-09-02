@@ -114,3 +114,29 @@ photograph needs a short description of what is in it.
 import is swapped for this project's `cn`, `framer-motion` becomes
 `motion/react`, every letter is marked `aria-hidden` behind a single
 `aria-label`, and reduced motion skips the animation.
+
+## Menjalankan audit di mesin lokal
+
+Urutannya penting, dan salah urutan menghasilkan hasil audit yang menyesatkan,
+bukan error yang jelas.
+
+1. **Matikan server dulu, baru build.** `next build` sementara `next start`
+   masih hidup menghasilkan build campur: HTML yang disajikan merujuk chunk CSS
+   atau JS yang sudah tidak ada di disk, dan server membalas 500 untuk file itu.
+   Halaman lalu tampil tanpa gaya sama sekali, gambar melar ke ukuran aslinya,
+   dan setiap pengukuran rasio atau lebar jadi salah.
+
+2. **Matikan prosesnya, bukan pembungkusnya.** `kill` pada pekerjaan latar
+   belakang hanya membunuh `npx`; proses `next` anaknya tetap hidup dan tetap
+   memegang port 4311, menyajikan build lama. Pakai:
+
+   ```
+   powershell -NoProfile -Command "Get-CimInstance Win32_Process -Filter \"Name='node.exe'\" | Where-Object { \$_.CommandLine -match 'pepo-properti' } | ForEach-Object { taskkill /PID \$_.ProcessId /T /F }"
+   ```
+
+3. **Pastikan build benar-benar selesai** sebelum start: `.next/prerender-manifest.json`
+   harus ada. Kalau tidak, `next start` menyala lalu langsung gagal.
+
+4. **Periksa CSS sebelum percaya hasil audit.** Ambil href stylesheet dari HTML
+   dan pastikan balasannya 200. Kalau 500, hentikan; hasil apa pun setelah itu
+   tidak berarti.

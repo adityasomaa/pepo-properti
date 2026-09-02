@@ -149,6 +149,8 @@ const id = {
 
     /* Pita berjalan di bawah judul. Isinya wilayah kerja dan lingkup layanan,
        keduanya fakta dari brief. Tidak ada klaim di sini. */
+    heroSlideshowLabel: "Foto properti",
+    heroSlideLabel: "Foto {n} dari {total}",
     tickerLabel: "Wilayah kerja dan lingkup layanan",
     ticker: [
       "Badung",
@@ -635,6 +637,8 @@ const en: Dict = {
     searchPlaceholder: "Search a villa, house, land plot, or area",
     searchSubmit: "Search",
 
+    heroSlideshowLabel: "Property photographs",
+    heroSlideLabel: "Photograph {n} of {total}",
     tickerLabel: "Service areas and scope of work",
     ticker: [
       "Badung",
